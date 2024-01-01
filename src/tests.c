@@ -1,25 +1,23 @@
 #include <check.h>
+#include <stddef.h>
 #include <string.h>
-#include <stdlib.h>
-#include <stddef.h> // for type size_t
 
 #include "s21_string.h"
 
-//STRLEN
+// STRLEN
 START_TEST(strlen_1) {
-  char* input = "make";
+  char *input = "make";
   size_t result = s21_strlen(input);
   size_t expected = strlen(input);
-  ck_assert_int_eq(result, expected); /// compare like INT for SIZE_T
+  ck_assert_int_eq(result, expected);  // compare like INT for SIZE_T
 }
 
 START_TEST(strlen_2) {
-  char* input = "";
+  char *input = "";
   size_t result = s21_strlen(input);
   size_t expected = strlen(input);
   ck_assert_int_eq(result, expected);
 }
-
 
 Suite *my_string_suite(void) {
   Suite *s;
@@ -29,7 +27,7 @@ Suite *my_string_suite(void) {
 
   tc_core = tcase_create("Core");
 
-  //STRLEN
+  // STRLEN
   tcase_add_test(tc_core, strlen_1);
   tcase_add_test(tc_core, strlen_2);
 
@@ -52,4 +50,3 @@ int main(void) {
 
   return (number_failed == 0) ? SUCCESS : ERROR;
 }
-
