@@ -1,6 +1,8 @@
 #ifndef S21_STRING_H
 #define S21_STRING_H
 
+#include <stddef.h>
+
 #define SUCCESS 0
 #define ERROR 1
 

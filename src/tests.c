@@ -6,25 +6,26 @@
 
 // STRLEN
 START_TEST(strlen_1) {
-  char *input = "make";
+  const char *input = "make";
   size_t result = s21_strlen(input);
   size_t expected = strlen(input);
-  ck_assert_int_eq(result, expected);  // compare like INT for SIZE_T
+  ck_assert_uint_eq(result, expected);  // compare unsigned int with size_t
 }
+END_TEST
 
 START_TEST(strlen_2) {
-  char *input = "";
+  const char *input = "";  // empty line
   size_t result = s21_strlen(input);
   size_t expected = strlen(input);
-  ck_assert_int_eq(result, expected);
+  ck_assert_uint_eq(result, expected);
 }
+END_TEST
 
 Suite *my_string_suite(void) {
   Suite *s;
   TCase *tc_core;
 
   s = suite_create("MyString");
-
   tc_core = tcase_create("Core");
 
   // STRLEN

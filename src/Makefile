@@ -4,7 +4,7 @@ GCOV_FLAGS = -fprofile-arcs -ftest-coverage
 
 LIBS = -lcheck -lm -lsubunit 
 
-VALG = valgrind --tool=memcheck --leak-check=full --show-leak-kinds=all ./s21_tests
+VALG = valgrind --tool=memcheck --leak-check=yes ./s21_tests
 CPPCH = cppcheck --enable=all --suppress=missingIncludeSystem --suppress=invalidFunctionArg --force
 
 SRC_FILES = s21_strlen.c
@@ -24,17 +24,17 @@ SRC_CL = ../materials/linters/.clang-format
 all: $(LIBRARY)
 
 # building static lib
-$(LIBRARY): $(OBJ_FILES) $(HEAD_FILE)
+$(LIBRARY): $(OBJ_FILES)
 	ar rcs $@ $^
 	
 # building objects for static lib
-%.o: %.c
+$(OBJ_FILES): $(SRC_FILES) $(HEAD_FILE)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(EXECUTABLE): $(TEST_SRC) $(LIBRARY)
 	$(CC) $(CFLAGS) $(TEST_SRC) -o $(EXECUTABLE) $(LIBRARY) $(LIBS)
 
-test: $(LIBRARY) $(EXECUTABLE)
+test: $(EXECUTABLE)
 	./$(EXECUTABLE)
 
 # building file for gcov report
