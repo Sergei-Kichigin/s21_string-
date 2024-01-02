@@ -1,5 +1,4 @@
 #include <check.h>
-#include <stddef.h>
 #include <string.h>
 
 #include "s21_string.h"
@@ -7,23 +6,23 @@
 // STRLEN
 START_TEST(strlen_1) {
   const char *input = "make";
-  size_t result = s21_strlen(input);
-  size_t expected = strlen(input);
-  ck_assert_uint_eq(result, expected);  // compare unsigned int with size_t
+  s21_size_t result = s21_strlen(input);
+  s21_size_t expected = strlen(input);
+  ck_assert_uint_eq(result, expected);  // compare unsigned int with size_t - unsigned long 
 }
 END_TEST
 
 START_TEST(strlen_2) {
   const char *input = "";  // empty line
-  size_t result = s21_strlen(input);
-  size_t expected = strlen(input);
+  s21_size_t result = s21_strlen(input);
+  s21_size_t expected = strlen(input);
   ck_assert_uint_eq(result, expected);
 }
 END_TEST
 
 // MEMSET
 START_TEST(memset_1) {
-  size_t length = 5;
+  s21_size_t length = 5; // > 10?
   char result[10];
   char expected[10];
 
@@ -35,7 +34,7 @@ START_TEST(memset_1) {
 END_TEST
 
 START_TEST(memset_2) {
-  size_t length = 7;
+  s21_size_t length = 7;
   char result[10];
   char expected[10];
 
