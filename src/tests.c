@@ -21,6 +21,31 @@ START_TEST(strlen_2) {
 }
 END_TEST
 
+// MEMSET
+START_TEST(memset_1) {
+  size_t length = 5;
+  char result[10];
+  char expected[10];
+
+  s21_memset(result, 'A', length);
+  memset(expected, 'A', length);
+
+  ck_assert_mem_eq(result, expected, length);
+}
+END_TEST
+
+START_TEST(memset_2) {
+  size_t length = 7;
+  char result[10];
+  char expected[10];
+
+  s21_memset(result, 'B', length);
+  memset(expected, 'B', length);
+
+  ck_assert_mem_eq(result, expected, length);
+}
+END_TEST
+
 Suite *my_string_suite(void) {
   Suite *s;
   TCase *tc_core;
@@ -31,6 +56,10 @@ Suite *my_string_suite(void) {
   // STRLEN
   tcase_add_test(tc_core, strlen_1);
   tcase_add_test(tc_core, strlen_2);
+
+  // MEMSET
+  tcase_add_test(tc_core, memset_1);
+  tcase_add_test(tc_core, memset_2);
 
   suite_add_tcase(s, tc_core);
 

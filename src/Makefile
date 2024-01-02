@@ -7,7 +7,7 @@ LIBS = -lcheck -lm -lsubunit
 VALG = valgrind --tool=memcheck --leak-check=yes ./s21_tests
 CPPCH = cppcheck --enable=all --suppress=missingIncludeSystem --suppress=invalidFunctionArg --force
 
-SRC_FILES = s21_strlen.c
+SRC_FILES = s21_strlen.c s21_memset.c
 OBJ_FILES = $(SRC_FILES:.c=.o)
 
 HEAD_FILE = s21_string.h
@@ -28,7 +28,7 @@ $(LIBRARY): $(OBJ_FILES)
 	ar rcs $@ $^
 	
 # building objects for static lib
-$(OBJ_FILES): $(SRC_FILES) $(HEAD_FILE)
+%.o: %.c $(HEAD_FILE)
 	$(CC) $(CFLAGS) -c $< -o $@
 
 $(EXECUTABLE): $(TEST_SRC) $(LIBRARY)
