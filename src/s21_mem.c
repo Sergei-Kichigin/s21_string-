@@ -2,14 +2,16 @@
 
 void *s21_memchr(const void *str, int c, s21_size_t n) {
   const unsigned char *p = str;
+  void *result = NULL;
   unsigned char value = (unsigned char)c;
 
   for (s21_size_t i = 0; i < n; i++) {
     if (p[i] == value) {
-      return (void *)(p + i);
+      result = (void *)(p + i);
+      break;
     }
   }
-  return NULL;
+  return result;
 }
 
 void *s21_memset(void *str, int c, s21_size_t n) {
