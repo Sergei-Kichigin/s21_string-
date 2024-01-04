@@ -1,28 +1,40 @@
 #include <check.h>
 #include <string.h>
+//#include <stdio.h>
 
 #include "s21_string.h"
 
-// STRLEN
-START_TEST(strlen_1) {
-  const char *input = "make";
-  s21_size_t result = s21_strlen(input);
-  s21_size_t expected = strlen(input);
-  ck_assert_uint_eq(result, expected);  // compare unsigned int with size_t - unsigned long 
+// MEMCHR
+START_TEST(memchr_1) {
+  s21_size_t length = 10;
+  char input[20] = "This is Test1";
+  void *result;
+  void *expected;
+
+  result = s21_memchr(input, 's', length);
+  expected = memchr(input, 's', length);
+
+  ck_assert_mem_eq(result, expected, sizeof(expected));
 }
 END_TEST
 
-START_TEST(strlen_2) {
-  const char *input = "";  // empty line
-  s21_size_t result = s21_strlen(input);
-  s21_size_t expected = strlen(input);
-  ck_assert_uint_eq(result, expected);
+START_TEST(memchr_2) {
+  s21_size_t length = 10;
+  char input[20] = "This is Test2";
+  void *result;
+  void *expected;
+
+  result = s21_memchr(input, 'A', length);
+  expected = memchr(input, 'A', length);
+
+  ck_assert_ptr_null(result);
+  ck_assert_ptr_null(expected);
 }
 END_TEST
 
 // MEMSET
 START_TEST(memset_1) {
-  s21_size_t length = 5; // > 10?
+  s21_size_t length = 5;
   char result[10];
   char expected[10];
 
@@ -45,6 +57,61 @@ START_TEST(memset_2) {
 }
 END_TEST
 
+// STRNCAT
+START_TEST(strncat_1) {
+  s21_size_t length = 7;
+  char input1[10] = "make";
+  char input2[10] = "Test1";
+  char *result;
+  char *expected;
+
+  result = s21_strncat(input1, input2, length);
+  expected = strncat(input1, input2, length);
+  
+  ck_assert_str_eq(result, expected);  
+}
+END_TEST
+
+START_TEST(strncat_2) {
+  s21_size_t length = 2;
+  char input1[10] = "make";
+  char input2[10] = "Test2";
+  char *result;
+  char *expected;
+
+  result = s21_strncat(input1, input2, length);
+  expected = strncat(input1, input2, length);
+  
+  ck_assert_str_eq(result, expected);  
+}
+END_TEST
+
+
+// STRLEN
+START_TEST(strlen_1) {
+  char *input = "make";
+  s21_size_t result; 
+  s21_size_t expected;
+
+  result = s21_strlen(input);
+  expected = strlen(input);
+
+  ck_assert_uint_eq(result, expected);  // compare unsigned int with size_t - unsigned long 
+}
+END_TEST
+
+START_TEST(strlen_2) {
+  char *input = "";  // empty line
+  s21_size_t result; 
+  s21_size_t expected;
+
+  result = s21_strlen(input);
+  expected = strlen(input);
+  
+  ck_assert_uint_eq(result, expected);
+}
+END_TEST
+
 Suite *my_string_suite(void) {
   Suite *s;
   TCase *tc_core;
@@ -52,13 +119,22 @@ Suite *my_string_suite(void) {
   s = suite_create("MyString");
   tc_core = tcase_create("Core");
 
-  // STRLEN
-  tcase_add_test(tc_core, strlen_1);
-  tcase_add_test(tc_core, strlen_2);
+
+  // MEMCHR
+  tcase_add_test(tc_core, memchr_1);
+  tcase_add_test(tc_core, memchr_2);
 
   // MEMSET
   tcase_add_test(tc_core, memset_1);
   tcase_add_test(tc_core, memset_2);
+
+  // STRNCAT
+  tcase_add_test(tc_core, strncat_1);
+  tcase_add_test(tc_core, strncat_2);
+  
+  // STRLEN
+  tcase_add_test(tc_core, strlen_1);
+  tcase_add_test(tc_core, strlen_2);
 
   suite_add_tcase(s, tc_core);
 
