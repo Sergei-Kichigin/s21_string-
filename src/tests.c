@@ -1,6 +1,5 @@
 #include <check.h>
 #include <string.h>
-//#include <stdio.h>
 
 #include "s21_string.h"
 
@@ -67,8 +66,8 @@ START_TEST(strncat_1) {
 
   result = s21_strncat(input1, input2, length);
   expected = strncat(input1, input2, length);
-  
-  ck_assert_str_eq(result, expected);  
+
+  ck_assert_str_eq(result, expected);
 }
 END_TEST
 
@@ -81,33 +80,33 @@ START_TEST(strncat_2) {
 
   result = s21_strncat(input1, input2, length);
   expected = strncat(input1, input2, length);
-  
-  ck_assert_str_eq(result, expected);  
+
+  ck_assert_str_eq(result, expected);
 }
 END_TEST
-
 
 // STRLEN
 START_TEST(strlen_1) {
   char *input = "make";
-  s21_size_t result; 
+  s21_size_t result;
   s21_size_t expected;
 
   result = s21_strlen(input);
   expected = strlen(input);
 
-  ck_assert_uint_eq(result, expected);  // compare unsigned int with size_t - unsigned long 
+  ck_assert_uint_eq(
+      result, expected);  // compare unsigned int with size_t - unsigned long
 }
 END_TEST
 
 START_TEST(strlen_2) {
   char *input = "";  // empty line
-  s21_size_t result; 
+  s21_size_t result;
   s21_size_t expected;
 
   result = s21_strlen(input);
   expected = strlen(input);
-  
+
   ck_assert_uint_eq(result, expected);
 }
 END_TEST
@@ -118,7 +117,6 @@ Suite *my_string_suite(void) {
 
   s = suite_create("MyString");
   tc_core = tcase_create("Core");
-
 
   // MEMCHR
   tcase_add_test(tc_core, memchr_1);
@@ -131,7 +129,7 @@ Suite *my_string_suite(void) {
   // STRNCAT
   tcase_add_test(tc_core, strncat_1);
   tcase_add_test(tc_core, strncat_2);
-  
+
   // STRLEN
   tcase_add_test(tc_core, strlen_1);
   tcase_add_test(tc_core, strlen_2);
