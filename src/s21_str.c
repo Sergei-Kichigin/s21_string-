@@ -22,6 +22,19 @@ char *s21_strchr(const char *str, int c) {
   return result;
 }
 
+s21_size_t s21_strcspn(const char *str1, const char *str2) {
+  s21_size_t length = 0;
+
+  for (s21_size_t i = 0; i < s21_strlen(str1); i++) {
+    if (s21_strchr(str2, (int)str1[i]) != NULL) {
+      break;
+    }
+    length++;
+  }
+
+  return length;
+}
+
 s21_size_t s21_strlen(const char *str) {
   s21_size_t length = 0;
   while (str[length] != '\0') {

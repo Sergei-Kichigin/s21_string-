@@ -180,6 +180,33 @@ START_TEST(strchr_3) {
 }
 END_TEST
 
+// STRCSPN
+START_TEST(strcspn_1) {
+  char input1[10] = "make";
+  char input2[10] = "Tst1";
+  s21_size_t result;
+  s21_size_t expected;
+
+  result = s21_strcspn(input1, input2);
+  expected = strcspn(input1, input2);
+
+  ck_assert_uint_eq(result, expected);
+}
+END_TEST
+
+START_TEST(strcspn_2) {
+  char input1[10] = "make";
+  char input2[10] = "Testm";
+  s21_size_t result;
+  s21_size_t expected;
+
+  result = s21_strcspn(input1, input2);
+  expected = strcspn(input1, input2);
+
+  ck_assert_uint_eq(result, expected);
+}
+END_TEST
+
 // STRLEN
 START_TEST(strlen_1) {
   char *input = "make";
@@ -273,6 +300,10 @@ Suite *my_string_suite(void) {
   tcase_add_test(tc_core, strchr_1);
   tcase_add_test(tc_core, strchr_2);
   tcase_add_test(tc_core, strchr_3);
+
+  // STRCSPN
+  tcase_add_test(tc_core, strcspn_1);
+  tcase_add_test(tc_core, strcspn_2);
 
   // STRLEN
   tcase_add_test(tc_core, strlen_1);
