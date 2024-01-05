@@ -23,11 +23,11 @@ START_TEST(memchr_2) {
   void *result;
   void *expected;
 
-  result = s21_memchr(input, 'A', length); 
+  result = s21_memchr(input, 'A', length);
   expected = memchr(input, 'A', length);
 
-  ck_assert_ptr_null(result); // 'A' is not in input
-  ck_assert_ptr_null(expected); // return NULL
+  ck_assert_ptr_null(result);    // 'A' is not in input
+  ck_assert_ptr_null(expected);  // return NULL
 }
 END_TEST
 
@@ -103,7 +103,7 @@ START_TEST(strchr_2) {
   char *result;
   char *expected;
 
-  result = s21_strchr(input, '\0'); // terminating null
+  result = s21_strchr(input, '\0');  // terminating null
   expected = strchr(input, '\0');
 
   ck_assert_str_eq(result, expected);
@@ -118,8 +118,8 @@ START_TEST(strchr_3) {
   result = s21_strchr(input, 'A');
   expected = strchr(input, 'A');
 
-  ck_assert_ptr_null(result); // 'A' is not in input
-  ck_assert_ptr_null(expected); // return NULL
+  ck_assert_ptr_null(result);    // 'A' is not in input
+  ck_assert_ptr_null(expected);  // return NULL
 }
 END_TEST
 
@@ -146,6 +146,44 @@ START_TEST(strlen_2) {
   expected = strlen(input);
 
   ck_assert_uint_eq(result, expected);
+}
+END_TEST
+
+// STRRCHR
+START_TEST(strrchr_1) {
+  char input[20] = "This is Test1";
+  char *result;
+  char *expected;
+
+  result = s21_strrchr(input, 's');
+  expected = strrchr(input, 's');
+
+  ck_assert_str_eq(result, expected);
+}
+END_TEST
+
+START_TEST(strrchr_2) {
+  char input[20] = "This is Test2";
+  char *result;
+  char *expected;
+
+  result = s21_strrchr(input, '\0');  // terminating null
+  expected = strrchr(input, '\0');
+
+  ck_assert_str_eq(result, expected);
+}
+END_TEST
+
+START_TEST(strrchr_3) {
+  char input[20] = "This is Test3";
+  char *result;
+  char *expected;
+
+  result = s21_strrchr(input, 'A');
+  expected = strrchr(input, 'A');
+
+  ck_assert_ptr_null(result);    // 'A' is not in input
+  ck_assert_ptr_null(expected);  // return NULL
 }
 END_TEST
 
@@ -176,6 +214,11 @@ Suite *my_string_suite(void) {
   // STRLEN
   tcase_add_test(tc_core, strlen_1);
   tcase_add_test(tc_core, strlen_2);
+
+  // STRRCHR
+  tcase_add_test(tc_core, strrchr_1);
+  tcase_add_test(tc_core, strrchr_2);
+  tcase_add_test(tc_core, strrchr_3);
 
   suite_add_tcase(s, tc_core);
 

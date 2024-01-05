@@ -9,11 +9,11 @@ char *s21_strncat(char *dest, const char *src, s21_size_t n) {
   return dest;
 }
 
-char *s21_strchr(const char *str, int c){
+char *s21_strchr(const char *str, int c) {
   char *result = NULL;
   char value = (char)c;
 
-  for (s21_size_t i = 0; i <= s21_strlen(str); i++) { // with '\0'
+  for (s21_size_t i = 0; i <= s21_strlen(str); i++) {  // with '\0'
     if (str[i] == value) {
       result = (char *)(str + i);
       break;
@@ -28,4 +28,17 @@ s21_size_t s21_strlen(const char *str) {
     length += 1;
   }
   return length;
+}
+
+char *s21_strrchr(const char *str, int c) {
+  char *result = NULL;
+  char value = (char)c;
+
+  for (int i = s21_strlen(str); i >= 0; i--) {  // with '\0'
+    if (str[i] == value) {
+      result = (char *)(str + i);
+      break;
+    }
+  }
+  return result;
 }
