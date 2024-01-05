@@ -9,11 +9,11 @@ char *s21_strncat(char *dest, const char *src, s21_size_t n) {
   return dest;
 }
 
-char *s21_strchr(const char *str, int c){
+char *s21_strchr(const char *str, int c) {
   char *result = NULL;
   char value = (char)c;
 
-  for (s21_size_t i = 0; i <= s21_strlen(str); i++) { // with '\0'
+  for (s21_size_t i = 0; i <= s21_strlen(str); i++) {  // with '\0'
     if (str[i] == value) {
       result = (char *)(str + i);
       break;
