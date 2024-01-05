@@ -43,6 +43,19 @@ s21_size_t s21_strlen(const char *str) {
   return length;
 }
 
+char *s21_strpbrk(const char *str1, const char *str2) {
+  char *result = NULL;
+
+  for (s21_size_t i = 0; i < s21_strlen(str1); i++) {
+    if (s21_strchr(str2, (int)str1[i]) != NULL) {
+      result = (char *)(str1 + i);
+      break;
+    }
+  }
+
+  return result;
+}
+
 char *s21_strrchr(const char *str, int c) {
   char *result = NULL;
   char value = (char)c;

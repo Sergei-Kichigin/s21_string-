@@ -233,6 +233,34 @@ START_TEST(strlen_2) {
 }
 END_TEST
 
+// STRPBRK
+START_TEST(strpbrk_1) {
+  char input1[10] = "make";
+  char input2[10] = "Test1";
+  char *result;
+  char *expected;
+
+  result = s21_strpbrk(input1, input2);
+  expected = strpbrk(input1, input2);
+
+  ck_assert_str_eq(result, expected);
+}
+END_TEST
+
+START_TEST(strpbrk_2) {
+  char input1[10] = "make";
+  char input2[10] = "Tst2";
+  char *result;
+  char *expected;
+
+  result = s21_strpbrk(input1, input2);
+  expected = strpbrk(input1, input2);
+
+  ck_assert_ptr_null(result);    // char from input1 is not in input2
+  ck_assert_ptr_null(expected);  // return NULL
+}
+END_TEST
+
 // STRRCHR
 START_TEST(strrchr_1) {
   char input[20] = "This is Test1";
@@ -308,6 +336,10 @@ Suite *my_string_suite(void) {
   // STRLEN
   tcase_add_test(tc_core, strlen_1);
   tcase_add_test(tc_core, strlen_2);
+
+  // STRPBRK
+  tcase_add_test(tc_core, strpbrk_1);
+  tcase_add_test(tc_core, strpbrk_2);
 
   // STRRCHR
   tcase_add_test(tc_core, strrchr_1);
