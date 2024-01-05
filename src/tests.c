@@ -56,6 +56,63 @@ START_TEST(memset_2) {
 }
 END_TEST
 
+// MEMCMP
+START_TEST(memcmp_1) {
+  s21_size_t length = 10;
+  char input1[20] = "This is Test1";
+  char input2[20] = "This is Test1";
+  int result;
+  int expected;
+
+  result = s21_memcmp(input1, input2, length);
+  expected = memcmp(input1, input2, length);
+
+  ck_assert_int_eq(result, expected);
+}
+END_TEST
+
+START_TEST(memcmp_2) {
+  s21_size_t length = 10;
+  char input1[20] = "This is Test2";
+  char input2[20] = "This is Test3";
+  int result;
+  int expected;
+
+  result = s21_memcmp(input1, input2, length);
+  expected = memcmp(input1, input2, length);
+
+  ck_assert_int_eq(result, expected);
+}
+END_TEST
+
+START_TEST(memcmp_3) {
+  s21_size_t length = 5;
+  char input1[10] = "hello";
+  char input2[10] = "world";
+  int result;
+  int expected;
+
+  result = s21_memcmp(input1, input2, length);
+  expected = memcmp(input1, input2, length);
+
+  ck_assert_int_eq(result, expected);  // 'h' < 'w'
+}
+END_TEST
+
+START_TEST(memcmp_4) {
+  s21_size_t length = 7;
+  char input1[10] = "foobar";
+  char input2[10] = "foobaz";
+  int result;
+  int expected;
+
+  result = s21_memcmp(input1, input2, length);
+  expected = memcmp(input1, input2, length);
+
+  ck_assert_int_eq(result, expected);  // 'r' > 'z'
+}
+END_TEST
+
 // STRNCAT
 START_TEST(strncat_1) {
   s21_size_t length = 7;
@@ -125,6 +182,12 @@ Suite *my_string_suite(void) {
   // MEMSET
   tcase_add_test(tc_core, memset_1);
   tcase_add_test(tc_core, memset_2);
+
+  // MEMCMP
+  tcase_add_test(tc_core, memcmp_1);
+  tcase_add_test(tc_core, memcmp_2);
+  tcase_add_test(tc_core, memcmp_3);
+  tcase_add_test(tc_core, memcmp_4);
 
   // STRNCAT
   tcase_add_test(tc_core, strncat_1);
