@@ -86,13 +86,11 @@ char *s21_strstr(const char *haystack, const char *needle) {
 
       if (*n == '\0') {
         result = haystack;  // Найдено вхождение
-        // ено
         break;
       }
 
       ++haystack;
     }
   }
-
   return (char *)result;
 }
