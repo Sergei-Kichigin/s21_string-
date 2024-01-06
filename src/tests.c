@@ -1,5 +1,6 @@
 #include <check.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "s21_string.h"
 
@@ -299,6 +300,62 @@ START_TEST(strrchr_3) {
 }
 END_TEST
 
+// STRSTR
+START_TEST(strstr_1) {
+  const char *haystack = "This is a simple test.";
+  const char *needle = "simple";
+  char *result;
+  char *expected;
+
+  result = s21_strstr(haystack, needle);
+  expected = strstr(haystack, needle);
+
+  printf("%s %s\n", result, expected);
+
+  ck_assert_str_eq(result, expected);
+}
+END_TEST
+
+START_TEST(strstr_2) {
+  const char *haystack = "This is another test.";
+  const char *needle = "missing";
+  char *result;
+  char *expected;
+
+  result = s21_strstr(haystack, needle);
+  expected = strstr(haystack, needle);
+
+  ck_assert_ptr_null(result);    // 'missing' is not in haystack
+  ck_assert_ptr_null(expected);  // return NULL
+}
+END_TEST
+
+START_TEST(strstr_3) {
+  const char *haystack = "This is a simple test.";
+  const char *needle = "simple";
+  char *result;
+  char *expected;
+
+  result = s21_strstr(haystack, needle);
+  expected = strstr(haystack, needle);
+
+  ck_assert_str_eq(result, expected);
+}
+END_TEST
+
+START_TEST(strstr_empty_needle) {
+  const char *haystack = "This is a simple test.";
+  const char *needle = "";
+  char *result;
+  char *expected;
+
+  result = s21_strstr(haystack, needle);
+  expected = strstr(haystack, needle);
+
+  ck_assert_str_eq(result, expected);
+}
+END_TEST
+
 Suite *my_string_suite(void) {
   Suite *s;
   TCase *tc_core;
@@ -345,6 +402,12 @@ Suite *my_string_suite(void) {
   tcase_add_test(tc_core, strrchr_1);
   tcase_add_test(tc_core, strrchr_2);
   tcase_add_test(tc_core, strrchr_3);
+
+  // STRSTR
+  tcase_add_test(tc_core, strstr_1);
+  tcase_add_test(tc_core, strstr_2);
+  tcase_add_test(tc_core, strstr_3);
+  tcase_add_test(tc_core, strstr_empty_needle);
 
   suite_add_tcase(s, tc_core);
 

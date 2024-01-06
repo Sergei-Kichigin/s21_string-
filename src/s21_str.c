@@ -68,3 +68,31 @@ char *s21_strrchr(const char *str, int c) {
   }
   return result;
 }
+
+char *s21_strstr(const char *haystack, const char *needle) {
+  const char *result = NULL;
+
+  if (*needle == '\0') {
+    result = haystack;  // Пустая строка всегда найдена в любой строке
+  } else {
+    while (*haystack != '\0') {
+      const char *h = haystack;
+      const char *n = needle;
+
+      while (*n != '\0' && *h == *n) {
+        ++h;
+        ++n;
+      }
+
+      if (*n == '\0') {
+        result = haystack;  // Найдено вхождение
+        // ено
+        break;
+      }
+
+      ++haystack;
+    }
+  }
+
+  return (char *)result;
+}
