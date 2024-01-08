@@ -1,6 +1,5 @@
 #include <check.h>
 #include <string.h>
-#include <stdio.h>
 
 #include "s21_string.h"
 
@@ -309,8 +308,6 @@ START_TEST(strstr_1) {
 
   result = s21_strstr(haystack, needle);
   expected = strstr(haystack, needle);
-
-  printf("%s %s\n", result, expected);
 
   ck_assert_str_eq(result, expected);
 }
