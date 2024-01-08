@@ -1,5 +1,6 @@
 #include <check.h>
 #include <string.h>
+#include <stdio.h>
 
 #include "s21_string.h"
 
@@ -415,6 +416,15 @@ int main(void) {
   int number_failed;
   Suite *s;
   SRunner *sr;
+
+  // TEST
+  
+  char str1[10];
+  char str2[10];
+  sprintf(str1, "%d", 4);
+  s21_sprintf(str2, "d", 4);
+  printf("%s\n", str1);
+  printf("%s\n", str2);
 
   s = my_string_suite();
   sr = srunner_create(s);
