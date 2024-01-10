@@ -419,7 +419,7 @@ int main(void) {
 
   // TEST
   
-  char str1[10];
+  char str1[10] = "name";
   char str2[10];
   sprintf(str1, "%d", 4);
   s21_sprintf(str2, "d", 4);

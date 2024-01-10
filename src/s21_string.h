@@ -6,7 +6,7 @@
 
 #define NULL ((void *)0)
 
-typedef unsigned long s21_size_t;
+typedef long unsigned s21_size_t;
 
 #include <stdarg.h>
 
