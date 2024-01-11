@@ -3,7 +3,7 @@
 
 #define SUCCESS 0
 #define ERROR 1
-#define NULL ((void *)0)
+#define S21_NULL (void *)0
 
 typedef long unsigned s21_size_t;
 
@@ -21,5 +21,6 @@ char *s21_strchr(const char *str, int c);
 char *s21_strpbrk(const char *str1, const char *str2);
 char *s21_strrchr(const char *str, int c);
 char *s21_strstr(const char *haystack, const char *needle);
+//char *s21_strtok(char *str, const char *delim);
 
 #endif

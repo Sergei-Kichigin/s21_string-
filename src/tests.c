@@ -418,15 +418,14 @@ int main(void) {
   SRunner *sr;
 
   // TEST
-
-  char str1[10];
-  
-  char str1[10] = "name";
-  char str2[10];
-  sprintf(str1, "%d", 4);
-  s21_sprintf(str2, "d", 4);
+  /*
+  char str1[20] = "make";
+  char str2[20] = "make";
+  sprintf(str1, "%s", "test");
+  s21_sprintf(str2, "s", "test"); 
   printf("%s\n", str1);
   printf("%s\n", str2);
+  */
 
   s = my_string_suite();
   sr = srunner_create(s);

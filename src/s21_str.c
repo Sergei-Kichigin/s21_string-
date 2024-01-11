@@ -12,7 +12,7 @@ char *s21_strncat(char *dest, const char *src, s21_size_t n) {
 }
 
 char *s21_strchr(const char *str, int c) {
-  char *result = NULL;
+  char *result = S21_NULL;
   char value = (char)c;
 
   for (s21_size_t i = 0; i <= s21_strlen(str); i++) {  // with '\0'
@@ -29,7 +29,7 @@ s21_size_t s21_strcspn(const char *str1, const char *str2) {
   s21_size_t length = 0;
 
   for (s21_size_t i = 0; i < s21_strlen(str1); i++) {
-    if (s21_strchr(str2, (int)str1[i]) != NULL) {
+    if (s21_strchr(str2, (int)str1[i]) != S21_NULL) {
       break;
     }
     length++;
@@ -49,10 +49,10 @@ s21_size_t s21_strlen(const char *str) {
 }
 
 char *s21_strpbrk(const char *str1, const char *str2) {
-  char *result = NULL;
+  char *result = S21_NULL;
 
   for (s21_size_t i = 0; i < s21_strlen(str1); i++) {
-    if (s21_strchr(str2, (int)str1[i]) != NULL) {
+    if (s21_strchr(str2, (int)str1[i]) != S21_NULL) {
       result = (char *)(str1 + i);
       break;
     }
@@ -62,7 +62,7 @@ char *s21_strpbrk(const char *str1, const char *str2) {
 }
 
 char *s21_strrchr(const char *str, int c) {
-  char *result = NULL;
+  char *result = S21_NULL;
   char value = (char)c;
 
   for (int i = s21_strlen(str); i >= 0; i--) {  // with '\0'
@@ -76,7 +76,7 @@ char *s21_strrchr(const char *str, int c) {
 }
 
 char *s21_strstr(const char *haystack, const char *needle) {
-  const char *result = NULL;
+  const char *result = S21_NULL;
 
   if (*needle == '\0') {
     result = haystack;  // Пустая строка всегда найдена в любой строке
