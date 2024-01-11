@@ -1,6 +1,6 @@
 #include <check.h>
-#include <string.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "s21_string.h"
 
@@ -418,6 +418,8 @@ int main(void) {
   SRunner *sr;
 
   // TEST
+
+  char str1[10];
   
   char str1[10] = "name";
   char str2[10];
