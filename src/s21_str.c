@@ -6,6 +6,7 @@ char *s21_strncat(char *dest, const char *src, s21_size_t n) {
   for (s21_size_t i = 0; i < n; i++) {
     p[i] = src[i];
     if (src[i] == '\0') break;
+    if (i == n - 1) p[n] = '\0';
   }
 
   return dest;

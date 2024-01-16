@@ -14,7 +14,7 @@ START_TEST(memchr_1) {
   result = s21_memchr(input, 's', length);
   expected = memchr(input, 's', length);
 
-  ck_assert_mem_eq(result, expected, sizeof(expected));
+  ck_assert_mem_eq(result, expected, sizeof(expected)); //
 }
 END_TEST
 
@@ -45,6 +45,20 @@ START_TEST(memset_1) {
 }
 END_TEST
 
+//START_TEST(memset_1) {
+//  s21_size_t length = 5;
+//  char input[20] = "Text to copy";
+//  void *result;
+//  void *expected;
+
+//  result = s21_memset(input, 'a', length);
+//  char expected_buffer[20] = "Text to copy";
+//  expected = memset(expected_buffer, 'a', length);
+
+//  ck_assert_mem_eq(result, expected, strlen(input)*sizeof(*expected));
+//}
+//END_TEST
+
 START_TEST(memset_2) {
   s21_size_t length = 7;
   char result[10];
@@ -59,7 +73,7 @@ END_TEST
 
 // MEMCMP
 START_TEST(memcmp_1) {
-  s21_size_t length = 10;
+  s21_size_t length = 13;
   char input1[20] = "This is Test1";
   char input2[20] = "This is Test1";
   int result;
@@ -73,7 +87,7 @@ START_TEST(memcmp_1) {
 END_TEST
 
 START_TEST(memcmp_2) {
-  s21_size_t length = 10;
+  s21_size_t length = 13;
   char input1[20] = "This is Test2";
   char input2[20] = "This is Test3";
   int result;
@@ -114,16 +128,39 @@ START_TEST(memcmp_4) {
 }
 END_TEST
 
+// MEMCPY
+START_TEST(memcpy_1) {
+  s21_size_t length = 5;
+  char src[20] = "Thiss is Test";
+  char input[20] = "Text to copy";
+  void *result;
+  void *expected;
+
+  result = s21_memcpy(input, src, length);
+  //printf("%s, %s\n", input, (char*)result);
+  char expected_buffer[20] = "Text to copy";
+  expected = memcpy(expected_buffer, src, length);
+  //printf("%s, %s", expected_buffer, (char*)expected);
+  //printf("\n%ld, %ld, %ld\n", sizeof(expected), sizeof(*expected), strlen(expected)*sizeof(*expected));
+  ck_assert_mem_eq(result, expected, strlen(expected)*sizeof(*expected));
+}
+END_TEST
+
 // STRNCAT
 START_TEST(strncat_1) {
   s21_size_t length = 7;
-  char input1[10] = "make";
-  char input2[10] = "Test1";
+
+  char dest1[10] = "make";  // change in strncat
+  const char src1[10] = "Test1";
+
+  char dest2[10] = "make";
+  const char src2[10] = "Test1";
+
   char *result;
   char *expected;
 
-  result = s21_strncat(input1, input2, length);
-  expected = strncat(input1, input2, length);
+  result = s21_strncat(dest1, src1, length);
+  expected = strncat(dest2, src2, length);
 
   ck_assert_str_eq(result, expected);
 }
@@ -131,13 +168,18 @@ END_TEST
 
 START_TEST(strncat_2) {
   s21_size_t length = 2;
-  char input1[10] = "make";
-  char input2[10] = "Test2";
+
+  char dest1[10] = "make";  // change in strncat
+  const char src1[10] = "Test2";
+
+  char dest2[10] = "make";
+  const char src2[10] = "Test2";
+
   char *result;
   char *expected;
 
-  result = s21_strncat(input1, input2, length);
-  expected = strncat(input1, input2, length);
+  result = s21_strncat(dest1, src1, length);
+  expected = strncat(dest2, src2, length);
 
   ck_assert_str_eq(result, expected);
 }
@@ -365,6 +407,9 @@ Suite *my_string_suite(void) {
   tcase_add_test(tc_core, memchr_1);
   tcase_add_test(tc_core, memchr_2);
 
+  // MEMCPY
+  tcase_add_test(tc_core, memcpy_1);
+
   // MEMSET
   tcase_add_test(tc_core, memset_1);
   tcase_add_test(tc_core, memset_2);
@@ -419,6 +464,7 @@ int main(void) {
 
   // TEST
 
+  /*
   char str1[10];
   char str2[10];
 
@@ -427,7 +473,7 @@ int main(void) {
 
   printf("%s\n", str1);
   printf("%s\n", str2);
-
+  */
 
   s = my_string_suite();
   sr = srunner_create(s);
