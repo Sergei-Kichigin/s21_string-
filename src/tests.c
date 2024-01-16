@@ -464,16 +464,15 @@ int main(void) {
 
   // TEST
 
-  /*
-  char str1[10];
-  char str2[10];
+  char str1[30];
+  char str2[30];
 
-  s21_sprintf(str2, "%d%s", 4, "test");
-  sprintf(str1, "%d%s", 4, "test");
+  s21_sprintf(str1, "Test %d %s", 455, "test");
+  sprintf(str2, "Test %d %s", 455, "test");
 
-  printf("%s\n", str1);
-  printf("%s\n", str2);
-  */
+  printf("result: %s\n", str1);
+  printf("expect: %s\n", str2);
+  
 
   s = my_string_suite();
   sr = srunner_create(s);

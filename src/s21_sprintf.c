@@ -1,6 +1,4 @@
 #include <stdarg.h>
-#include <stdio.h>
-#include <string.h>
 
 #include "s21_string.h"
 
@@ -15,12 +13,15 @@ int s21_sprintf(char *str, const char *format, ...) {
         // int type
         case 'd':
           int intValue = va_arg(arg, int);
-          s21_strncat(str, s21_itoa(intValue), s21_strlen(s21_itoa(intValue)));
+          char *buffer = s21_itoa(intValue);
+          s21_strncat(str, buffer, s21_strlen(buffer)); 
+          str += s21_strlen(buffer);
           break;
         // string type
         case 's':
           char *charValue = va_arg(arg, char *);
           s21_strncat(str, charValue, s21_strlen(charValue));
+          str += s21_strlen(charValue);
         // unknown type
         default:
           break;
