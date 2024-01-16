@@ -481,6 +481,20 @@ START_TEST(strncmp_6) {
 }
 END_TEST
 
+START_TEST(strncmp_7) {
+  s21_size_t length = 5;
+  char input1[20] = "This is Test7";
+  char input2[20] = "This is Tett7";
+  int result;
+  int expected;
+
+  result = s21_strncmp(input1, input2, length);
+  expected = strncmp(input1, input2, length);
+
+  ck_assert_int_eq(result, expected);
+}
+END_TEST
+
 Suite *my_string_suite(void) {
   Suite *s;
   TCase *tc_core;
@@ -543,8 +557,8 @@ Suite *my_string_suite(void) {
   tcase_add_test(tc_core, strncmp_3);
   tcase_add_test(tc_core, strncmp_4); 
   tcase_add_test(tc_core, strncmp_5); 
-  tcase_add_test(tc_core, strncmp_6);  
-
+  tcase_add_test(tc_core, strncmp_6);
+  tcase_add_test(tc_core, strncmp_7);
   suite_add_tcase(s, tc_core);
 
   return s;
