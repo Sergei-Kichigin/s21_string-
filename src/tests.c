@@ -405,9 +405,7 @@ START_TEST(strncmp_1) {
   int expected;
 
   result = s21_strncmp(input1, input2, length);
-  printf("%d\n", result);
   expected = strncmp(input1, input2, length);
-  printf("%d\n", expected);
 
   ck_assert_int_eq(result, expected);
 }
@@ -421,9 +419,7 @@ START_TEST(strncmp_2) {
   int expected;
 
   result = s21_strncmp(input1, input2, length);
-  printf("%d\n", result);
   expected = strncmp(input1, input2, length);
-  printf("%d\n", expected);
 
   ck_assert_int_eq(result, expected);
 }
@@ -437,9 +433,7 @@ START_TEST(strncmp_3) {
   int expected;
 
   result = s21_strncmp(input1, input2, length);
-  printf("%d\n", result);
   expected = strncmp(input1, input2, length);
-  printf("%d\n", expected);
 
   ck_assert_int_eq(result, expected);
 }
@@ -453,9 +447,7 @@ START_TEST(strncmp_4) {
   int expected;
 
   result = s21_strncmp(input1, input2, length);
-  printf("%d\n", result);
   expected = strncmp(input1, input2, length);
-  printf("%d\n", expected);
 
   ck_assert_int_eq(result, expected);
 }
@@ -469,9 +461,7 @@ START_TEST(strncmp_5) {
   int expected;
 
   result = s21_strncmp(input1, input2, length);
-  printf("%d\n", result);
   expected = strncmp(input1, input2, length);
-  printf("%d\n", expected);
 
   ck_assert_int_eq(result, expected);
 }
@@ -485,9 +475,7 @@ START_TEST(strncmp_6) {
   int expected;
 
   result = s21_strncmp(input1, input2, length);
-  printf("%d\n", result);
   expected = strncmp(input1, input2, length);
-  printf("%d\n", expected);
 
   ck_assert_int_eq(result, expected);
 }
