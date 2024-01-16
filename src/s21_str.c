@@ -102,3 +102,21 @@ char *s21_strstr(const char *haystack, const char *needle) {
 
   return (char *)result;
 }
+
+int s21_strncmp(const char *str1, const char *str2, s21_size_t n) {
+  int flag = 0;
+  int result = 0;
+  if ((int)n < 0) {
+    n = -n;
+    flag = 1;
+  }
+  for (s21_size_t i = 0; flag == 0 ? i < n: flag != 2; i++) {
+    if (str1[i] != str2[i]) {
+      result = (int)(str1[i] - str2[i]);
+      break;
+    }
+    //if ((str1[i] == '\0' && str2[i] != '\0') || (str1[i] != '\0' && str2[i] == '\0')) flag = 2;
+    if (str1[i] == '\0' || str2[i] == '\0') flag = 2;
+  }
+  return result;
+}

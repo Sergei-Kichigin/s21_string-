@@ -396,6 +396,103 @@ START_TEST(strstr_empty_needle) {
 }
 END_TEST
 
+// STRNCMP
+START_TEST(strncmp_1) {
+  s21_size_t length = -1;
+  char input1[20] = "This is Test1";
+  char input2[20] = "This is Test1221";
+  int result;
+  int expected;
+
+  result = s21_strncmp(input1, input2, length);
+  printf("%d\n", result);
+  expected = strncmp(input1, input2, length);
+  printf("%d\n", expected);
+
+  ck_assert_int_eq(result, expected);
+}
+END_TEST
+
+START_TEST(strncmp_2) {
+  s21_size_t length = -1;
+  char input1[20] = "This is Test2221";
+  char input2[20] = "This is Test2";
+  int result;
+  int expected;
+
+  result = s21_strncmp(input1, input2, length);
+  printf("%d\n", result);
+  expected = strncmp(input1, input2, length);
+  printf("%d\n", expected);
+
+  ck_assert_int_eq(result, expected);
+}
+END_TEST
+
+START_TEST(strncmp_3) {
+  s21_size_t length = -1;
+  char input1[20] = "This is Test3";
+  char input2[20] = "This is Test3";
+  int result;
+  int expected;
+
+  result = s21_strncmp(input1, input2, length);
+  printf("%d\n", result);
+  expected = strncmp(input1, input2, length);
+  printf("%d\n", expected);
+
+  ck_assert_int_eq(result, expected);
+}
+END_TEST
+
+START_TEST(strncmp_4) {
+  s21_size_t length = 10;
+  char input1[20] = "This is Test4";
+  char input2[20] = "This is Test4";
+  int result;
+  int expected;
+
+  result = s21_strncmp(input1, input2, length);
+  printf("%d\n", result);
+  expected = strncmp(input1, input2, length);
+  printf("%d\n", expected);
+
+  ck_assert_int_eq(result, expected);
+}
+END_TEST
+
+START_TEST(strncmp_5) {
+  s21_size_t length = 10;
+  char input1[20] = "This Test5";
+  char input2[20] = "This is Test5";
+  int result;
+  int expected;
+
+  result = s21_strncmp(input1, input2, length);
+  printf("%d\n", result);
+  expected = strncmp(input1, input2, length);
+  printf("%d\n", expected);
+
+  ck_assert_int_eq(result, expected);
+}
+END_TEST
+
+START_TEST(strncmp_6) {
+  s21_size_t length = 10;
+  char input1[20] = "This is Test5";
+  char input2[20] = "This Test5";
+  int result;
+  int expected;
+
+  result = s21_strncmp(input1, input2, length);
+  printf("%d\n", result);
+  expected = strncmp(input1, input2, length);
+  printf("%d\n", expected);
+
+  ck_assert_int_eq(result, expected);
+}
+END_TEST
+
 Suite *my_string_suite(void) {
   Suite *s;
   TCase *tc_core;
@@ -451,6 +548,14 @@ Suite *my_string_suite(void) {
   tcase_add_test(tc_core, strstr_2);
   tcase_add_test(tc_core, strstr_3);
   tcase_add_test(tc_core, strstr_empty_needle);
+  
+  // STRNCMP
+  tcase_add_test(tc_core, strncmp_1);
+  tcase_add_test(tc_core, strncmp_2);
+  tcase_add_test(tc_core, strncmp_3);
+  tcase_add_test(tc_core, strncmp_4); 
+  tcase_add_test(tc_core, strncmp_5); 
+  tcase_add_test(tc_core, strncmp_6);  
 
   suite_add_tcase(s, tc_core);
 

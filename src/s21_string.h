@@ -22,6 +22,7 @@ char *s21_strchr(const char *str, int c);
 char *s21_strpbrk(const char *str1, const char *str2);
 char *s21_strrchr(const char *str, int c);
 char *s21_strstr(const char *haystack, const char *needle);
+int s21_strncmp(const char *str1, const char *str2, s21_size_t n);
 
 // additional functions
 void s21_strrev(char *str);
