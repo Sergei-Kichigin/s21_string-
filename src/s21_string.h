@@ -21,6 +21,10 @@ char *s21_strchr(const char *str, int c);
 char *s21_strpbrk(const char *str1, const char *str2);
 char *s21_strrchr(const char *str, int c);
 char *s21_strstr(const char *haystack, const char *needle);
-//char *s21_strtok(char *str, const char *delim);
+
+// additional functions
+void s21_strrev(char *str);
+
+char *s21_itoa(int value);
 
 #endif
