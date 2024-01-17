@@ -14,7 +14,7 @@ int s21_sprintf(char *str, const char *format, ...) {
         case 'd':
           int intValue = va_arg(arg, int);
           char *buffer = s21_itoa(intValue);
-          s21_strncat(str, buffer, s21_strlen(buffer)); 
+          s21_strncat(str, buffer, s21_strlen(buffer));
           str += s21_strlen(buffer);
           break;
         // string type

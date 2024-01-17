@@ -14,7 +14,7 @@ START_TEST(memchr_1) {
   result = s21_memchr(input, 's', length);
   expected = memchr(input, 's', length);
 
-  ck_assert_mem_eq(result, expected, sizeof(expected)); //
+  ck_assert_mem_eq(result, expected, sizeof(expected));  //
 }
 END_TEST
 
@@ -45,11 +45,11 @@ START_TEST(memset_1) {
 }
 END_TEST
 
-//START_TEST(memset_1) {
-//  s21_size_t length = 5;
-//  char input[20] = "Text to copy";
-//  void *result;
-//  void *expected;
+// START_TEST(memset_1) {
+//   s21_size_t length = 5;
+//   char input[20] = "Text to copy";
+//   void *result;
+//   void *expected;
 
 //  result = s21_memset(input, 'a', length);
 //  char expected_buffer[20] = "Text to copy";
@@ -57,7 +57,7 @@ END_TEST
 
 //  ck_assert_mem_eq(result, expected, strlen(input)*sizeof(*expected));
 //}
-//END_TEST
+// END_TEST
 
 START_TEST(memset_2) {
   s21_size_t length = 7;
@@ -137,12 +137,13 @@ START_TEST(memcpy_1) {
   void *expected;
 
   result = s21_memcpy(input, src, length);
-  //printf("%s, %s\n", input, (char*)result);
+  // printf("%s, %s\n", input, (char*)result);
   char expected_buffer[20] = "Text to copy";
   expected = memcpy(expected_buffer, src, length);
-  //printf("%s, %s", expected_buffer, (char*)expected);
-  //printf("\n%ld, %ld, %ld\n", sizeof(expected), sizeof(*expected), strlen(expected)*sizeof(*expected));
-  ck_assert_mem_eq(result, expected, strlen(expected)*sizeof(*expected));
+  // printf("%s, %s", expected_buffer, (char*)expected);
+  // printf("\n%ld, %ld, %ld\n", sizeof(expected), sizeof(*expected),
+  // strlen(expected)*sizeof(*expected));
+  ck_assert_mem_eq(result, expected, strlen(expected) * sizeof(*expected));
 }
 END_TEST
 
@@ -472,7 +473,6 @@ int main(void) {
 
   printf("result: %s\n", str1);
   printf("expect: %s\n", str2);
-  
 
   s = my_string_suite();
   sr = srunner_create(s);
