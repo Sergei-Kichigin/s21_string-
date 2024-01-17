@@ -467,13 +467,14 @@ int main(void) {
 
   char str1[30];
   char str2[30];
+  unsigned int UnsInt = 105;
 
-  s21_sprintf(str1, "Te %d %s %f", 455, "test", 123.553231);
-  sprintf(str2, "Te %d %s %f", 455, "test", 123.553231);
+  s21_sprintf(str1, "Te %d %s %f %c %u %%", 455, "test", 123.553231, 'k', UnsInt);
+  sprintf(str2, "Te %d %s %f %c %u %%", 455, "test", 123.553231, 'k', UnsInt);
 
   printf("result: %s\n", str1);
   printf("expect: %s\n", str2);
-
+ 
   // SPRINTF TEST ----------------------------
 
   s = my_string_suite();

@@ -24,9 +24,10 @@ char *s21_strrchr(const char *str, int c);
 char *s21_strstr(const char *haystack, const char *needle);
 
 // additional functions
-void s21_strrev(char *str);
-void s21_itoa(int value, char *buffer);
-void s21_ftoa(double value, char *buffer);
 void s21_strcpy(char *str, char *buffer);
+void s21_ctoa(char value, char *buffer);
+void s21_itoa(int value, char *buffer);
+void s21_strrev(char *str);
+void s21_ftoa(double value, char *buffer);
 
 #endif

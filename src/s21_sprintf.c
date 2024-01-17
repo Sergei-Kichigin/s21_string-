@@ -1,7 +1,6 @@
 #include <math.h>
 #include <stdarg.h>
 #include <stdio.h>
-#include <string.h>
 
 #include "s21_string.h"
 
@@ -15,6 +14,11 @@ int s21_sprintf(char *str, const char *format, ...) {
       char buffer[20];
       
       switch (*format) {
+        // char type
+        case 'c':
+          char charValue = (char)va_arg(arg, int);
+          s21_ctoa(charValue, buffer);
+          break;  
         // int type
         case 'd':
           int intValue = va_arg(arg, int);
@@ -30,6 +34,13 @@ int s21_sprintf(char *str, const char *format, ...) {
           char *charPtrValue = va_arg(arg, char *);
           s21_strcpy(buffer, charPtrValue);
           break;
+        // unsigned int type
+        case 'u':
+          int unsignedIntValue = va_arg(arg, unsigned int);
+          s21_itoa(unsignedIntValue, buffer);
+          break;
+        case '%':
+          s21_ctoa('%', buffer);
         // unknown type
         default:
           break;
@@ -53,6 +64,11 @@ void s21_strcpy(char *str, char *buffer) {
   for (s21_size_t i = 0; i <= s21_strlen(buffer); i++) {  // with '\0'
     str[i] = buffer[i];
   }
+}
+
+void s21_ctoa(char value, char *buffer){
+  buffer[0] = value;
+  buffer[1] = '\0';
 }
 
 void s21_itoa(int value, char *buffer) {
