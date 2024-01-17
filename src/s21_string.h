@@ -27,5 +27,6 @@ char *s21_strstr(const char *haystack, const char *needle);
 void s21_strrev(char *str);
 void s21_itoa(int value, char *buffer);
 void s21_ftoa(double value, char *buffer);
+void s21_strcpy(char *str, char *buffer);
 
 #endif

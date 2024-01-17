@@ -1,6 +1,7 @@
 #include <math.h>
 #include <stdarg.h>
 #include <stdio.h>
+#include <string.h>
 
 #include "s21_string.h"
 
@@ -11,33 +12,32 @@ int s21_sprintf(char *str, const char *format, ...) {
   while (*format) {
     if (*format == '%') {
       format++;
+      char buffer[20];
+      
       switch (*format) {
         // int type
         case 'd':
           int intValue = va_arg(arg, int);
-          char buffer[20];
           s21_itoa(intValue, buffer);
-          s21_strncat(str, buffer, s21_strlen(buffer));
-          str += s21_strlen(buffer);
           break;
         // float type
         case 'f':
           double floatValue = va_arg(arg, double);
-          char floatBuffer[20];
-          s21_ftoa(floatValue, floatBuffer);
-          s21_strncat(str, floatBuffer, s21_strlen(floatBuffer));
-          str += s21_strlen(floatBuffer);
+          s21_ftoa(floatValue, buffer);
           break;
         // string type
         case 's':
           char *charPtrValue = va_arg(arg, char *);
-          s21_strncat(str, charPtrValue, s21_strlen(charPtrValue));
-          str += s21_strlen(charPtrValue);
+          s21_strcpy(buffer, charPtrValue);
           break;
         // unknown type
         default:
           break;
       }
+      
+      s21_strcpy(str, buffer);
+      str += s21_strlen(buffer);
+
     } else {
       *str = *format;
       str++;
@@ -47,6 +47,12 @@ int s21_sprintf(char *str, const char *format, ...) {
 
   va_end(arg);
   return (int)s21_strlen(str);
+}
+
+void s21_strcpy(char *str, char *buffer) {
+  for (s21_size_t i = 0; i <= s21_strlen(buffer); i++) {  // with '\0'
+    str[i] = buffer[i];
+  }
 }
 
 void s21_itoa(int value, char *buffer) {
