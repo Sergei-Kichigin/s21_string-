@@ -14,7 +14,7 @@ START_TEST(memchr_1) {
   result = s21_memchr(input, 's', length);
   expected = memchr(input, 's', length);
 
-  ck_assert_mem_eq(result, expected, sizeof(expected));  //
+  ck_assert_mem_eq(result, expected, sizeof(*expected));  //
 }
 END_TEST
 
@@ -463,16 +463,18 @@ int main(void) {
   Suite *s;
   SRunner *sr;
 
-  // TEST
+  // SPRINTF TEST ----------------------------
 
   char str1[30];
   char str2[30];
 
-  s21_sprintf(str1, "Test %d %s", 455, "test");
-  sprintf(str2, "Test %d %s", 455, "test");
+  s21_sprintf(str1, "Te %d %s %f", 455, "test", 123.553231);
+  sprintf(str2, "Te %d %s %f", 455, "test", 123.553231);
 
   printf("result: %s\n", str1);
   printf("expect: %s\n", str2);
+
+  // SPRINTF TEST ----------------------------
 
   s = my_string_suite();
   sr = srunner_create(s);

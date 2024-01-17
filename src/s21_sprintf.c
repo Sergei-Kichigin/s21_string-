@@ -1,4 +1,6 @@
+#include <math.h>
 #include <stdarg.h>
+#include <stdio.h>
 
 #include "s21_string.h"
 
@@ -13,15 +15,25 @@ int s21_sprintf(char *str, const char *format, ...) {
         // int type
         case 'd':
           int intValue = va_arg(arg, int);
-          char *buffer = s21_itoa(intValue);
+          char buffer[20];
+          s21_itoa(intValue, buffer);
           s21_strncat(str, buffer, s21_strlen(buffer));
           str += s21_strlen(buffer);
           break;
+        // float type
+        case 'f':
+          double floatValue = va_arg(arg, double);
+          char floatBuffer[20];
+          s21_ftoa(floatValue, floatBuffer);
+          s21_strncat(str, floatBuffer, s21_strlen(floatBuffer));
+          str += s21_strlen(floatBuffer);
+          break;
         // string type
         case 's':
-          char *charValue = va_arg(arg, char *);
-          s21_strncat(str, charValue, s21_strlen(charValue));
-          str += s21_strlen(charValue);
+          char *charPtrValue = va_arg(arg, char *);
+          s21_strncat(str, charPtrValue, s21_strlen(charPtrValue));
+          str += s21_strlen(charPtrValue);
+          break;
         // unknown type
         default:
           break;
@@ -37,8 +49,7 @@ int s21_sprintf(char *str, const char *format, ...) {
   return (int)s21_strlen(str);
 }
 
-char *s21_itoa(int value) {
-  static char buffer[20];  // max length long int + знак + завершающий символ
+void s21_itoa(int value, char *buffer) {
   int isNegative = 0;
   s21_size_t i = 0;
 
@@ -60,8 +71,6 @@ char *s21_itoa(int value) {
 
   // Переворачиваем строку, так как мы записывали цифры в обратном порядке
   s21_strrev(buffer);
-
-  return buffer;
 }
 
 void s21_strrev(char *str) {
@@ -79,4 +88,17 @@ void s21_strrev(char *str) {
     start++;
     end--;
   }
+}
+
+void s21_ftoa(double value, char *buffer) {
+  char doubleBuffer[20];
+
+  int intPart = (int)value;
+  int fractionalPart = round((value - intPart) * pow(10, 6));
+
+  s21_itoa(intPart, buffer);
+  s21_itoa(fractionalPart, doubleBuffer);
+
+  s21_strncat(buffer, ".", 1);
+  s21_strncat(buffer, doubleBuffer, s21_strlen(doubleBuffer));
 }
