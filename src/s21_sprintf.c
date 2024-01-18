@@ -12,13 +12,13 @@ int s21_sprintf(char *str, const char *format, ...) {
     if (*format == '%') {
       format++;
       char buffer[20];
-      
+
       switch (*format) {
         // char type
         case 'c':
           char charValue = (char)va_arg(arg, int);
           s21_ctoa(charValue, buffer);
-          break;  
+          break;
         // int type
         case 'd':
           int intValue = va_arg(arg, int);
@@ -45,7 +45,7 @@ int s21_sprintf(char *str, const char *format, ...) {
         default:
           break;
       }
-      
+
       s21_strcpy(str, buffer);
       str += s21_strlen(buffer);
 
@@ -66,7 +66,7 @@ void s21_strcpy(char *str, char *buffer) {
   }
 }
 
-void s21_ctoa(char value, char *buffer){
+void s21_ctoa(char value, char *buffer) {
   buffer[0] = value;
   buffer[1] = '\0';
 }
