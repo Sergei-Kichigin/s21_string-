@@ -11,14 +11,23 @@ int s21_sprintf(char *str, const char *format, ...) {
   while (*format) {
     if (*format == '%') {
       format++;
+
+      // if(*format == '%'){ // % не имеет параметров
+      //   *str = *format;
+      //   str++;
+      // }
+
+      s21_size_t len_spec = s21_strcspn(format, "cdfsu");
+      printf("len_spec: %lu\n", len_spec);
+
       char buffer[20];
-      
+
       switch (*format) {
         // char type
         case 'c':
           char charValue = (char)va_arg(arg, int);
           s21_ctoa(charValue, buffer);
-          break;  
+          break;
         // int type
         case 'd':
           int intValue = va_arg(arg, int);
@@ -45,7 +54,7 @@ int s21_sprintf(char *str, const char *format, ...) {
         default:
           break;
       }
-      
+
       s21_strcpy(str, buffer);
       str += s21_strlen(buffer);
 
@@ -66,7 +75,7 @@ void s21_strcpy(char *str, char *buffer) {
   }
 }
 
-void s21_ctoa(char value, char *buffer){
+void s21_ctoa(char value, char *buffer) {
   buffer[0] = value;
   buffer[1] = '\0';
 }
@@ -116,7 +125,7 @@ void s21_ftoa(double value, char *buffer) {
   char doubleBuffer[20];
 
   int intPart = (int)value;
-  int fractionalPart = round((value - intPart) * pow(10, 6));
+  int fractionalPart = fabs(round((value - intPart) * pow(10, 6)));
 
   s21_itoa(intPart, buffer);
   s21_itoa(fractionalPart, doubleBuffer);
