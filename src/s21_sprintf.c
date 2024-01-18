@@ -11,6 +11,15 @@ int s21_sprintf(char *str, const char *format, ...) {
   while (*format) {
     if (*format == '%') {
       format++;
+
+      // if(*format == '%'){ // % не имеет параметров
+      //   *str = *format;
+      //   str++;
+      // }
+
+      s21_size_t len_spec = s21_strcspn(format, "cdfsu");
+      printf("len_spec: %lu\n", len_spec);
+
       char buffer[20];
 
       switch (*format) {
@@ -116,7 +125,7 @@ void s21_ftoa(double value, char *buffer) {
   char doubleBuffer[20];
 
   int intPart = (int)value;
-  int fractionalPart = round((value - intPart) * pow(10, 6));
+  int fractionalPart = fabs(round((value - intPart) * pow(10, 6)));
 
   s21_itoa(intPart, buffer);
   s21_itoa(fractionalPart, doubleBuffer);

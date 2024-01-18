@@ -465,13 +465,14 @@ int main(void) {
 
   // SPRINTF TEST ----------------------------
 
-  char str1[30];
-  char str2[30];
+  char str1[50];
+  char str2[50];
   unsigned int UnsInt = 105;
 
-  s21_sprintf(str1, "Te %d %s %f %c %u %%", 455, "test", 123.553231, 'k',
+  s21_sprintf(str1, "Te %d %s %f %c %u %%", -455, "test", 123.12349, 'k',
               UnsInt);
-  sprintf(str2, "Te %d %s %f %c %u %%", 455, "test", 123.553231, 'k', UnsInt);
+  sprintf(str2, "Te %-10d %s %f %c %u %%", -455, "test", 123.12349, 'k',
+          UnsInt);
 
   printf("result: %s\n", str1);
   printf("expect: %s\n", str2);
