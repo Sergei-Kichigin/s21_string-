@@ -40,6 +40,7 @@ void s21_utoa(unsigned int value, char *buffer);
 
 int s21_stoi(const char *str);
 int s21_isdigit(int c);
+int s21_isflag(int c);
 
 int s21_writeParameters(parserParameters *parametrs, const char *format,
                         s21_size_t len_spec);
