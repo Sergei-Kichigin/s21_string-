@@ -6,35 +6,35 @@
  
 int s21_sprintf(char *str, const char *format, ...) {
   va_list arg;
-
   va_start(arg, format);
 
   while (*format) {
     if (*format == '%') {
       format++;
 
-      if (*format == '%') {  // % не имеет параметров
+      if (*format == '%') {  // % don't have parametrs
         *str = *format;
         str++;
       } else {
-        s21_size_t len_spec = s21_strcspn(format, "cdfsu");
+        s21_size_t lenFormatSpec = s21_strcspn(format, "cdfsu");
+        parserParameters parametrs = {'\0', 0, 0, '\0'};
 
-        printf("len_spec: %lu\n", len_spec);
-
-        if (len_spec == s21_strlen(format)) {
+        if (lenFormatSpec == s21_strlen(format)) { // not found "cdfsu"
           printf("%s", "Uncorrect format\n");
           return ERROR;
         }
 
-        if (len_spec > 0) {
-          parserParameters parametrs = {'\0', 0, 0, 0};
-          s21_writeParameters(&parametrs, format, len_spec);
-          printf("\nflag is: %c\n", parametrs.flag);
-          printf("\n%s %lu\n", format, len_spec);
-          format += len_spec;
+        if (lenFormatSpec > 0) { // specifier have parametrs 
+          char formatSpec [20];  
+
+          s21_writeNchar(formatSpec, format, lenFormatSpec);
+          s21_writeParameters(&parametrs, formatSpec);
+
+          format += lenFormatSpec;
         }
 
-        char buffer[20];
+        char buffer[20]; // достаточно 20 символов? с добавлением ширины
+                         // какая может быть максимальная ширина
 
         switch (*format) {
           // char type
@@ -62,15 +62,13 @@ int s21_sprintf(char *str, const char *format, ...) {
             unsigned int unsignedIntValue = va_arg(arg, unsigned int);
             s21_utoa(unsignedIntValue, buffer);
             break;
-          case '%':
-            s21_ctoa('%', buffer);
-            break;
           // unknown type
           default:
             return ERROR;  // need to change !!!
             break;
         }
 
+        s21_addFormat(buffer, parametrs);
         s21_writeString(str, buffer);
         str += s21_strlen(buffer);
       }

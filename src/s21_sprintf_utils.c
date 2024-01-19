@@ -6,48 +6,66 @@ int s21_isdigit(int c) { return (c >= '0' && c <= '9'); }
 
 int s21_isflag(int c) { return (c == '-' || c == '+' || c == ' '); }
 
-int s21_writeParameters(parserParameters *parametrs, const char *format,
-                        s21_size_t len_spec) {
-  if (s21_isflag(*format)) {
-    parametrs->flag = *format;
-    format++;
-    len_spec--;
+int s21_writeParameters(parserParameters *parametrs, char *formatSpec) {
+  s21_size_t lenFormatSpec = s21_strlen(formatSpec);
+
+  if (s21_isflag(*formatSpec)) {
+    parametrs->flag = *formatSpec;
+    formatSpec++;
+    lenFormatSpec--;
   }
 
-  if (!s21_writeWidth(parametrs, format, len_spec)) {
+  if (!s21_writeWidth(parametrs, formatSpec)) {
     return ERROR;
   }
 
   return SUCCESS;
 }
 
-int s21_writeWidth(parserParameters *parametrs, const char *format,
-                   s21_size_t len_spec) {
+int s21_writeWidth(parserParameters *parametrs, char *formatSpec) {
   char charWidth[20];
   s21_size_t i;
 
-  if (len_spec > 0) {
-    for (i = 0; i < len_spec; i++, format++) {
-      if (s21_isdigit(*format)) {
-        charWidth[i] = *format;
+  s21_size_t lenFormatSpec = s21_strlen(formatSpec);
+
+  if (lenFormatSpec > 0) {
+    for (i = 0; i < lenFormatSpec; i++, formatSpec++) {
+      if (s21_isdigit(*formatSpec)) {
+        charWidth[i] = *formatSpec;
       } else {
         return ERROR;
       }
     }
     charWidth[i] = '\0';
+
     parametrs->width = s21_stoi(charWidth);
   }
 
   return SUCCESS;
 }
 
-int s21_stoi(const char *str) {
-  int result = 0;
+void s21_addFormat(char *buffer, parserParameters parametrs) { 
+  if (parametrs.width > s21_strlen(buffer)) {
+    s21_size_t addWidth = parametrs.width - s21_strlen(buffer);
+    char bufferWidth[addWidth];
+    s21_memset(bufferWidth, ' ', addWidth);
+
+    if (parametrs.flag == '-') { // left orientation
+      s21_strncat(buffer, bufferWidth, addWidth);  
+    } else { // right orientation
+      s21_strncat(bufferWidth, buffer, s21_strlen(buffer));
+      s21_writeString(buffer, bufferWidth);      
+    }
+  }
+}
+
+s21_size_t s21_stoi(const char *str) {
+  s21_size_t result = 0;
   // Convert a string to a number between 0 and 9
   while (*str >= '0' && *str <= '9') {
-    result = result * 10 + (*str++ - '0');
+    result = result * 10 + (*str - '0');
+    str++;
   }
-
   return result;
 }
 
@@ -56,6 +74,14 @@ void s21_writeString(char *str, char *buffer) {
   for (s21_size_t i = 0; i <= s21_strlen(buffer); i++) {
     str[i] = buffer[i];
   }
+}
+
+void s21_writeNchar(char *str, const char *buffer, s21_size_t n) {
+  // copy n char from buffer to the str
+  for (s21_size_t i = 0; i < n; i++) {
+    str[i] = buffer[i];
+  }
+  str[n] = '\0';
 }
 
 void s21_ctoa(char value, char *buffer) {

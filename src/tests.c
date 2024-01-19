@@ -469,9 +469,9 @@ int main(void) {
   char str2[50];
   unsigned int UnsInt = 105;
 
-  s21_sprintf(str1, "\nTe %+10312d %-21312s %f %c %u\n", -455, "test",
+  s21_sprintf(str1, "\nTe %10d %s %f %c %u\n", 455, "test",
               123.12349, 'k', UnsInt);
-  sprintf(str2, "\nTe %-10d %-10s %f %c %u\n", -455, "test", 123.12349, 'k',
+  sprintf(str2, "\nTe %10d %s %f %c %u\n", 455, "test", 123.12349, 'k',
           UnsInt);
 
   printf("result: %s\n", str1);
