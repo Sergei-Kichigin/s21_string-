@@ -53,5 +53,4 @@ s21_size_t s21_stoi(const char *str);
 int s21_writeParameters(parserParameters *parametrs, char *format);
 int s21_writeWidth(parserParameters *parametrs, char *format);
 
-
 #endif

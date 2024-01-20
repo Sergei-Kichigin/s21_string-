@@ -44,17 +44,17 @@ int s21_writeWidth(parserParameters *parametrs, char *formatSpec) {
   return SUCCESS;
 }
 
-void s21_addFormat(char *buffer, parserParameters parametrs) { 
+void s21_addFormat(char *buffer, parserParameters parametrs) {
   if (parametrs.width > s21_strlen(buffer)) {
     s21_size_t addWidth = parametrs.width - s21_strlen(buffer);
     char bufferWidth[addWidth];
     s21_memset(bufferWidth, ' ', addWidth);
 
-    if (parametrs.flag == '-') { // left orientation
-      s21_strncat(buffer, bufferWidth, addWidth);  
-    } else { // right orientation
+    if (parametrs.flag == '-') {  // left orientation
+      s21_strncat(buffer, bufferWidth, addWidth);
+    } else {  // right orientation
       s21_strncat(bufferWidth, buffer, s21_strlen(buffer));
-      s21_writeString(buffer, bufferWidth);      
+      s21_writeString(buffer, bufferWidth);
     }
   }
 }

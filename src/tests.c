@@ -469,10 +469,9 @@ int main(void) {
   char str2[50];
   unsigned int UnsInt = 105;
 
-  s21_sprintf(str1, "\nTe %10d %s %f %c %u\n", 455, "test",
-              123.12349, 'k', UnsInt);
-  sprintf(str2, "\nTe %10d %s %f %c %u\n", 455, "test", 123.12349, 'k',
-          UnsInt);
+  s21_sprintf(str1, "\nTe %d %s %f %c %u\n", 455, "test", 123.12349, 'k',
+              UnsInt);
+  sprintf(str2, "\nTe %d %s %f %c %u\n", 455, "test", 123.12349, 'k', UnsInt);
 
   printf("result: %s\n", str1);
   printf("expect: %s\n", str2);
