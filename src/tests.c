@@ -403,10 +403,7 @@ START_TEST(test_sprintf_int_left_orientation) {
   char buffer1[100];
   char buffer2[100];
 
-  // Используйте вашу функцию
   s21_sprintf(buffer1, "Test: %-10d", 42);
-
-  // Используйте оригинальную sprintf
   sprintf(buffer2, "Test: %-10d", 42);
 
   ck_assert_str_eq(buffer1, buffer2);
@@ -417,10 +414,7 @@ START_TEST(test_sprintf_int_right_orientation) {
   char buffer1[100];
   char buffer2[100];
 
-  // Используйте вашу функцию
   s21_sprintf(buffer1, "Test: %+10d", 42);
-
-  // Используйте оригинальную sprintf
   sprintf(buffer2, "Test: %+10d", 42);
 
   ck_assert_str_eq(buffer1, buffer2);
@@ -431,10 +425,7 @@ START_TEST(test_sprintf_int_negative) {
   char buffer1[100];
   char buffer2[100];
 
-  // Используйте вашу функцию
   s21_sprintf(buffer1, "Test: %-10d", -142);
-
-  // Используйте оригинальную sprintf
   sprintf(buffer2, "Test: %-10d", -142);
 
   ck_assert_str_eq(buffer1, buffer2);
