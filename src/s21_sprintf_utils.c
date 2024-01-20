@@ -62,7 +62,7 @@ void s21_addFormat(char *buffer, parserParameters parametrs) {
 s21_size_t s21_stoi(const char *str) {
   s21_size_t result = 0;
   // Convert a string to a number between 0 and 9
-  while (*str >= '0' && *str <= '9') {
+  while (s21_isdigit(*str)) {
     result = result * 10 + (*str - '0');
     str++;
   }
