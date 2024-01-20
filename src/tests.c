@@ -788,13 +788,12 @@ int main(void) {
   number_failed = srunner_ntests_failed(sr);
   srunner_free(sr);
 
-  /*char str[] = "Hello, world! How are you?";
-  s21_strtok(str, " ,!?");
-  //char *token = s21_strtok(str, " ,!?");
+  /*char str[] = "Hello, world!? How are you?";
+  char *token = s21_strtok(str, " ,!?");
 
     while (token != S21_NULL) {
         printf("Token: %s\n", token);
-        token = s21_strtok(NULL, " ,!?");
+        token = s21_strtok(S21_NULL, " ,!?");
     }*/
 
   return (number_failed == 0) ? SUCCESS : ERROR;

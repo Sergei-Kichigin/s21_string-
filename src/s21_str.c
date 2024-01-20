@@ -1,5 +1,4 @@
 #include "s21_string.h"
-#include <stdio.h>
 
 char *s21_strncat(char *dest, const char *src, s21_size_t n) {
   char *p = dest + s21_strlen(dest);
@@ -139,15 +138,17 @@ char *s21_strtok(char *str, const char *delim) {
   } else { 
     point = point + count;
     }
-    while (*(point+count) != '\0') {
-    printf("%d", s21_for_compare(delim, *point));
-    count++;}
-  /*for (int count = 0; *(point+count) != '\0'; count++) {
-    if (s21_for_compare(delim, *(point + count)) == 1 ) {
-      *(point + count) = '\0';
-      count++;
-    }
-  }*/
+  if (*point== '\0') {
+    point = S21_NULL; 
+  } else {
+      for (count = 0; *(point+count) != '\0'; count++) {
+        if (s21_for_compare(delim, *(point + count)) == 1 ) {
+          *(point + count) = '\0';
+          count++;
+          break;
+        }
+      }
+   }
   return point;
 }
 
