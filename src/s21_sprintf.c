@@ -11,19 +11,66 @@ int s21_sprintf(char *str, const char *format, ...) {
   while (*format) {
     if (*format == '%') {
       format++;
-      switch (*format) {
-        // int type
-        case 'd':
-          int intValue = va_arg(arg, int);
-          s21_strncat(str, s21_itoa(intValue), s21_strlen(s21_itoa(intValue)));
-          break;
-        // string type
-        case 's':
-          char *charValue = va_arg(arg, char *);
-          s21_strncat(str, charValue, s21_strlen(charValue));
-        // unknown type
-        default:
-          break;
+
+      if (*format == '%') {  // % don't have parametrs
+        *str = *format;
+        str++;
+      } else {
+        s21_size_t lenFormatSpec = s21_strcspn(format, "cdfsu");
+        parserParameters parametrs = {'\0', 0, 0, '\0'};
+
+        if (lenFormatSpec == s21_strlen(format)) {  // not found "cdfsu"
+          printf("%s", "Uncorrect format\n");
+          return ERROR;
+        }
+
+        if (lenFormatSpec > 0) {  // specifier have parametrs
+          char formatSpec[20];
+
+          s21_writeNchar(formatSpec, format, lenFormatSpec);
+          s21_writeParameters(&parametrs, formatSpec);
+
+          format += lenFormatSpec;
+        }
+
+        char buffer[20];  // достаточно 20 символов? с добавлением ширины
+                          // какая может быть максимальная ширина
+
+        switch (*format) {
+          // char type
+          case 'c':
+            char charValue = (char)va_arg(arg, int);
+            s21_ctoa(charValue, buffer);
+            break;
+          // int type
+          case 'd':
+            int intValue = va_arg(arg, int);
+            s21_itoa(intValue, buffer);
+            break;
+          // float type
+          case 'f':
+            double floatValue = va_arg(arg, double);
+            s21_ftoa(floatValue, buffer);
+            break;
+          // string type
+          case 's':
+            char *charPtrValue = va_arg(arg, char *);
+            s21_writeString(buffer, charPtrValue);
+            break;
+          // unsigned int type
+          case 'u':
+            unsigned int unsignedIntValue = va_arg(arg, unsigned int);
+            s21_utoa(unsignedIntValue, buffer);
+            break;
+          // unknown type
+          default:
+            return ERROR;  // need to change !!!
+            break;
+        }
+
+        s21_addFormat(buffer, parametrs);
+        s21_writeString(str, buffer);
+        str += s21_strlen(buffer);
       }
     } else {
       *str = *format;
@@ -34,48 +81,4 @@ int s21_sprintf(char *str, const char *format, ...) {
 
   va_end(arg);
   return (int)s21_strlen(str);
-}
-
-char *s21_itoa(int value) {
-  static char buffer[20];  // max length long int + знак + завершающий символ
-  int isNegative = 0;
-  s21_size_t i = 0;
-
-  if (value < 0) {
-    isNegative = 1;
-    value = -value;
-  }
-
-  while (value > 0) {
-    buffer[i++] = '0' + value % 10;
-    value /= 10;
-  }
-
-  if (isNegative) {
-    buffer[i++] = '-';
-  }
-
-  buffer[i] = '\0';
-
-  // Переворачиваем строку, так как мы записывали цифры в обратном порядке
-  s21_strrev(buffer);
-
-  return buffer;
-}
-
-void s21_strrev(char *str) {
-  int length = s21_strlen(str);
-  int start = 0;
-  int end = length - 1;
-
-  while (start < end) {
-    // Обмениваем символы на концах строки
-    char temp = str[start];
-    str[start] = str[end];
-    str[end] = temp;
-
-    // Переходим к следующей паре символов
-    start++;
-    end--;
-  }
 }

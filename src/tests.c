@@ -14,7 +14,7 @@ START_TEST(memchr_1) {
   result = s21_memchr(input, 's', length);
   expected = memchr(input, 's', length);
 
-  ck_assert_mem_eq(result, expected, sizeof(expected)); //
+  ck_assert_mem_eq(result, expected, sizeof(*expected));  //
 }
 END_TEST
 
@@ -45,11 +45,11 @@ START_TEST(memset_1) {
 }
 END_TEST
 
-//START_TEST(memset_1) {
-//  s21_size_t length = 5;
-//  char input[20] = "Text to copy";
-//  void *result;
-//  void *expected;
+// START_TEST(memset_1) {
+//   s21_size_t length = 5;
+//   char input[20] = "Text to copy";
+//   void *result;
+//   void *expected;
 
 //  result = s21_memset(input, 'a', length);
 //  char expected_buffer[20] = "Text to copy";
@@ -57,7 +57,7 @@ END_TEST
 
 //  ck_assert_mem_eq(result, expected, strlen(input)*sizeof(*expected));
 //}
-//END_TEST
+// END_TEST
 
 START_TEST(memset_2) {
   s21_size_t length = 7;
@@ -137,12 +137,13 @@ START_TEST(memcpy_1) {
   void *expected;
 
   result = s21_memcpy(input, src, length);
-  //printf("%s, %s\n", input, (char*)result);
+  // printf("%s, %s\n", input, (char*)result);
   char expected_buffer[20] = "Text to copy";
   expected = memcpy(expected_buffer, src, length);
-  //printf("%s, %s", expected_buffer, (char*)expected);
-  //printf("\n%ld, %ld, %ld\n", sizeof(expected), sizeof(*expected), strlen(expected)*sizeof(*expected));
-  ck_assert_mem_eq(result, expected, strlen(expected)*sizeof(*expected));
+  // printf("%s, %s", expected_buffer, (char*)expected);
+  // printf("\n%ld, %ld, %ld\n", sizeof(expected), sizeof(*expected),
+  // strlen(expected)*sizeof(*expected));
+  ck_assert_mem_eq(result, expected, strlen(expected) * sizeof(*expected));
 }
 END_TEST
 
@@ -495,6 +496,85 @@ START_TEST(strncmp_7) {
 }
 END_TEST
 
+// SPRINTF
+
+START_TEST(test_sprintf_int_left_orientation) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Test: %-10d", 42);
+  sprintf(buffer2, "Test: %-10d", 42);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_int_right_orientation) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Test: %+10d", 42);
+  sprintf(buffer2, "Test: %+10d", 42);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_int_negative) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Test: %-10d", -142);
+  sprintf(buffer2, "Test: %-10d", -142);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_float) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Float: %2f", 3.14159);
+  sprintf(buffer2, "Float: %2f", 3.14159);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_string) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "String: %s", "Hello, World!");
+  sprintf(buffer2, "String: %s", "Hello, World!");
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_char) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Char: %c", 'A');
+  sprintf(buffer2, "Char: %c", 'A');
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_unsigned) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Unsigned: %u", 12345);
+  sprintf(buffer2, "Unsigned: %u", 12345);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
 Suite *my_string_suite(void) {
   Suite *s;
   TCase *tc_core;
@@ -551,6 +631,15 @@ Suite *my_string_suite(void) {
   tcase_add_test(tc_core, strstr_3);
   tcase_add_test(tc_core, strstr_empty_needle);
   
+  // SPRINTF
+  tcase_add_test(tc_core, test_sprintf_int_left_orientation);
+  tcase_add_test(tc_core, test_sprintf_int_right_orientation);
+  tcase_add_test(tc_core, test_sprintf_int_negative);
+  tcase_add_test(tc_core, test_sprintf_float);
+  tcase_add_test(tc_core, test_sprintf_string);
+  tcase_add_test(tc_core, test_sprintf_char);
+  tcase_add_test(tc_core, test_sprintf_unsigned);
+
   // STRNCMP
   tcase_add_test(tc_core, strncmp_1);
   tcase_add_test(tc_core, strncmp_2);
@@ -569,18 +658,20 @@ int main(void) {
   Suite *s;
   SRunner *sr;
 
-  // TEST
+  // SPRINTF TEST ----------------------------
 
-  /*
-  char str1[10];
-  char str2[10];
+  char str1[50];
+  char str2[50];
+  unsigned int UnsInt = 105;
 
-  s21_sprintf(str2, "%d%s", 4, "test");
-  sprintf(str1, "%d%s", 4, "test");
+  s21_sprintf(str1, "\nTe %10d %s %f %c %u\n", 455, "test", 123.12349, 'k',
+              UnsInt);
+  sprintf(str2, "\nTe %10d %s %f %c %u\n", 455, "test", 123.12349, 'k', UnsInt);
 
-  printf("%s\n", str1);
-  printf("%s\n", str2);
-  */
+  printf("result: %s\n", str1);
+  printf("expect: %s\n", str2);
+
+  // SPRINTF TEST ----------------------------
 
   s = my_string_suite();
   sr = srunner_create(s);
