@@ -7,6 +7,11 @@
 int s21_sprintf(char *str, const char *format, ...) {
   va_list arg;
   va_start(arg, format);
+  char charValue;
+  int intValue;
+  double floatValue;
+  char *charPtrValue;
+  unsigned int unsignedIntValue;
 
   while (*format) {
     if (*format == '%') {
@@ -39,27 +44,27 @@ int s21_sprintf(char *str, const char *format, ...) {
         switch (*format) {
           // char type
           case 'c':
-            char charValue = (char)va_arg(arg, int);
+            charValue = (char)va_arg(arg, int);
             s21_ctoa(charValue, buffer);
             break;
           // int type
           case 'd':
-            int intValue = va_arg(arg, int);
+            intValue = va_arg(arg, int);
             s21_itoa(intValue, buffer);
             break;
           // float type
           case 'f':
-            double floatValue = va_arg(arg, double);
+            floatValue = va_arg(arg, double);
             s21_ftoa(floatValue, buffer);
             break;
           // string type
           case 's':
-            char *charPtrValue = va_arg(arg, char *);
+            charPtrValue = va_arg(arg, char *);
             s21_writeString(buffer, charPtrValue);
             break;
           // unsigned int type
           case 'u':
-            unsigned int unsignedIntValue = va_arg(arg, unsigned int);
+            unsignedIntValue = va_arg(arg, unsigned int);
             s21_utoa(unsignedIntValue, buffer);
             break;
           // unknown type

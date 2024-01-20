@@ -1,4 +1,5 @@
 #include "s21_string.h"
+#include <stdio.h>
 
 char *s21_strncat(char *dest, const char *src, s21_size_t n) {
   char *p = dest + s21_strlen(dest);
@@ -118,4 +119,45 @@ int s21_strncmp(const char *str1, const char *str2, s21_size_t n) {
     if (str1[i] == '\0' || str2[i] == '\0') flag = 2; /* для отрицательных n сравнение идёт, пока одна из строчек не закончится */
   }
   return result;
+}
+
+char *s21_strncpy(char *dest, const char *src, s21_size_t n) {
+  char *p1 = dest;
+
+  for (s21_size_t i = 0; i < n; i++) {
+    p1[i] = src[i];
+  }
+  return dest;
+}
+
+char *s21_strtok(char *str, const char *delim) {
+  static char *point = S21_NULL;
+  static int count = 0;
+
+  if (str != S21_NULL) {
+    point = str;
+  } else { 
+    point = point + count;
+    }
+    while (*(point+count) != '\0') {
+    printf("%d", s21_for_compare(delim, *point));
+    count++;}
+  /*for (int count = 0; *(point+count) != '\0'; count++) {
+    if (s21_for_compare(delim, *(point + count)) == 1 ) {
+      *(point + count) = '\0';
+      count++;
+    }
+  }*/
+  return point;
+}
+
+int s21_for_compare(const char *str, char letter) {
+  int flag = 0;
+  for(int i = 0; str[i] != '\0'; i++) {
+    if (str[i] == letter) {
+      flag = 1;
+      break;
+    }
+  }
+  return flag;
 }

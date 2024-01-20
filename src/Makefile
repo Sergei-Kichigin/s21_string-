@@ -2,7 +2,8 @@ CC = gcc
 CFLAGS = -Wall -Wextra -Werror -std=c11 -D_POSIX_C_SOURCE=200809L
 GCOV_FLAGS = -fprofile-arcs -ftest-coverage
 
-LIBS = -lcheck -lm -lsubunit 
+#LIBS = -lcheck -lm -lsubunit
+LIBS = -lcheck
 
 VALG = valgrind --tool=memcheck --leak-check=yes ./s21_tests
 CPPCH = cppcheck --enable=all --suppress=missingIncludeSystem --suppress=invalidFunctionArg --force
