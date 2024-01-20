@@ -397,6 +397,94 @@ START_TEST(strstr_empty_needle) {
 }
 END_TEST
 
+// SPRINTF
+
+START_TEST(test_sprintf_int_left_orientation) {
+  char buffer1[100];
+  char buffer2[100];
+
+  // Используйте вашу функцию
+  s21_sprintf(buffer1, "Test: %-10d", 42);
+
+  // Используйте оригинальную sprintf
+  sprintf(buffer2, "Test: %-10d", 42);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_int_right_orientation) {
+  char buffer1[100];
+  char buffer2[100];
+
+  // Используйте вашу функцию
+  s21_sprintf(buffer1, "Test: %+10d", 42);
+
+  // Используйте оригинальную sprintf
+  sprintf(buffer2, "Test: %+10d", 42);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_int_negative) {
+  char buffer1[100];
+  char buffer2[100];
+
+  // Используйте вашу функцию
+  s21_sprintf(buffer1, "Test: %-10d", -142);
+
+  // Используйте оригинальную sprintf
+  sprintf(buffer2, "Test: %-10d", -142);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_float) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Float: %2f", 3.14159);
+  sprintf(buffer2, "Float: %2f", 3.14159);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_string) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "String: %s", "Hello, World!");
+  sprintf(buffer2, "String: %s", "Hello, World!");
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_char) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Char: %c", 'A');
+  sprintf(buffer2, "Char: %c", 'A');
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_unsigned) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Unsigned: %u", 12345);
+  sprintf(buffer2, "Unsigned: %u", 12345);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
 Suite *my_string_suite(void) {
   Suite *s;
   TCase *tc_core;
@@ -453,6 +541,15 @@ Suite *my_string_suite(void) {
   tcase_add_test(tc_core, strstr_3);
   tcase_add_test(tc_core, strstr_empty_needle);
 
+  // SPRINTF
+  tcase_add_test(tc_core, test_sprintf_int_left_orientation);
+  tcase_add_test(tc_core, test_sprintf_int_right_orientation);
+  tcase_add_test(tc_core, test_sprintf_int_negative);
+  tcase_add_test(tc_core, test_sprintf_float);
+  tcase_add_test(tc_core, test_sprintf_string);
+  tcase_add_test(tc_core, test_sprintf_char);
+  tcase_add_test(tc_core, test_sprintf_unsigned);
+
   suite_add_tcase(s, tc_core);
 
   return s;
@@ -469,10 +566,9 @@ int main(void) {
   char str2[50];
   unsigned int UnsInt = 105;
 
-  s21_sprintf(str1, "\nTe %10d %s %f %c %u\n", 455, "test",
-              123.12349, 'k', UnsInt);
-  sprintf(str2, "\nTe %10d %s %f %c %u\n", 455, "test", 123.12349, 'k',
-          UnsInt);
+  s21_sprintf(str1, "\nTe %10d %s %f %c %u\n", 455, "test", 123.12349, 'k',
+              UnsInt);
+  sprintf(str2, "\nTe %10d %s %f %c %u\n", 455, "test", 123.12349, 'k', UnsInt);
 
   printf("result: %s\n", str1);
   printf("expect: %s\n", str2);

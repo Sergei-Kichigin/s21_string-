@@ -3,7 +3,7 @@
 #include <string.h>
 
 #include "s21_string.h"
- 
+
 int s21_sprintf(char *str, const char *format, ...) {
   va_list arg;
   va_start(arg, format);
@@ -19,13 +19,13 @@ int s21_sprintf(char *str, const char *format, ...) {
         s21_size_t lenFormatSpec = s21_strcspn(format, "cdfsu");
         parserParameters parametrs = {'\0', 0, 0, '\0'};
 
-        if (lenFormatSpec == s21_strlen(format)) { // not found "cdfsu"
+        if (lenFormatSpec == s21_strlen(format)) {  // not found "cdfsu"
           printf("%s", "Uncorrect format\n");
           return ERROR;
         }
 
-        if (lenFormatSpec > 0) { // specifier have parametrs 
-          char formatSpec [20];  
+        if (lenFormatSpec > 0) {  // specifier have parametrs
+          char formatSpec[20];
 
           s21_writeNchar(formatSpec, format, lenFormatSpec);
           s21_writeParameters(&parametrs, formatSpec);
@@ -33,8 +33,8 @@ int s21_sprintf(char *str, const char *format, ...) {
           format += lenFormatSpec;
         }
 
-        char buffer[20]; // достаточно 20 символов? с добавлением ширины
-                         // какая может быть максимальная ширина
+        char buffer[20];  // достаточно 20 символов? с добавлением ширины
+                          // какая может быть максимальная ширина
 
         switch (*format) {
           // char type
