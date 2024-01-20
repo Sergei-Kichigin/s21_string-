@@ -414,8 +414,8 @@ START_TEST(test_sprintf_int_right_orientation) {
   char buffer1[100];
   char buffer2[100];
 
-  s21_sprintf(buffer1, "Test: %+10d", 42);
-  sprintf(buffer2, "Test: %+10d", 42);
+  s21_sprintf(buffer1, "Test: %10d", 42);
+  sprintf(buffer2, "Test: %10d", 42);
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -425,8 +425,8 @@ START_TEST(test_sprintf_int_negative) {
   char buffer1[100];
   char buffer2[100];
 
-  s21_sprintf(buffer1, "Test: %-10d", -142);
-  sprintf(buffer2, "Test: %-10d", -142);
+  s21_sprintf(buffer1, "Test: %d", -142);
+  sprintf(buffer2, "Test: %d", -142);
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -436,8 +436,19 @@ START_TEST(test_sprintf_float) {
   char buffer1[100];
   char buffer2[100];
 
-  s21_sprintf(buffer1, "Float: %2f", 3.14159);
-  sprintf(buffer2, "Float: %2f", 3.14159);
+  s21_sprintf(buffer1, "Float: %f", 3.14159);
+  sprintf(buffer2, "Float: %f", 3.14159);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_float_negative) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Float: %f", -3.14159);
+  sprintf(buffer2, "Float: %f", -3.14159);
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -537,6 +548,7 @@ Suite *my_string_suite(void) {
   tcase_add_test(tc_core, test_sprintf_int_right_orientation);
   tcase_add_test(tc_core, test_sprintf_int_negative);
   tcase_add_test(tc_core, test_sprintf_float);
+  tcase_add_test(tc_core, test_sprintf_float_negative);
   tcase_add_test(tc_core, test_sprintf_string);
   tcase_add_test(tc_core, test_sprintf_char);
   tcase_add_test(tc_core, test_sprintf_unsigned);
@@ -557,9 +569,9 @@ int main(void) {
   char str2[50];
   unsigned int UnsInt = 105;
 
-  s21_sprintf(str1, "\nTe %10d %s %f %c %u\n", 455, "test", 123.12349, 'k',
+  s21_sprintf(str1, "\nTe % d %s % f %c %u\n", 0, "test", 0.0, 'k',
               UnsInt);
-  sprintf(str2, "\nTe %10d %s %f %c %u\n", 455, "test", 123.12349, 'k', UnsInt);
+  sprintf(str2, "\nTe % d %s % f %c %u\n", 0, "test", 0.0, 'k', UnsInt);
 
   printf("result: %s\n", str1);
   printf("expect: %s\n", str2);

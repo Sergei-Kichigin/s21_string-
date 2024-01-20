@@ -1,6 +1,5 @@
 #include <stdarg.h>
 #include <stdio.h>
-#include <string.h>
 
 #include "s21_string.h"
 
@@ -12,7 +11,7 @@ int s21_sprintf(char *str, const char *format, ...) {
     if (*format == '%') {
       format++;
 
-      if (*format == '%') {  // % don't have parametrs
+      if (*format == '%') {  // % have not parametrs
         *str = *format;
         str++;
       } else {
@@ -45,12 +44,12 @@ int s21_sprintf(char *str, const char *format, ...) {
           // int type
           case 'd':
             int intValue = va_arg(arg, int);
-            s21_itoa(intValue, buffer);
+            s21_itoa(intValue, buffer, parametrs);
             break;
           // float type
           case 'f':
             double floatValue = va_arg(arg, double);
-            s21_ftoa(floatValue, buffer);
+            s21_ftoa(floatValue, buffer, parametrs);
             break;
           // string type
           case 's':

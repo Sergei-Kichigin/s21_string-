@@ -39,9 +39,9 @@ void s21_addFormat(char *buffer, parserParameters parametrs);
 
 // transform type
 void s21_ctoa(char value, char *buffer);
-void s21_itoa(int value, char *buffer);
+void s21_itoa(int value, char *buffer, parserParameters parametrs);
 void s21_strrev(char *str);
-void s21_ftoa(double value, char *buffer);
+void s21_ftoa(double value, char *buffer, parserParameters parametrs);
 void s21_utoa(unsigned int value, char *buffer);
 
 int s21_isdigit(int c);

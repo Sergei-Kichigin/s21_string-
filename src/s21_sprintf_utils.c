@@ -47,8 +47,10 @@ int s21_writeWidth(parserParameters *parametrs, char *formatSpec) {
 void s21_addFormat(char *buffer, parserParameters parametrs) {
   if (parametrs.width > s21_strlen(buffer)) {
     s21_size_t addWidth = parametrs.width - s21_strlen(buffer);
-    char bufferWidth[addWidth];
+
+    char bufferWidth[parametrs.width];
     s21_memset(bufferWidth, ' ', addWidth);
+    bufferWidth[addWidth] = '\0';
 
     if (parametrs.flag == '-') {  // left orientation
       s21_strncat(buffer, bufferWidth, addWidth);
@@ -101,9 +103,13 @@ void s21_utoa(unsigned int value, char *buffer) {
   s21_strrev(buffer);
 }
 
-void s21_itoa(int value, char *buffer) {
+void s21_itoa(int value, char *buffer, parserParameters parametrs) {
   int isNegative = 0;
   s21_size_t i = 0;
+
+  if (value == 0) {
+    buffer[i++] = '0';
+  }
 
   if (value < 0) {
     isNegative = 1;
@@ -117,6 +123,9 @@ void s21_itoa(int value, char *buffer) {
 
   if (isNegative) {
     buffer[i++] = '-';
+  } else {
+    if (parametrs.flag == '+') buffer[i++] = '+';
+    if (parametrs.flag == ' ') buffer[i++] = ' ';
   }
 
   buffer[i] = '\0';
@@ -141,15 +150,26 @@ void s21_strrev(char *str) {
   }
 }
 
-void s21_ftoa(double value, char *buffer) {
+void s21_ftoa(double value, char *buffer, parserParameters parametrs) {
   char doubleBuffer[20];
 
   int intPart = (int)value;
   int fractionalPart = fabs(round((value - intPart) * pow(10, 6)));
 
-  s21_itoa(intPart, buffer);
-  s21_itoa(fractionalPart, doubleBuffer);
+  s21_itoa(intPart, buffer, parametrs);
+  
+  if (fractionalPart == 0) {
+    fractionalPart = pow(10, 6);  
+  }
+  
+  parametrs.flag = '\0'; // fractionalPart haven't sign   
+  s21_itoa(fractionalPart, doubleBuffer, parametrs); /// utoa??
+  
+  if (fractionalPart == pow(10, 6)) { // for fractionalPart == 0
+    doubleBuffer[0] = '.';
+  } else {
+    s21_strncat(buffer, ".", 1);
+  }
 
-  s21_strncat(buffer, ".", 1);
   s21_strncat(buffer, doubleBuffer, s21_strlen(doubleBuffer));
 }
