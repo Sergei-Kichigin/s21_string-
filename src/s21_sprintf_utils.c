@@ -8,7 +8,7 @@ int s21_isflag(int c) { return (c == '-' || c == '+' || c == ' '); }
 
 int s21_writeParameters(parserParameters *parametrs, char *formatSpec) {
   s21_size_t lenFormatSpec = s21_strlen(formatSpec);
-
+  
   if (s21_isflag(*formatSpec)) {
     parametrs->flag = *formatSpec;
     formatSpec++;
@@ -151,25 +151,14 @@ void s21_strrev(char *str) {
 }
 
 void s21_ftoa(double value, char *buffer, parserParameters parametrs) {
-  char doubleBuffer[20];
+  char fracBuffer[20];
 
   int intPart = (int)value;
-  int fractionalPart = fabs(round((value - intPart) * pow(10, 6)));
+  s21_size_t fractionalPart = round((fabs(value - intPart) + 1) * pow(10, 6)); // +1 for save nulls in frac.part 
 
-  s21_itoa(intPart, buffer, parametrs);
+  s21_itoa(intPart, buffer, parametrs);   
+  s21_utoa(fractionalPart, fracBuffer); 
   
-  if (fractionalPart == 0) {
-    fractionalPart = pow(10, 6);  
-  }
-  
-  parametrs.flag = '\0'; // fractionalPart haven't sign   
-  s21_itoa(fractionalPart, doubleBuffer, parametrs); /// utoa??
-  
-  if (fractionalPart == pow(10, 6)) { // for fractionalPart == 0
-    doubleBuffer[0] = '.';
-  } else {
-    s21_strncat(buffer, ".", 1);
-  }
-
-  s21_strncat(buffer, doubleBuffer, s21_strlen(doubleBuffer));
+  fracBuffer[0] = '.'; //  1 -> '.'
+  s21_strncat(buffer, fracBuffer, s21_strlen(fracBuffer));
 }
