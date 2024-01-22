@@ -39,7 +39,6 @@ char *s21_strtok(char *str, const char *delim);
 void s21_writeString(char *str, char *buffer);
 void s21_writeNchar(char *str, const char *buffer, s21_size_t n);
 void s21_addFormat(char *buffer, parserParameters parametrs);
-int s21_for_compare(const char *str, char letter);
 
 // transform type
 void s21_ctoa(char value, char *buffer);

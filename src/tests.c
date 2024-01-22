@@ -426,6 +426,7 @@ START_TEST(strstr_empty_needle) {
 END_TEST
 
 // STRNCMP
+
 /*START_TEST(strncmp_1) {
   s21_size_t length = -1;
   char input1[20] = "This is Test1";
@@ -523,6 +524,8 @@ START_TEST(strncmp_7) {
   ck_assert_int_eq(result, expected);
 }
 END_TEST
+
+//STRNCPY
 
 START_TEST(strncpy_1) {
   s21_size_t length = 5;

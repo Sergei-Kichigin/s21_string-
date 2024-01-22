@@ -133,16 +133,17 @@ char *s21_strtok(char *str, const char *delim) {
   static char *point = S21_NULL;
   static int count = 0;
 
-  if (str != S21_NULL) {
-    point = str;
-  } else { 
-    point = point + count;
-    }
+  point = str != S21_NULL ? str : point + count;
+  
+  while (*point != '\0' && s21_strchr(delim, *point) != S21_NULL) {
+      *point = '\0';
+      point++;
+   }  
   if (*point== '\0') {
     point = S21_NULL; 
   } else {
       for (count = 0; *(point+count) != '\0'; count++) {
-        if (s21_for_compare(delim, *(point + count)) == 1 ) {
+        if (s21_strchr(delim, *(point + count)) != S21_NULL) {
           *(point + count) = '\0';
           count++;
           break;
@@ -150,15 +151,4 @@ char *s21_strtok(char *str, const char *delim) {
       }
    }
   return point;
-}
-
-int s21_for_compare(const char *str, char letter) {
-  int flag = 0;
-  for(int i = 0; str[i] != '\0'; i++) {
-    if (str[i] == letter) {
-      flag = 1;
-      break;
-    }
-  }
-  return flag;
 }
