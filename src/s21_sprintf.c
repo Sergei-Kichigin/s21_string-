@@ -1,4 +1,5 @@
 #include <stdarg.h>
+#include <stdbool.h>
 #include <stdio.h>
 
 #include "s21_string.h"
@@ -16,7 +17,7 @@ int s21_sprintf(char *str, const char *format, ...) {
         str++;
       } else {
         s21_size_t lenFormatSpec = s21_strcspn(format, "cdfsu");
-        parserParameters parametrs = {'\0', 0, 0, '\0'};
+        parserParameters parametrs = {false, false, false, 0, 0, '\0'};
 
         if (lenFormatSpec == s21_strlen(format)) {  // not found "cdfsu"
           printf("%s", "Uncorrect format\n");
@@ -27,7 +28,10 @@ int s21_sprintf(char *str, const char *format, ...) {
           char formatSpec[20];
 
           s21_writeNchar(formatSpec, format, lenFormatSpec);
-          s21_writeParameters(&parametrs, formatSpec);
+          if (s21_writeParameters(&parametrs, formatSpec)) {
+            printf("%s", "Uncorrect format\n");
+            return ERROR;
+          }
 
           format += lenFormatSpec;
         }

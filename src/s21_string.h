@@ -1,14 +1,19 @@
 #ifndef S21_STRING_H
 #define S21_STRING_H
 
+#include <stdbool.h>
+
 #define SUCCESS 0
 #define ERROR 1
 #define S21_NULL (void *)0
+#define MAXLENGHTSTRFLAGS
 
 typedef long unsigned s21_size_t;
 
 typedef struct {
-  char flag;
+  bool forcedSignOutput;  // Принудительный вывод знака
+  bool leftOrientation;
+  bool signPlace;
   s21_size_t width;
   s21_size_t precision;
   char length;
@@ -36,6 +41,7 @@ char *s21_strstr(const char *haystack, const char *needle);
 void s21_writeString(char *str, char *buffer);
 void s21_writeNchar(char *str, const char *buffer, s21_size_t n);
 void s21_addFormat(char *buffer, parserParameters parametrs);
+int s21_writeFlags(parserParameters *parametrs, char *formatSpec);
 
 // transform type
 void s21_ctoa(char value, char *buffer);

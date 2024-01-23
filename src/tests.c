@@ -569,9 +569,17 @@ int main(void) {
   char str2[50];
   unsigned int UnsInt = 105;
 
-  s21_sprintf(str1, "\nTe %d %s % f %c %u\n", 0, "test", 0.0002346, 'k',
+  // correct combination
+  // -
+  // +
+  // ' '
+  // -+ / +-
+  // -' ' / ' '-
+
+  s21_sprintf(str1, "\nTe % -10d %s % f %c %u\n", 0, "test", 0.0002346, 'k',
               UnsInt);
-  sprintf(str2, "\nTe %d %s % f %c %u\n", 0, "test", 0.0002346, 'k', UnsInt);
+  sprintf(str2, "\nTe % -10d %s % f %c %u\n", 0, "test", 0.0002346, 'k',
+          UnsInt);
 
   printf("result: %s\n", str1);
   printf("expect: %s\n", str2);

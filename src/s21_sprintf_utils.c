@@ -1,4 +1,5 @@
 #include <math.h>
+#include <stdio.h>
 
 #include "s21_string.h"
 
@@ -7,19 +8,64 @@ int s21_isdigit(int c) { return (c >= '0' && c <= '9'); }
 int s21_isflag(int c) { return (c == '-' || c == '+' || c == ' '); }
 
 int s21_writeParameters(parserParameters *parametrs, char *formatSpec) {
-  s21_size_t lenFormatSpec = s21_strlen(formatSpec);
-  
-  if (s21_isflag(*formatSpec)) {
-    parametrs->flag = *formatSpec;
-    formatSpec++;
-    lenFormatSpec--;
+  int currentStep = 0;
+  currentStep = s21_writeFlags(parametrs, formatSpec);
+
+  if (currentStep == -1) {
+    return ERROR;
   }
 
-  if (!s21_writeWidth(parametrs, formatSpec)) {
+  formatSpec += currentStep;
+
+  if (s21_writeWidth(parametrs, formatSpec)) {
     return ERROR;
   }
 
   return SUCCESS;
+}
+
+int s21_writeFlags(parserParameters *parametrs, char *formatSpec) {
+  s21_size_t lenFlags = s21_strcspn(formatSpec, "1234567890.lh");
+  s21_size_t i = 0;
+
+  if (lenFlags > 0) {
+    printf("\nlength: %ld\n", lenFlags);
+    if (lenFlags > 2) {
+      return -1;
+    }
+
+    if (lenFlags == 2) {
+      if (formatSpec[0] == formatSpec[1]) {
+        return -1;
+      }
+    }
+
+    for (; i < lenFlags; i++) {
+      switch (formatSpec[i]) {
+        case '-':
+          parametrs->leftOrientation = true;
+          break;
+
+        case '+':
+          parametrs->forcedSignOutput = true;
+          break;
+
+        case ' ':
+          parametrs->signPlace = true;
+          break;
+
+        default:
+          return -1;
+          break;
+      }
+    }
+  }
+
+  if (parametrs->forcedSignOutput && parametrs->signPlace) {
+    return -1;
+  }
+
+  return lenFlags;
 }
 
 int s21_writeWidth(parserParameters *parametrs, char *formatSpec) {
@@ -52,7 +98,7 @@ void s21_addFormat(char *buffer, parserParameters parametrs) {
     s21_memset(bufferWidth, ' ', addWidth);
     bufferWidth[addWidth] = '\0';
 
-    if (parametrs.flag == '-') {  // left orientation
+    if (parametrs.leftOrientation) {  // left orientation
       s21_strncat(buffer, bufferWidth, addWidth);
     } else {  // right orientation
       s21_strncat(bufferWidth, buffer, s21_strlen(buffer));
@@ -124,8 +170,8 @@ void s21_itoa(int value, char *buffer, parserParameters parametrs) {
   if (isNegative) {
     buffer[i++] = '-';
   } else {
-    if (parametrs.flag == '+') buffer[i++] = '+';
-    if (parametrs.flag == ' ') buffer[i++] = ' ';
+    if (parametrs.forcedSignOutput) buffer[i++] = '+';
+    if (parametrs.signPlace) buffer[i++] = ' ';
   }
 
   buffer[i] = '\0';
@@ -154,11 +200,13 @@ void s21_ftoa(double value, char *buffer, parserParameters parametrs) {
   char fracBuffer[20];
 
   int intPart = (int)value;
-  s21_size_t fractionalPart = round((fabs(value - intPart) + 1) * pow(10, 6)); // +1 for save nulls in frac.part 
+  s21_size_t fractionalPart =
+      round((fabs(value - intPart) + 1) *
+            pow(10, 6));  // +1 for save nulls in frac.part
 
-  s21_itoa(intPart, buffer, parametrs);   
-  s21_utoa(fractionalPart, fracBuffer); 
-  
-  fracBuffer[0] = '.'; //  1 -> '.'
+  s21_itoa(intPart, buffer, parametrs);
+  s21_utoa(fractionalPart, fracBuffer);
+
+  fracBuffer[0] = '.';  //  1 -> '.'
   s21_strncat(buffer, fracBuffer, s21_strlen(fracBuffer));
 }
