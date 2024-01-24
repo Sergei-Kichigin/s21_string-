@@ -5,17 +5,14 @@
 
 int s21_isdigit(int c) { return (c >= '0' && c <= '9'); }
 
-int s21_isflag(int c) { return (c == '-' || c == '+' || c == ' '); }
-
 int s21_writeParameters(parserParameters *parametrs, char *formatSpec) {
-  int currentStep = 0;
-  currentStep = s21_writeFlags(parametrs, formatSpec);
+  s21_size_t lenParam = 0;
 
-  if (currentStep == -1) {
+  if (s21_writeFlags(parametrs, formatSpec, &lenParam)) {
     return ERROR;
   }
 
-  formatSpec += currentStep;
+  formatSpec += lenParam;
 
   if (s21_writeWidth(parametrs, formatSpec)) {
     return ERROR;
@@ -24,58 +21,49 @@ int s21_writeParameters(parserParameters *parametrs, char *formatSpec) {
   return SUCCESS;
 }
 
-int s21_writeFlags(parserParameters *parametrs, char *formatSpec) {
-  s21_size_t lenFlags = s21_strcspn(formatSpec, "1234567890.lh");
-  s21_size_t i = 0;
+int s21_writeFlags(parserParameters *parametrs, char *formatSpec,
+                   s21_size_t *lenParam) {
+  size_t lenFlags = s21_strcspn(formatSpec, "1234567890.lh");
+  *lenParam = lenFlags;
 
-  if (lenFlags > 0) {
-    printf("\nlength: %ld\n", lenFlags);
-    if (lenFlags > 2) {
-      return -1;
-    }
+  if (lenFlags > 2 || (lenFlags == 2 && (formatSpec[0] == formatSpec[1]))) {
+    return ERROR;
+  }
 
-    if (lenFlags == 2) {
-      if (formatSpec[0] == formatSpec[1]) {
-        return -1;
-      }
-    }
-
-    for (; i < lenFlags; i++) {
+  if (lenFlags == 1 || lenFlags == 2){
+    for (s21_size_t i = 0; i < lenFlags; i++) {
       switch (formatSpec[i]) {
         case '-':
           parametrs->leftOrientation = true;
           break;
-
         case '+':
           parametrs->forcedSignOutput = true;
           break;
-
         case ' ':
           parametrs->signPlace = true;
           break;
-
         default:
-          return -1;
+          return ERROR;
           break;
       }
     }
   }
 
   if (parametrs->forcedSignOutput && parametrs->signPlace) {
-    return -1;
+    return ERROR;
   }
 
-  return lenFlags;
+  return SUCCESS;
 }
 
 int s21_writeWidth(parserParameters *parametrs, char *formatSpec) {
   char charWidth[20];
   s21_size_t i;
 
-  s21_size_t lenFormatSpec = s21_strlen(formatSpec);
+  s21_size_t lenWidth = s21_strcspn(formatSpec, "lh");
 
-  if (lenFormatSpec > 0) {
-    for (i = 0; i < lenFormatSpec; i++, formatSpec++) {
+  if (lenWidth > 0) {
+    for (i = 0; i < lenWidth; i++, formatSpec++) {
       if (s21_isdigit(*formatSpec)) {
         charWidth[i] = *formatSpec;
       } else {
