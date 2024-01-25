@@ -14,23 +14,31 @@ int s21_writeParameters(parserParameters *parametrs, char *formatSpec) {
 
   formatSpec += lenParam;
 
-  if (s21_writeWidth(parametrs, formatSpec)) {
+  if (s21_writeWidth(parametrs, formatSpec, &lenParam)) {
     return ERROR;
   }
+
+  formatSpec += lenParam;
+
+  if (s21_writePrecision(parametrs, formatSpec, &lenParam)) {
+    return ERROR;
+  }
+
+  formatSpec += lenParam;
 
   return SUCCESS;
 }
 
 int s21_writeFlags(parserParameters *parametrs, char *formatSpec,
                    s21_size_t *lenParam) {
-  size_t lenFlags = s21_strcspn(formatSpec, "1234567890.lh");
+  s21_size_t lenFlags = s21_strcspn(formatSpec, "1234567890.lh");
   *lenParam = lenFlags;
 
   if (lenFlags > 2 || (lenFlags == 2 && (formatSpec[0] == formatSpec[1]))) {
     return ERROR;
   }
 
-  if (lenFlags == 1 || lenFlags == 2){
+  if (lenFlags == 1 || lenFlags == 2) {
     for (s21_size_t i = 0; i < lenFlags; i++) {
       switch (formatSpec[i]) {
         case '-':
@@ -56,29 +64,57 @@ int s21_writeFlags(parserParameters *parametrs, char *formatSpec,
   return SUCCESS;
 }
 
-int s21_writeWidth(parserParameters *parametrs, char *formatSpec) {
-  char charWidth[20];
-  s21_size_t i;
+int s21_writeWidth(parserParameters *parametrs, char *formatSpec,
+                   s21_size_t *lenParam) {
+  char strWidth[20];
 
-  s21_size_t lenWidth = s21_strcspn(formatSpec, "lh");
+  s21_size_t lenWidth = s21_strcspn(formatSpec, ".lh");
+  *lenParam = lenWidth;
 
   if (lenWidth > 0) {
-    for (i = 0; i < lenWidth; i++, formatSpec++) {
+    for (s21_size_t i = 0; i < lenWidth; i++, formatSpec++) {
       if (s21_isdigit(*formatSpec)) {
-        charWidth[i] = *formatSpec;
+        strWidth[i] = *formatSpec;
       } else {
         return ERROR;
       }
     }
-    charWidth[i] = '\0';
+    strWidth[lenWidth] = '\0';
 
-    parametrs->width = s21_stoi(charWidth);
+    parametrs->width = s21_stoi(strWidth);
   }
 
   return SUCCESS;
 }
 
-void s21_addFormat(char *buffer, parserParameters parametrs) {
+int s21_writePrecision(parserParameters *parametrs, char *formatSpec,
+                       s21_size_t *lenParam) {
+  char strPrecision[20];
+
+  if (*formatSpec == '.') {
+    formatSpec++;
+
+    s21_size_t lenPrecision = s21_strcspn(formatSpec, "lh");
+    *lenParam = lenPrecision + 1;  // + '.'
+
+    if (lenPrecision > 0) {
+      for (s21_size_t i = 0; i < lenPrecision; i++, formatSpec++) {
+        if (s21_isdigit(*formatSpec)) {
+          strPrecision[i] = *formatSpec;
+        } else {
+          return ERROR;
+        }
+      }
+      strPrecision[lenPrecision] = '\0';
+
+      parametrs->precision = s21_stoi(strPrecision);
+    }
+  }
+
+  return SUCCESS;
+}
+
+void s21_addFormat(parserParameters parametrs, char *buffer) {
   if (parametrs.width > s21_strlen(buffer)) {
     s21_size_t addWidth = parametrs.width - s21_strlen(buffer);
 

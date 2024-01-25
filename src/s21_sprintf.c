@@ -71,7 +71,7 @@ int s21_sprintf(char *str, const char *format, ...) {
             break;
         }
 
-        s21_addFormat(buffer, parametrs);
+        s21_addFormat(parametrs, buffer);
         s21_writeString(str, buffer);
         str += s21_strlen(buffer);
       }
