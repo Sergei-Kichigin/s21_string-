@@ -161,24 +161,20 @@ void s21_ctoa(char value, char *buffer) {
   buffer[1] = '\0';
 }
 
-void s21_utoa(unsigned int value, char *buffer) {
-  s21_size_t i = 0;
-
-  while (value > 0) {
-    buffer[i++] = '0' + value % 10;
-    value /= 10;
-  }
-  buffer[i] = '\0';
-
-  s21_strrev(buffer);
-}
-
 void s21_itoa(int value, char *buffer, parserParameters parametrs) {
   int isNegative = 0;
-  s21_size_t i = 0;
+  int i = 0;
+
+  if(parametrs.precision == -1){
+    parametrs.precision = 1;
+  }
 
   if (value == 0) {
-    buffer[i++] = '0';
+    if(parametrs.precision == 0){
+      buffer[i++] = ' ';  
+    } else {
+      buffer[i++] = '0';
+    }
   }
 
   if (value < 0) {
@@ -189,6 +185,14 @@ void s21_itoa(int value, char *buffer, parserParameters parametrs) {
   while (value > 0) {
     buffer[i++] = '0' + value % 10;
     value /= 10;
+  }
+
+  if (parametrs.precision > i) {
+    int numberNulls = parametrs.precision - i;
+    while (numberNulls > 0) {
+      buffer[i++] = '0';
+      numberNulls--;
+    }
   }
 
   if (isNegative) {
@@ -220,16 +224,53 @@ void s21_strrev(char *str) {
   }
 }
 
+void s21_utoa(unsigned int value, char *buffer, parserParameters parametrs) {
+  int i = 0;
+
+  if(parametrs.precision == -1){
+    parametrs.precision = 1;
+  }
+
+  if (value == 0) {
+    if(parametrs.precision == 0){
+      buffer[i++] = ' ';  
+    } else {
+      buffer[i++] = '0';
+    }
+  }
+
+  while (value > 0) {
+    buffer[i++] = '0' + value % 10;
+    value /= 10;
+  }
+
+  if (parametrs.precision > i) {
+    int numberNulls = parametrs.precision - i;
+    while (numberNulls > 0) {
+      buffer[i++] = '0';
+      numberNulls--;
+    }
+  }
+
+  buffer[i] = '\0';
+
+  s21_strrev(buffer);
+}
+
 void s21_ftoa(double value, char *buffer, parserParameters parametrs) {
-  char fracBuffer[20];
+  char fracBuffer[40];
+
+  if(parametrs.precision == -1){
+    parametrs.precision = 6;
+  }
 
   int intPart = (int)value;
-  s21_size_t fractionalPart =
-      round((fabs(value - intPart) + 1) *
-            pow(10, 6));  // +1 for save nulls in frac.part
+  s21_size_t fractionalPart = round((fabs(value - intPart) + 1) * pow(10, parametrs.precision));
+  // +1 for save nulls in frac.part
 
+  parametrs.precision = 1; 
   s21_itoa(intPart, buffer, parametrs);
-  s21_utoa(fractionalPart, fracBuffer);
+  s21_utoa(fractionalPart, fracBuffer, parametrs);
 
   fracBuffer[0] = '.';  //  1 -> '.'
   s21_strncat(buffer, fracBuffer, s21_strlen(fracBuffer));

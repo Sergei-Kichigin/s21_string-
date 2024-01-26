@@ -15,7 +15,7 @@ typedef struct {
   bool leftOrientation;
   bool signPlace;
   s21_size_t width;
-  s21_size_t precision;
+  int precision;
   char length;
 } parserParameters;
 
@@ -47,7 +47,7 @@ void s21_ctoa(char value, char *buffer);
 void s21_itoa(int value, char *buffer, parserParameters parametrs);
 void s21_strrev(char *str);
 void s21_ftoa(double value, char *buffer, parserParameters parametrs);
-void s21_utoa(unsigned int value, char *buffer);
+void s21_utoa(unsigned int value, char *buffer, parserParameters parametrs);
 
 int s21_isdigit(int c);
 

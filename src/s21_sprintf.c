@@ -17,7 +17,7 @@ int s21_sprintf(char *str, const char *format, ...) {
         str++;
       } else {
         s21_size_t lenFormatSpec = s21_strcspn(format, "cdfsu");
-        parserParameters parametrs = {false, false, false, 0, 0, '\0'};
+        parserParameters parametrs = {false, false, false, 0, -1, '\0'};
 
         if (lenFormatSpec == s21_strlen(format)) {  // not found "cdfsu"
           printf("%s", "Uncorrect format\n");
@@ -63,7 +63,7 @@ int s21_sprintf(char *str, const char *format, ...) {
           // unsigned int type
           case 'u':
             unsigned int unsignedIntValue = va_arg(arg, unsigned int);
-            s21_utoa(unsignedIntValue, buffer);
+            s21_utoa(unsignedIntValue, buffer, parametrs);
             break;
           // unknown type
           default:

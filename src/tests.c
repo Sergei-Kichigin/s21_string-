@@ -576,9 +576,9 @@ int main(void) {
   // -+ / +-
   // -' ' / ' '-
 
-  s21_sprintf(str1, "\nTe %+5.3d %s %f %c %u\n", 11, "test", 0.0002346, 'k',
+  s21_sprintf(str1, "\nTe %5d %s %f %c %11.4u\n", 0, "test", 0.0002346, 'k',
               UnsInt);
-  sprintf(str2, "\nTe %+5.3d %s %f %c %u\n", 11, "test", 0.0002346, 'k',
+  sprintf(str2, "\nTe %5d %s %f %c %11.4u\n", 0, "test", 0.0002346, 'k',
           UnsInt);
 
   printf("result: %s\n", str1);
