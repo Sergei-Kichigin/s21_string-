@@ -48,12 +48,12 @@ int s21_sprintf(char *str, const char *format, ...) {
           // int type
           case 'd':
             int intValue = va_arg(arg, int);
-            s21_itoa(intValue, buffer, parametrs);
+            s21_itoa(parametrs, buffer, intValue);
             break;
           // float type
           case 'f':
             double floatValue = va_arg(arg, double);
-            s21_ftoa(floatValue, buffer, parametrs);
+            s21_ftoa(parametrs, buffer, floatValue);
             break;
           // string type
           case 's':
@@ -63,7 +63,7 @@ int s21_sprintf(char *str, const char *format, ...) {
           // unsigned int type
           case 'u':
             unsigned int unsignedIntValue = va_arg(arg, unsigned int);
-            s21_utoa(unsignedIntValue, buffer, parametrs);
+            s21_utoa(parametrs, buffer, unsignedIntValue);
             break;
           // unknown type
           default:

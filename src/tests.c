@@ -487,6 +487,107 @@ START_TEST(test_sprintf_unsigned) {
 }
 END_TEST
 
+// PRECISION
+
+START_TEST(test_sprintf_int_precision_positive) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Test: %.4d", 42);
+  sprintf(buffer2, "Test: %.4d", 42);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_int_precision_null) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Test: %.0d", 0);
+  sprintf(buffer2, "Test: %.0d", 0);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_int_precision_no_explicit_meaning) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Test: %.d", 0);  // precision = 0
+  sprintf(buffer2, "Test: %.d", 0);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_unsigned_int_precision_positive) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Test: %.4u", 65);
+  sprintf(buffer2, "Test: %.4u", 65);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_unsigned_int_precision_null) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Test: %.0u", 0);
+  sprintf(buffer2, "Test: %.0u", 0);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_unsigned_int_precision_no_explicit_meaning) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Test: %.u", 0);  // precision = 0
+  sprintf(buffer2, "Test: %.u", 0);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_double_precision_positive) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Test: %.4f", 12.456789);
+  sprintf(buffer2, "Test: %.4f", 12.456789);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_double_precision_null) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Test: %.0f", -134.784);
+  sprintf(buffer2, "Test: %.0f", -134.784);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_double_precision_no_explicit_meaning) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Test: %.f", 0.6);  // precision = 0
+  sprintf(buffer2, "Test: %.f", 0.6);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
 Suite *my_string_suite(void) {
   Suite *s;
   TCase *tc_core;
@@ -553,6 +654,20 @@ Suite *my_string_suite(void) {
   tcase_add_test(tc_core, test_sprintf_char);
   tcase_add_test(tc_core, test_sprintf_unsigned);
 
+  // PRECISION
+  tcase_add_test(tc_core, test_sprintf_int_precision_positive);
+  tcase_add_test(tc_core, test_sprintf_int_precision_null);
+  tcase_add_test(tc_core, test_sprintf_int_precision_no_explicit_meaning);
+
+  tcase_add_test(tc_core, test_sprintf_unsigned_int_precision_positive);
+  tcase_add_test(tc_core, test_sprintf_unsigned_int_precision_null);
+  tcase_add_test(tc_core,
+                 test_sprintf_unsigned_int_precision_no_explicit_meaning);
+
+  tcase_add_test(tc_core, test_sprintf_double_precision_positive);
+  tcase_add_test(tc_core, test_sprintf_double_precision_null);
+  tcase_add_test(tc_core, test_sprintf_double_precision_no_explicit_meaning);
+
   suite_add_tcase(s, tc_core);
 
   return s;
@@ -565,9 +680,9 @@ int main(void) {
 
   // SPRINTF TEST ----------------------------
 
-  char str1[100];
-  char str2[100];
-  unsigned int UnsInt = 105;
+  // char str1[100];
+  // char str2[100];
+  // unsigned int UnsInt = 105;
 
   // correct combination flags
   // -
@@ -576,13 +691,14 @@ int main(void) {
   // -+ / +-
   // -' ' / ' '-
 
-  s21_sprintf(str1, "\nTe %5d %s %f %c %11.4u\n", 0, "test", 0.0002346, 'k',
-              UnsInt);
-  sprintf(str2, "\nTe %5d %s %f %c %11.4u\n", 0, "test", 0.0002346, 'k',
-          UnsInt);
+  // s21_sprintf(str1, "\nTe %5.0d %s %f %c %11.0u\n", 11, "test", 0.0002346,
+  // 'k',
+  //             UnsInt);
+  // sprintf(str2, "\nTe %5.0d %s %f %c %11.0u\n", 11, "test", 0.0002346, 'k',
+  //         UnsInt);
 
-  printf("result: %s\n", str1);
-  printf("expect: %s\n", str2);
+  // printf("result: %s\n", str1);
+  // printf("expect: %s\n", str2);
 
   // SPRINTF TEST ----------------------------
 
