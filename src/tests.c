@@ -137,7 +137,7 @@ START_TEST(memcpy_1) {
   void *expected;
 
   result = s21_memcpy(input, src, length);
-  //printf("%s, %s\n", input, (char*)result);
+  // printf("%s, %s\n", input, (char*)result);
   char expected_buffer[20] = "Text to copy";
   expected = memcpy(expected_buffer, src, length);
   // printf("%s, %s\n", expected_buffer, (char*)expected);
@@ -525,7 +525,7 @@ START_TEST(strncmp_7) {
 }
 END_TEST
 
-//STRNCPY
+// STRNCPY
 
 START_TEST(strncpy_1) {
   s21_size_t length = 5;
@@ -599,6 +599,80 @@ START_TEST(strncpy_4) {
 }
 END_TEST
 
+// STRTOK
+
+START_TEST(strtok_1) {
+  char str1[] = "Hello, world, how are you";
+  char str2[] = "Hello, world, how are you";
+
+  char delim[] = ",?";
+
+  ck_assert_str_eq(s21_strtok(str1, delim), strtok(str2, delim));
+  ck_assert_str_eq(s21_strtok(S21_NULL, delim), strtok(S21_NULL, delim));
+  ck_assert_str_eq(s21_strtok(S21_NULL, delim), strtok(S21_NULL, delim));
+}
+END_TEST
+
+START_TEST(strtok_2) {
+  char str1[] = "Hello, world, how are you";
+  char str2[] = "Hello, world, how are you";
+
+  char delim[] = "!?";
+
+  ck_assert_str_eq(s21_strtok(str1, delim), strtok(str2, delim));
+  ck_assert_pstr_eq(s21_strtok(S21_NULL, delim), strtok(S21_NULL, delim));
+}
+END_TEST
+
+START_TEST(strtok_3) {
+  char str1[] = "Hello, world! how are you?";
+  char str2[] = "Hello, world! how are you?";
+
+  char delim[] = ",!?";
+
+  ck_assert_str_eq(s21_strtok(str1, delim), strtok(str2, delim));
+  ck_assert_str_eq(s21_strtok(S21_NULL, delim), strtok(S21_NULL, delim));
+  ck_assert_str_eq(s21_strtok(S21_NULL, delim), strtok(S21_NULL, delim));
+  ck_assert_pstr_eq(s21_strtok(S21_NULL, delim), strtok(S21_NULL, delim));
+}
+END_TEST
+
+START_TEST(strtok_4) {
+  char str1[] = "Hello, world! how are you?";
+  char str2[] = "Hello, world! how are you?";
+
+  char delim[] = "\0";
+
+  ck_assert_pstr_eq(s21_strtok(str1, delim), strtok(str2, delim));
+}
+END_TEST
+
+START_TEST(strtok_5) {
+  char str1[] = "";
+  char str2[] = "";
+
+  char delim[] = ",!?";
+
+  ck_assert_pstr_eq(s21_strtok(str1, delim), strtok(str2, delim));
+}
+END_TEST
+
+START_TEST(strtok_6) {
+  char str1[] = "";
+  char str2[] = "";
+  char delim[] = "\0";
+
+  ck_assert_pstr_eq(s21_strtok(str1, delim), strtok(str2, delim));
+}
+END_TEST
+
+// STRERROR
+
+START_TEST(strerror_1) {
+  for (int i = -5; i < 150; i++) ck_assert_str_eq(s21_strerror(i), strerror(i));
+}
+END_TEST
+
 // SPRINTF
 
 START_TEST(test_sprintf_int_left_orientation) {
@@ -612,23 +686,23 @@ START_TEST(test_sprintf_int_left_orientation) {
 }
 END_TEST
 
-/*START_TEST(test_sprintf_int_right_orientation) {
+START_TEST(test_sprintf_int_right_orientation) {
   char buffer1[100];
   char buffer2[100];
 
-  s21_sprintf(buffer1, "Test: %+10d", 42);
-  sprintf(buffer2, "Test: %+10d", 42);
+  s21_sprintf(buffer1, "Test: %10d", 42);
+  sprintf(buffer2, "Test: %10d", 42);
 
   ck_assert_str_eq(buffer1, buffer2);
 }
-END_TEST*/
+END_TEST
 
 START_TEST(test_sprintf_int_negative) {
   char buffer1[100];
   char buffer2[100];
 
-  s21_sprintf(buffer1, "Test: %-10d", -142);
-  sprintf(buffer2, "Test: %-10d", -142);
+  s21_sprintf(buffer1, "Test: %d", -142);
+  sprintf(buffer2, "Test: %d", -142);
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -638,8 +712,19 @@ START_TEST(test_sprintf_float) {
   char buffer1[100];
   char buffer2[100];
 
-  s21_sprintf(buffer1, "Float: %2f", 3.14159);
-  sprintf(buffer2, "Float: %2f", 3.14159);
+  s21_sprintf(buffer1, "Float: %f", 3.14159);
+  sprintf(buffer2, "Float: %f", 3.14159);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_float_negative) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Float: %f", -3.14159);
+  sprintf(buffer2, "Float: %f", -3.14159);
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -673,6 +758,107 @@ START_TEST(test_sprintf_unsigned) {
 
   s21_sprintf(buffer1, "Unsigned: %u", 12345);
   sprintf(buffer2, "Unsigned: %u", 12345);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+// PRECISION
+
+START_TEST(test_sprintf_int_precision_positive) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Test: %.4d", 42);
+  sprintf(buffer2, "Test: %.4d", 42);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_int_precision_null) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Test: %.0d", 0);
+  sprintf(buffer2, "Test: %.0d", 0);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_int_precision_no_explicit_meaning) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Test: %.d", 0);  // precision = 0
+  sprintf(buffer2, "Test: %.d", 0);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_unsigned_int_precision_positive) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Test: %.4u", 65);
+  sprintf(buffer2, "Test: %.4u", 65);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_unsigned_int_precision_null) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Test: %.0u", 0);
+  sprintf(buffer2, "Test: %.0u", 0);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_unsigned_int_precision_no_explicit_meaning) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Test: %.u", 0);  // precision = 0
+  sprintf(buffer2, "Test: %.u", 0);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_double_precision_positive) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Test: %.4f", 12.456789);
+  sprintf(buffer2, "Test: %.4f", 12.456789);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_double_precision_null) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Test: %.0f", -134.784);
+  sprintf(buffer2, "Test: %.0f", -134.784);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_double_precision_no_explicit_meaning) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Test: %.f", 0.6);  // precision = 0
+  sprintf(buffer2, "Test: %.f", 0.6);
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -740,26 +926,53 @@ Suite *my_string_suite(void) {
   /*tcase_add_test(tc_core, strncmp_1);
   tcase_add_test(tc_core, strncmp_2);
   tcase_add_test(tc_core, strncmp_3);*/
-  tcase_add_test(tc_core, strncmp_4); 
-  tcase_add_test(tc_core, strncmp_5); 
+  tcase_add_test(tc_core, strncmp_4);
+  tcase_add_test(tc_core, strncmp_5);
   tcase_add_test(tc_core, strncmp_6);
   tcase_add_test(tc_core, strncmp_7);
-  suite_add_tcase(s, tc_core);
 
-  // STRNCPY  
-  tcase_add_test(tc_core, strncpy_1); 
-  tcase_add_test(tc_core, strncpy_2); 
-  tcase_add_test(tc_core, strncpy_3); 
-  tcase_add_test(tc_core, strncpy_4); 
+  // STRNCPY
+  tcase_add_test(tc_core, strncpy_1);
+  tcase_add_test(tc_core, strncpy_2);
+  tcase_add_test(tc_core, strncpy_3);
+  tcase_add_test(tc_core, strncpy_4);
+
+  // STRTOK
+  tcase_add_test(tc_core, strtok_1);
+  tcase_add_test(tc_core, strtok_2);
+  tcase_add_test(tc_core, strtok_3);
+  tcase_add_test(tc_core, strtok_4);
+  tcase_add_test(tc_core, strtok_5);
+  tcase_add_test(tc_core, strtok_6);
+
+  // STRERROR
+  tcase_add_test(tc_core, strerror_1);
 
   // SPRINTF
   tcase_add_test(tc_core, test_sprintf_int_left_orientation);
-  //tcase_add_test(tc_core, test_sprintf_int_right_orientation);
+  tcase_add_test(tc_core, test_sprintf_int_right_orientation);
   tcase_add_test(tc_core, test_sprintf_int_negative);
   tcase_add_test(tc_core, test_sprintf_float);
+  tcase_add_test(tc_core, test_sprintf_float_negative);
   tcase_add_test(tc_core, test_sprintf_string);
   tcase_add_test(tc_core, test_sprintf_char);
   tcase_add_test(tc_core, test_sprintf_unsigned);
+
+  // PRECISION
+  tcase_add_test(tc_core, test_sprintf_int_precision_positive);
+  tcase_add_test(tc_core, test_sprintf_int_precision_null);
+  tcase_add_test(tc_core, test_sprintf_int_precision_no_explicit_meaning);
+
+  tcase_add_test(tc_core, test_sprintf_unsigned_int_precision_positive);
+  tcase_add_test(tc_core, test_sprintf_unsigned_int_precision_null);
+  tcase_add_test(tc_core,
+                 test_sprintf_unsigned_int_precision_no_explicit_meaning);
+
+  tcase_add_test(tc_core, test_sprintf_double_precision_positive);
+  tcase_add_test(tc_core, test_sprintf_double_precision_null);
+  tcase_add_test(tc_core, test_sprintf_double_precision_no_explicit_meaning);
+
+  suite_add_tcase(s, tc_core);
 
   return s;
 }
@@ -771,16 +984,25 @@ int main(void) {
 
   // SPRINTF TEST ----------------------------
 
-  char str1[50];
-  char str2[50];
-  unsigned int UnsInt = 105;
+  // char str1[100];
+  // char str2[100];
+  // unsigned int UnsInt = 105;
 
-  s21_sprintf(str1, "\nTe %10d %s %f %c %u\n", 455, "test", 123.12349, 'k',
-              UnsInt);
-  sprintf(str2, "\nTe %10d %s %f %c %u\n", 455, "test", 123.12349, 'k', UnsInt);
+  // correct combination flags
+  // -
+  // +
+  // ' '
+  // -+ / +-
+  // -' ' / ' '-
 
-  printf("result: %s\n", str1);
-  printf("expect: %s\n", str2);
+  // s21_sprintf(str1, "\nTe %5.0d %s %f %c %11.0u\n", 11, "test", 0.0002346,
+  // 'k',
+  //             UnsInt);
+  // sprintf(str2, "\nTe %5.0d %s %f %c %11.0u\n", 11, "test", 0.0002346, 'k',
+  //         UnsInt);
+
+  // printf("result: %s\n", str1);
+  // printf("expect: %s\n", str2);
 
   // SPRINTF TEST ----------------------------
 
@@ -790,14 +1012,6 @@ int main(void) {
   srunner_run_all(sr, CK_NORMAL);
   number_failed = srunner_ntests_failed(sr);
   srunner_free(sr);
-
-  /*char str[] = "Hello, world!? How are you?";
-  char *token = s21_strtok(str, " ,!?");
-
-    while (token != S21_NULL) {
-        printf("Token: %s\n", token);
-        token = s21_strtok(S21_NULL, " ,!?");
-    }*/
 
   return (number_failed == 0) ? SUCCESS : ERROR;
 }

@@ -1,16 +1,21 @@
 #ifndef S21_STRING_H
 #define S21_STRING_H
 
+#include <stdbool.h>
+
 #define SUCCESS 0
 #define ERROR 1
 #define S21_NULL (void *)0
+#define MAXLENGHTSTRFLAGS
 
 typedef long unsigned s21_size_t;
 
 typedef struct {
-  char flag;
+  bool forcedSignOutput;  // Принудительный вывод знака
+  bool leftOrientation;
+  bool signPlace;
   s21_size_t width;
-  s21_size_t precision;
+  int precision;
   char length;
 } parserParameters;
 
@@ -32,28 +37,35 @@ char *s21_strstr(const char *haystack, const char *needle);
 int s21_strncmp(const char *str1, const char *str2, s21_size_t n);
 char *s21_strncpy(char *dest, const char *src, s21_size_t n);
 char *s21_strtok(char *str, const char *delim);
+char *s21_strerror(int errnum);
 
 // additional functions
 
 // for str
 void s21_writeString(char *str, char *buffer);
 void s21_writeNchar(char *str, const char *buffer, s21_size_t n);
-void s21_addFormat(char *buffer, parserParameters parametrs);
+void s21_addFormat(parserParameters parametrs, char *buffer);
 
 // transform type
 void s21_ctoa(char value, char *buffer);
-void s21_itoa(int value, char *buffer);
+void s21_itoa(parserParameters parametrs, char *buffer, int value);
+void s21_ftoa(parserParameters parametrs, char *buffer, double value);
+void s21_utoa(parserParameters parametrs, char *buffer, unsigned int value);
+
+void s21_intPartToa(parserParameters parametrs, char *buffer, int intPart);
 void s21_strrev(char *str);
-void s21_ftoa(double value, char *buffer);
-void s21_utoa(unsigned int value, char *buffer);
 
 int s21_isdigit(int c);
-int s21_isflag(int c);
 
 s21_size_t s21_stoi(const char *str);
 
 // specifier parametrs
 int s21_writeParameters(parserParameters *parametrs, char *format);
-int s21_writeWidth(parserParameters *parametrs, char *format);
+int s21_writeFlags(parserParameters *parametrs, char *formatSpec,
+                   s21_size_t *lenParam);
+int s21_writeWidth(parserParameters *parametrs, char *format,
+                   s21_size_t *lenParam);
+int s21_writePrecision(parserParameters *parametrs, char *formatSpec,
+                       s21_size_t *lenParam);
 
 #endif

@@ -1,56 +1,132 @@
 #include <math.h>
+#include <stdio.h>
 
 #include "s21_string.h"
 
 int s21_isdigit(int c) { return (c >= '0' && c <= '9'); }
 
-int s21_isflag(int c) { return (c == '-' || c == '+' || c == ' '); }
-
 int s21_writeParameters(parserParameters *parametrs, char *formatSpec) {
-  s21_size_t lenFormatSpec = s21_strlen(formatSpec);
+  s21_size_t lenParam = 0;
 
-  if (s21_isflag(*formatSpec)) {
-    parametrs->flag = *formatSpec;
-    formatSpec++;
-    lenFormatSpec--;
+  if (s21_writeFlags(parametrs, formatSpec, &lenParam)) {
+    return ERROR;
   }
 
-  if (!s21_writeWidth(parametrs, formatSpec)) {
+  formatSpec += lenParam;
+
+  if (s21_writeWidth(parametrs, formatSpec, &lenParam)) {
+    return ERROR;
+  }
+
+  formatSpec += lenParam;
+
+  if (s21_writePrecision(parametrs, formatSpec, &lenParam)) {
+    return ERROR;
+  }
+
+  formatSpec += lenParam;
+
+  return SUCCESS;
+}
+
+int s21_writeFlags(parserParameters *parametrs, char *formatSpec,
+                   s21_size_t *lenParam) {
+  s21_size_t lenFlags = s21_strcspn(formatSpec, "1234567890.lh");
+  *lenParam = lenFlags;
+
+  if (lenFlags > 2 || (lenFlags == 2 && (formatSpec[0] == formatSpec[1]))) {
+    return ERROR;
+  }
+
+  if (lenFlags == 1 || lenFlags == 2) {
+    for (s21_size_t i = 0; i < lenFlags; i++) {
+      switch (formatSpec[i]) {
+        case '-':
+          parametrs->leftOrientation = true;
+          break;
+        case '+':
+          parametrs->forcedSignOutput = true;
+          break;
+        case ' ':
+          parametrs->signPlace = true;
+          break;
+        default:
+          return ERROR;
+          break;
+      }
+    }
+  }
+
+  if (parametrs->forcedSignOutput && parametrs->signPlace) {
     return ERROR;
   }
 
   return SUCCESS;
 }
 
-int s21_writeWidth(parserParameters *parametrs, char *formatSpec) {
-  char charWidth[20];
-  s21_size_t i;
+int s21_writeWidth(parserParameters *parametrs, char *formatSpec,
+                   s21_size_t *lenParam) {
+  char strWidth[20];
 
-  s21_size_t lenFormatSpec = s21_strlen(formatSpec);
+  s21_size_t lenWidth = s21_strcspn(formatSpec, ".lh");
+  *lenParam = lenWidth;
 
-  if (lenFormatSpec > 0) {
-    for (i = 0; i < lenFormatSpec; i++, formatSpec++) {
+  if (lenWidth > 0) {
+    for (s21_size_t i = 0; i < lenWidth; i++, formatSpec++) {
       if (s21_isdigit(*formatSpec)) {
-        charWidth[i] = *formatSpec;
+        strWidth[i] = *formatSpec;
       } else {
         return ERROR;
       }
     }
-    charWidth[i] = '\0';
+    strWidth[lenWidth] = '\0';
 
-    parametrs->width = s21_stoi(charWidth);
+    parametrs->width = s21_stoi(strWidth);
   }
 
   return SUCCESS;
 }
 
-void s21_addFormat(char *buffer, parserParameters parametrs) {
+int s21_writePrecision(parserParameters *parametrs, char *formatSpec,
+                       s21_size_t *lenParam) {
+  char strPrecision[20];
+
+  if (*formatSpec == '.') {
+    formatSpec++;
+
+    s21_size_t lenPrecision = s21_strcspn(formatSpec, "lh");
+    *lenParam = lenPrecision + 1;  // + '.'
+
+    if (lenPrecision == 0) {
+      parametrs->precision = 0;
+    }
+
+    if (lenPrecision > 0) {
+      for (s21_size_t i = 0; i < lenPrecision; i++, formatSpec++) {
+        if (s21_isdigit(*formatSpec)) {
+          strPrecision[i] = *formatSpec;
+        } else {
+          return ERROR;
+        }
+      }
+      strPrecision[lenPrecision] = '\0';
+
+      parametrs->precision = s21_stoi(strPrecision);
+    }
+  }
+
+  return SUCCESS;
+}
+
+void s21_addFormat(parserParameters parametrs, char *buffer) {
   if (parametrs.width > s21_strlen(buffer)) {
     s21_size_t addWidth = parametrs.width - s21_strlen(buffer);
-    char bufferWidth[addWidth];
-    s21_memset(bufferWidth, ' ', addWidth);
 
-    if (parametrs.flag == '-') {  // left orientation
+    char bufferWidth[parametrs.width];
+    s21_memset(bufferWidth, ' ', addWidth);
+    bufferWidth[addWidth] = '\0';
+
+    if (parametrs.leftOrientation) {  // left orientation
       s21_strncat(buffer, bufferWidth, addWidth);
     } else {  // right orientation
       s21_strncat(bufferWidth, buffer, s21_strlen(buffer));
@@ -89,21 +165,20 @@ void s21_ctoa(char value, char *buffer) {
   buffer[1] = '\0';
 }
 
-void s21_utoa(unsigned int value, char *buffer) {
-  s21_size_t i = 0;
-
-  while (value > 0) {
-    buffer[i++] = '0' + value % 10;
-    value /= 10;
-  }
-  buffer[i] = '\0';
-
-  s21_strrev(buffer);
-}
-
-void s21_itoa(int value, char *buffer) {
+void s21_itoa(parserParameters parametrs, char *buffer, int value) {
   int isNegative = 0;
-  s21_size_t i = 0;
+  int i = 0;
+
+  if (parametrs.precision == -1) {
+    parametrs.precision = 1;
+  }
+
+  if (value == 0) {
+    if (parametrs.precision != 0) {
+      buffer[i++] = '0';
+    }
+    buffer[i] = '\0';
+  }
 
   if (value < 0) {
     isNegative = 1;
@@ -115,8 +190,19 @@ void s21_itoa(int value, char *buffer) {
     value /= 10;
   }
 
+  if (parametrs.precision > i) {
+    int numberNulls = parametrs.precision - i;
+    while (numberNulls > 0) {
+      buffer[i++] = '0';
+      numberNulls--;
+    }
+  }
+
   if (isNegative) {
     buffer[i++] = '-';
+  } else {
+    if (parametrs.forcedSignOutput) buffer[i++] = '+';
+    if (parametrs.signPlace) buffer[i++] = ' ';
   }
 
   buffer[i] = '\0';
@@ -141,15 +227,67 @@ void s21_strrev(char *str) {
   }
 }
 
-void s21_ftoa(double value, char *buffer) {
-  char doubleBuffer[20];
+void s21_utoa(parserParameters parametrs, char *buffer, unsigned int value) {
+  int i = 0;
 
-  int intPart = (int)value;
-  int fractionalPart = fabs(round((value - intPart) * pow(10, 6)));
+  if (parametrs.precision == -1) {
+    parametrs.precision = 1;
+  }
 
-  s21_itoa(intPart, buffer);
-  s21_itoa(fractionalPart, doubleBuffer);
+  if (value == 0) {
+    if (parametrs.precision != 0) {
+      buffer[i++] = '0';
+    }
+    buffer[i] = '\0';
+  }
 
-  s21_strncat(buffer, ".", 1);
-  s21_strncat(buffer, doubleBuffer, s21_strlen(doubleBuffer));
+  while (value > 0) {
+    buffer[i++] = '0' + value % 10;
+    value /= 10;
+  }
+
+  if (parametrs.precision > i) {
+    int numberNulls = parametrs.precision - i;
+    while (numberNulls > 0) {
+      buffer[i++] = '0';
+      numberNulls--;
+    }
+  }
+
+  buffer[i] = '\0';
+
+  s21_strrev(buffer);
+}
+
+void s21_ftoa(parserParameters parametrs, char *buffer, double value) {
+  int intPart;
+  char fracBuffer[41];
+
+  if (parametrs.precision == -1) {  // not specified
+    parametrs.precision = 6;
+  }
+
+  if (parametrs.precision == 0) {
+    intPart = round(value);
+    s21_intPartToa(parametrs, buffer, intPart);
+  }
+
+  if (parametrs.precision > 0) {
+    intPart = (int)value;
+
+    s21_size_t fractionalPart =
+        round((fabs(value - intPart) + 1) * pow(10, parametrs.precision));
+    // +1 for save nulls in frac.part
+
+    s21_intPartToa(parametrs, buffer, intPart);
+    s21_utoa(parametrs, fracBuffer, fractionalPart);
+
+    fracBuffer[0] = '.';  //  1 -> '.'
+    s21_strncat(buffer, fracBuffer, s21_strlen(fracBuffer));
+  }
+}
+
+void s21_intPartToa(parserParameters parametrs, char *buffer, int intPart) {
+  parametrs.precision = 1;
+  s21_itoa(parametrs, buffer, intPart);
 }

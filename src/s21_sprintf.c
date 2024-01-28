@@ -1,6 +1,6 @@
 #include <stdarg.h>
+#include <stdbool.h>
 #include <stdio.h>
-#include <string.h>
 
 #include "s21_string.h"
 
@@ -8,21 +8,18 @@ int s21_sprintf(char *str, const char *format, ...) {
   va_list arg;
   va_start(arg, format);
   char charValue;
-  int intValue;
-  double floatValue;
   char *charPtrValue;
-  unsigned int unsignedIntValue;
 
   while (*format) {
     if (*format == '%') {
       format++;
 
-      if (*format == '%') {  // % don't have parametrs
+      if (*format == '%') {  // % have not parametrs
         *str = *format;
         str++;
       } else {
         s21_size_t lenFormatSpec = s21_strcspn(format, "cdfsu");
-        parserParameters parametrs = {'\0', 0, 0, '\0'};
+        parserParameters parametrs = {false, false, false, 0, -1, '\0'};
 
         if (lenFormatSpec == s21_strlen(format)) {  // not found "cdfsu"
           printf("%s", "Uncorrect format\n");
@@ -33,7 +30,10 @@ int s21_sprintf(char *str, const char *format, ...) {
           char formatSpec[20];
 
           s21_writeNchar(formatSpec, format, lenFormatSpec);
-          s21_writeParameters(&parametrs, formatSpec);
+          if (s21_writeParameters(&parametrs, formatSpec)) {
+            printf("%s", "Uncorrect format\n");
+            return ERROR;
+          }
 
           format += lenFormatSpec;
         }
@@ -49,13 +49,13 @@ int s21_sprintf(char *str, const char *format, ...) {
             break;
           // int type
           case 'd':
-            intValue = va_arg(arg, int);
-            s21_itoa(intValue, buffer);
+            int intValue = va_arg(arg, int);
+            s21_itoa(parametrs, buffer, intValue);
             break;
           // float type
           case 'f':
-            floatValue = va_arg(arg, double);
-            s21_ftoa(floatValue, buffer);
+            double floatValue = va_arg(arg, double);
+            s21_ftoa(parametrs, buffer, floatValue);
             break;
           // string type
           case 's':
@@ -64,8 +64,8 @@ int s21_sprintf(char *str, const char *format, ...) {
             break;
           // unsigned int type
           case 'u':
-            unsignedIntValue = va_arg(arg, unsigned int);
-            s21_utoa(unsignedIntValue, buffer);
+            unsigned int unsignedIntValue = va_arg(arg, unsigned int);
+            s21_utoa(parametrs, buffer, unsignedIntValue);
             break;
           // unknown type
           default:
@@ -73,7 +73,7 @@ int s21_sprintf(char *str, const char *format, ...) {
             break;
         }
 
-        s21_addFormat(buffer, parametrs);
+        s21_addFormat(parametrs, buffer);
         s21_writeString(str, buffer);
         str += s21_strlen(buffer);
       }
