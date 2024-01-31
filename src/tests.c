@@ -128,7 +128,7 @@ START_TEST(memcmp_4) {
 }
 END_TEST
 
-// MEMCPY
+// MEMCPY (n < 0 --> Segmentation fault | Original : Illegal instruction)
 START_TEST(memcpy_1) {
   s21_size_t length = 5;
   char src[20] = "Thiss is Test";
@@ -140,9 +140,37 @@ START_TEST(memcpy_1) {
   // printf("%s, %s\n", input, (char*)result);
   char expected_buffer[20] = "Text to copy";
   expected = memcpy(expected_buffer, src, length);
-  // printf("%s, %s", expected_buffer, (char*)expected);
+  // printf("%s, %s\n", expected_buffer, (char*)expected);
   // printf("\n%ld, %ld, %ld\n", sizeof(expected), sizeof(*expected),
   // strlen(expected)*sizeof(*expected));
+  ck_assert_mem_eq(result, expected, strlen(expected) * sizeof(*expected));
+}
+END_TEST
+
+START_TEST(memcpy_2) {
+  s21_size_t length = 5;
+  char src[20] = "This";
+  char input[20] = "Text to copy";
+  void *result;
+  void *expected;
+
+  result = s21_memcpy(input, src, length);
+  char expected_buffer[20] = "Text to copy";
+  expected = memcpy(expected_buffer, src, length);
+  ck_assert_mem_eq(result, expected, strlen(expected) * sizeof(*expected));
+}
+END_TEST
+
+START_TEST(memcpy_3) {
+  s21_size_t length = 5;
+  char src[20] = "Thiss is Test";
+  char input[20] = "Text";
+  void *result;
+  void *expected;
+
+  result = s21_memcpy(input, src, length);
+  char expected_buffer[20] = "Text";
+  expected = memcpy(expected_buffer, src, length);
   ck_assert_mem_eq(result, expected, strlen(expected) * sizeof(*expected));
 }
 END_TEST
@@ -397,6 +425,254 @@ START_TEST(strstr_empty_needle) {
 }
 END_TEST
 
+// STRNCMP
+
+/*START_TEST(strncmp_1) {
+  s21_size_t length = -1;
+  char input1[20] = "This is Test1";
+  char input2[20] = "This is Test1221";
+  int result;
+  int expected;
+
+  result = s21_strncmp(input1, input2, length);
+  expected = strncmp(input1, input2, length);
+
+  ck_assert_int_eq(result, expected);
+}
+END_TEST
+
+START_TEST(strncmp_2) {
+  s21_size_t length = -1;
+  char input1[20] = "This is Test2221";
+  char input2[20] = "This is Test2";
+  int result;
+  int expected;
+
+  result = s21_strncmp(input1, input2, length);
+  expected = strncmp(input1, input2, length);
+
+  ck_assert_int_eq(result, expected);
+}
+END_TEST
+
+START_TEST(strncmp_3) {
+  s21_size_t length = -1;
+  char input1[20] = "This is Test3";
+  char input2[20] = "This is Test3";
+  int result;
+  int expected;
+
+  result = s21_strncmp(input1, input2, length);
+  expected = strncmp(input1, input2, length);
+
+  ck_assert_int_eq(result, expected);
+}
+END_TEST*/
+
+START_TEST(strncmp_4) {
+  s21_size_t length = 10;
+  char input1[20] = "This is Test4";
+  char input2[20] = "This is Test4";
+  int result;
+  int expected;
+
+  result = s21_strncmp(input1, input2, length);
+  expected = strncmp(input1, input2, length);
+
+  ck_assert_int_eq(result, expected);
+}
+END_TEST
+
+START_TEST(strncmp_5) {
+  s21_size_t length = 10;
+  char input1[20] = "This Test5";
+  char input2[20] = "This is Test5";
+  int result;
+  int expected;
+
+  result = s21_strncmp(input1, input2, length);
+  expected = strncmp(input1, input2, length);
+
+  ck_assert_int_eq(result, expected);
+}
+END_TEST
+
+START_TEST(strncmp_6) {
+  s21_size_t length = 10;
+  char input1[20] = "This is Test5";
+  char input2[20] = "This Test5";
+  int result;
+  int expected;
+
+  result = s21_strncmp(input1, input2, length);
+  expected = strncmp(input1, input2, length);
+
+  ck_assert_int_eq(result, expected);
+}
+END_TEST
+
+START_TEST(strncmp_7) {
+  s21_size_t length = 5;
+  char input1[20] = "This is Test7";
+  char input2[20] = "This is Tett7";
+  int result;
+  int expected;
+
+  result = s21_strncmp(input1, input2, length);
+  expected = strncmp(input1, input2, length);
+
+  ck_assert_int_eq(result, expected);
+}
+END_TEST
+
+// STRNCPY
+
+START_TEST(strncpy_1) {
+  s21_size_t length = 5;
+
+  char input[20] = "Textt to copy";
+
+  char src1[20] = "This is Test";
+  char src2[20] = "This is Test";
+
+  char *result;
+  char *expected;
+
+  result = s21_strncpy(src1, input, length);
+  expected = strncpy(src2, input, length);
+
+  ck_assert_str_eq(result, expected);
+}
+END_TEST
+
+START_TEST(strncpy_2) {
+  s21_size_t length = 5;
+
+  char input[20] = "Text";
+
+  char src1[20] = "This is Test";
+  char src2[20] = "This is Test";
+
+  char *result;
+  char *expected;
+
+  result = s21_strncpy(src1, input, length);
+  expected = strncpy(src2, input, length);
+
+  ck_assert_str_eq(result, expected);
+}
+END_TEST
+
+START_TEST(strncpy_3) {
+  s21_size_t length = 5;
+
+  char input[20] = "Textt to copy";
+
+  char src1[20] = "This";
+  char src2[20] = "This";
+
+  char *result;
+  char *expected;
+
+  result = s21_strncpy(src1, input, length);
+  expected = strncpy(src2, input, length);
+
+  ck_assert_str_eq(result, expected);
+}
+END_TEST
+
+START_TEST(strncpy_4) {
+  s21_size_t length = 0;
+
+  char input[20] = "Textt to copy";
+
+  char src1[20] = "This is Test";
+  char src2[20] = "This is Test";
+
+  char *result;
+  char *expected;
+
+  result = s21_strncpy(src1, input, length);
+  expected = strncpy(src2, input, length);
+
+  ck_assert_str_eq(result, expected);
+}
+END_TEST
+
+// STRTOK
+
+START_TEST(strtok_1) {
+  char str1[] = "Hello, world, how are you";
+  char str2[] = "Hello, world, how are you";
+
+  char delim[] = ",?";
+
+  ck_assert_str_eq(s21_strtok(str1, delim), strtok(str2, delim));
+  ck_assert_str_eq(s21_strtok(S21_NULL, delim), strtok(S21_NULL, delim));
+  ck_assert_str_eq(s21_strtok(S21_NULL, delim), strtok(S21_NULL, delim));
+}
+END_TEST
+
+START_TEST(strtok_2) {
+  char str1[] = "Hello, world, how are you";
+  char str2[] = "Hello, world, how are you";
+
+  char delim[] = "!?";
+
+  ck_assert_str_eq(s21_strtok(str1, delim), strtok(str2, delim));
+  ck_assert_pstr_eq(s21_strtok(S21_NULL, delim), strtok(S21_NULL, delim));
+}
+END_TEST
+
+START_TEST(strtok_3) {
+  char str1[] = "Hello, world! how are you?";
+  char str2[] = "Hello, world! how are you?";
+
+  char delim[] = ",!?";
+
+  ck_assert_str_eq(s21_strtok(str1, delim), strtok(str2, delim));
+  ck_assert_str_eq(s21_strtok(S21_NULL, delim), strtok(S21_NULL, delim));
+  ck_assert_str_eq(s21_strtok(S21_NULL, delim), strtok(S21_NULL, delim));
+  ck_assert_pstr_eq(s21_strtok(S21_NULL, delim), strtok(S21_NULL, delim));
+}
+END_TEST
+
+START_TEST(strtok_4) {
+  char str1[] = "Hello, world! how are you?";
+  char str2[] = "Hello, world! how are you?";
+
+  char delim[] = "\0";
+
+  ck_assert_pstr_eq(s21_strtok(str1, delim), strtok(str2, delim));
+}
+END_TEST
+
+START_TEST(strtok_5) {
+  char str1[] = "";
+  char str2[] = "";
+
+  char delim[] = ",!?";
+
+  ck_assert_pstr_eq(s21_strtok(str1, delim), strtok(str2, delim));
+}
+END_TEST
+
+START_TEST(strtok_6) {
+  char str1[] = "";
+  char str2[] = "";
+  char delim[] = "\0";
+
+  ck_assert_pstr_eq(s21_strtok(str1, delim), strtok(str2, delim));
+}
+END_TEST
+
+// STRERROR
+
+START_TEST(strerror_1) {
+  for (int i = -5; i < 150; i++) ck_assert_str_eq(s21_strerror(i), strerror(i));
+}
+END_TEST
+
 // SPRINTF
 
 START_TEST(test_sprintf_int_left_orientation) {
@@ -634,6 +910,8 @@ Suite *my_string_suite(void) {
 
   // MEMCPY
   tcase_add_test(tc_core, memcpy_1);
+  tcase_add_test(tc_core, memcpy_2);
+  tcase_add_test(tc_core, memcpy_3);
 
   // MEMSET
   tcase_add_test(tc_core, memset_1);
@@ -676,6 +954,32 @@ Suite *my_string_suite(void) {
   tcase_add_test(tc_core, strstr_2);
   tcase_add_test(tc_core, strstr_3);
   tcase_add_test(tc_core, strstr_empty_needle);
+
+  // STRNCMP
+  /*tcase_add_test(tc_core, strncmp_1);
+  tcase_add_test(tc_core, strncmp_2);
+  tcase_add_test(tc_core, strncmp_3);*/
+  tcase_add_test(tc_core, strncmp_4);
+  tcase_add_test(tc_core, strncmp_5);
+  tcase_add_test(tc_core, strncmp_6);
+  tcase_add_test(tc_core, strncmp_7);
+
+  // STRNCPY
+  tcase_add_test(tc_core, strncpy_1);
+  tcase_add_test(tc_core, strncpy_2);
+  tcase_add_test(tc_core, strncpy_3);
+  tcase_add_test(tc_core, strncpy_4);
+
+  // STRTOK
+  tcase_add_test(tc_core, strtok_1);
+  tcase_add_test(tc_core, strtok_2);
+  tcase_add_test(tc_core, strtok_3);
+  tcase_add_test(tc_core, strtok_4);
+  tcase_add_test(tc_core, strtok_5);
+  tcase_add_test(tc_core, strtok_6);
+
+  // STRERROR
+  tcase_add_test(tc_core, strerror_1);
 
   // SPRINTF
   tcase_add_test(tc_core, test_sprintf_int_left_orientation);

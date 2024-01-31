@@ -39,30 +39,36 @@ int s21_sprintf(char *str, const char *format, ...) {
         char buffer[20];  // достаточно 20 символов? с добавлением ширины
                           // какая может быть максимальная ширина
 
+        char charValue;
+        int intValue;
+        double doubleValue;
+        unsigned int unsignedIntValue;
+        char *stringValue;
+
         switch (*format) {
           // char type
           case 'c':
-            char charValue = (char)va_arg(arg, int);
+            charValue = (char)va_arg(arg, int);
             s21_ctoa(charValue, buffer);
             break;
           // int type
           case 'd':
-            int intValue = va_arg(arg, int);
+            intValue = va_arg(arg, int);
             s21_itoa(parametrs, buffer, intValue);
             break;
           // float type
           case 'f':
-            double doubleValue = va_arg(arg, double);
+            doubleValue = va_arg(arg, double);
             s21_ftoa(parametrs, buffer, doubleValue);
             break;
           // string type
           case 's':
-            char *charPtrValue = va_arg(arg, char *);
-            s21_stoa(parametrs, buffer, charPtrValue);
+            stringValue = va_arg(arg, char *);
+            s21_stoa(parametrs, buffer, stringValue);
             break;
           // unsigned int type
           case 'u':
-            unsigned int unsignedIntValue = va_arg(arg, unsigned int);
+            unsignedIntValue = va_arg(arg, unsigned int);
             s21_utoa(parametrs, buffer, unsignedIntValue);
             break;
           // unknown type
