@@ -40,9 +40,17 @@ int s21_sprintf(char *str, const char *format, ...) {
                           // какая может быть максимальная ширина
 
         char charValue;
+
         int intValue;
+        short int shortIntValue;
+        long int longIntValue;
+
         double doubleValue;
+
         unsigned int unsignedIntValue;
+        short unsigned int shortUnsignedIntValue;
+        long unsigned int longUnsignedIntValue;
+
         char *stringValue;
 
         switch (*format) {
@@ -53,8 +61,18 @@ int s21_sprintf(char *str, const char *format, ...) {
             break;
           // int type
           case 'd':
-            intValue = va_arg(arg, int);
-            s21_itoa(parametrs, buffer, intValue);
+            if (parametrs.length == '\0') {
+              intValue = va_arg(arg, int);
+              s21_itoa(parametrs, buffer, intValue);
+            }
+            if (parametrs.length == 'h') {
+              shortIntValue = va_arg(arg, int);
+              s21_itoa(parametrs, buffer, shortIntValue);
+            }
+            if (parametrs.length == 'l') {
+              longIntValue = va_arg(arg, long int);
+              s21_itoa(parametrs, buffer, longIntValue);
+            }
             break;
           // float type
           case 'f':
@@ -68,8 +86,18 @@ int s21_sprintf(char *str, const char *format, ...) {
             break;
           // unsigned int type
           case 'u':
-            unsignedIntValue = va_arg(arg, unsigned int);
-            s21_utoa(parametrs, buffer, unsignedIntValue);
+            if (parametrs.length == '\0') {
+              unsignedIntValue = va_arg(arg, int);
+              s21_itoa(parametrs, buffer, unsignedIntValue);
+            }
+            if (parametrs.length == 'h') {
+              shortUnsignedIntValue = va_arg(arg, int);
+              s21_itoa(parametrs, buffer, shortUnsignedIntValue);
+            }
+            if (parametrs.length == 'l') {
+              longUnsignedIntValue = va_arg(arg, long int);
+              s21_itoa(parametrs, buffer, longUnsignedIntValue);
+            }
             break;
           // unknown type
           default:

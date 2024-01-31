@@ -26,6 +26,8 @@ int s21_writeParameters(parserParameters *parametrs, char *formatSpec) {
 
   formatSpec += lenParam;
 
+  s21_writeLength(parametrs, formatSpec);
+
   return SUCCESS;
 }
 
@@ -118,6 +120,10 @@ int s21_writePrecision(parserParameters *parametrs, char *formatSpec,
   return SUCCESS;
 }
 
+void s21_writeLength(parserParameters *parametrs, char *formatSpec) {
+  parametrs->length = *formatSpec;
+}
+
 void s21_addFormat(parserParameters parametrs, char *buffer) {
   if (parametrs.width > s21_strlen(buffer)) {
     s21_size_t addWidth = parametrs.width - s21_strlen(buffer);
@@ -165,7 +171,7 @@ void s21_ctoa(char value, char *buffer) {
   buffer[1] = '\0';
 }
 
-void s21_itoa(parserParameters parametrs, char *buffer, int value) {
+void s21_itoa(parserParameters parametrs, char *buffer, long int value) {
   int isNegative = 0;
   int i = 0;
 
@@ -224,7 +230,8 @@ void s21_strrev(char *str) {
   }
 }
 
-void s21_utoa(parserParameters parametrs, char *buffer, unsigned int value) {
+void s21_utoa(parserParameters parametrs, char *buffer,
+              long unsigned int value) {
   int i = 0;
 
   if (parametrs.precision == -1) {

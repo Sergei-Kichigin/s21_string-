@@ -47,9 +47,10 @@ void s21_addFormat(parserParameters parametrs, char *buffer);
 
 // transform type
 void s21_ctoa(char value, char *buffer);
-void s21_itoa(parserParameters parametrs, char *buffer, int value);
+void s21_itoa(parserParameters parametrs, char *buffer, long int value);
 void s21_ftoa(parserParameters parametrs, char *buffer, double value);
-void s21_utoa(parserParameters parametrs, char *buffer, unsigned int value);
+void s21_utoa(parserParameters parametrs, char *buffer,
+              long unsigned int value);
 void s21_stoa(parserParameters parametrs, char *buffer, char *charPtrValue);
 
 void s21_intPartToa(parserParameters parametrs, char *buffer, int intPart);
@@ -67,5 +68,6 @@ int s21_writeWidth(parserParameters *parametrs, char *format,
                    s21_size_t *lenParam);
 int s21_writePrecision(parserParameters *parametrs, char *formatSpec,
                        s21_size_t *lenParam);
+void s21_writeLength(parserParameters *parametrs, char *formatSpec);
 
 #endif

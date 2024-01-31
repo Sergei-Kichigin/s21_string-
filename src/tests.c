@@ -897,6 +897,50 @@ START_TEST(test_sprintf_string_precision_no_explicit_meaning) {
 }
 END_TEST
 
+START_TEST(test_sprintf_int_length_h) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Test: %hd", -112000);
+  sprintf(buffer2, "Test: %hd", -112000);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_unsigned_int_length_h) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Test: %hu", 12999999);
+  sprintf(buffer2, "Test: %hu", 12999999);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_int_length_l) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Test: %ld", -6120000000);
+  sprintf(buffer2, "Test: %ld", -6120000000);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_unsigned_int_length_l) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Test: %lu", 9120000000);
+  sprintf(buffer2, "Test: %lu", 9120000000);
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
 Suite *my_string_suite(void) {
   Suite *s;
   TCase *tc_core;
@@ -1008,7 +1052,13 @@ Suite *my_string_suite(void) {
   tcase_add_test(tc_core, test_sprintf_string_precision_positive);
   tcase_add_test(tc_core, test_sprintf_string_precision_null);
   tcase_add_test(tc_core, test_sprintf_string_precision_no_explicit_meaning);
-  
+
+  tcase_add_test(tc_core, test_sprintf_int_length_h);
+  tcase_add_test(tc_core, test_sprintf_unsigned_int_length_h);
+
+  tcase_add_test(tc_core, test_sprintf_int_length_l);
+  tcase_add_test(tc_core, test_sprintf_unsigned_int_length_l);
+
   suite_add_tcase(s, tc_core);
 
   return s;
