@@ -52,13 +52,13 @@ int s21_sprintf(char *str, const char *format, ...) {
             break;
           // float type
           case 'f':
-            double floatValue = va_arg(arg, double);
-            s21_ftoa(parametrs, buffer, floatValue);
+            double doubleValue = va_arg(arg, double);
+            s21_ftoa(parametrs, buffer, doubleValue);
             break;
           // string type
           case 's':
             char *charPtrValue = va_arg(arg, char *);
-            s21_writeString(buffer, charPtrValue);
+            s21_stoa(parametrs, buffer, charPtrValue);
             break;
           // unsigned int type
           case 'u':

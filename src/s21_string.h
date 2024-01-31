@@ -6,7 +6,6 @@
 #define SUCCESS 0
 #define ERROR 1
 #define S21_NULL (void *)0
-#define MAXLENGHTSTRFLAGS
 
 typedef long unsigned s21_size_t;
 
@@ -47,6 +46,7 @@ void s21_ctoa(char value, char *buffer);
 void s21_itoa(parserParameters parametrs, char *buffer, int value);
 void s21_ftoa(parserParameters parametrs, char *buffer, double value);
 void s21_utoa(parserParameters parametrs, char *buffer, unsigned int value);
+void s21_stoa(parserParameters parametrs, char *buffer, char *charPtrValue);
 
 void s21_intPartToa(parserParameters parametrs, char *buffer, int intPart);
 void s21_strrev(char *str);

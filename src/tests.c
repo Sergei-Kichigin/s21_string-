@@ -588,6 +588,39 @@ START_TEST(test_sprintf_double_precision_no_explicit_meaning) {
 }
 END_TEST
 
+START_TEST(test_sprintf_string_precision_positive) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Test: %.4s", "SUCCESS");
+  sprintf(buffer2, "Test: %.4s", "SUCCESS");
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_string_precision_null) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Test: %.0s", "SUCCESS");
+  sprintf(buffer2, "Test: %.0s", "SUCCESS");
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_string_precision_no_explicit_meaning) {
+  char buffer1[100];
+  char buffer2[100];
+
+  s21_sprintf(buffer1, "Test: %.s", "SUCCESS");  // precision = 0
+  sprintf(buffer2, "Test: %.s", "SUCCESS");
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
 Suite *my_string_suite(void) {
   Suite *s;
   TCase *tc_core;
@@ -668,6 +701,10 @@ Suite *my_string_suite(void) {
   tcase_add_test(tc_core, test_sprintf_double_precision_null);
   tcase_add_test(tc_core, test_sprintf_double_precision_no_explicit_meaning);
 
+  tcase_add_test(tc_core, test_sprintf_string_precision_positive);
+  tcase_add_test(tc_core, test_sprintf_string_precision_null);
+  tcase_add_test(tc_core, test_sprintf_string_precision_no_explicit_meaning);
+  
   suite_add_tcase(s, tc_core);
 
   return s;
@@ -691,7 +728,7 @@ int main(void) {
   // -+ / +-
   // -' ' / ' '-
 
-  // s21_sprintf(str1, "\nTe %5.0d %s %f %c %11.0u\n", 11, "test", 0.0002346,
+  // s21_sprintf(str1, "\nTe %5.d %s %f %c %11.0u\n", 11, "test", 0.0002346,
   // 'k',
   //             UnsInt);
   // sprintf(str2, "\nTe %5.0d %s %f %c %11.0u\n", 11, "test", 0.0002346, 'k',

@@ -97,7 +97,7 @@ int s21_writePrecision(parserParameters *parametrs, char *formatSpec,
     s21_size_t lenPrecision = s21_strcspn(formatSpec, "lh");
     *lenParam = lenPrecision + 1;  // + '.'
 
-    if (lenPrecision == 0) {
+    if (lenPrecision == 0) {  // no_explicit_meaning
       parametrs->precision = 0;
     }
 
@@ -173,11 +173,8 @@ void s21_itoa(parserParameters parametrs, char *buffer, int value) {
     parametrs.precision = 1;
   }
 
-  if (value == 0) {
-    if (parametrs.precision != 0) {
-      buffer[i++] = '0';
-    }
-    buffer[i] = '\0';
+  if (value == 0 && parametrs.precision != 0) {
+    buffer[i++] = '0';
   }
 
   if (value < 0) {
@@ -234,11 +231,8 @@ void s21_utoa(parserParameters parametrs, char *buffer, unsigned int value) {
     parametrs.precision = 1;
   }
 
-  if (value == 0) {
-    if (parametrs.precision != 0) {
-      buffer[i++] = '0';
-    }
-    buffer[i] = '\0';
+  if (value == 0 && parametrs.precision != 0) {
+    buffer[i++] = '0';
   }
 
   while (value > 0) {
@@ -290,4 +284,12 @@ void s21_ftoa(parserParameters parametrs, char *buffer, double value) {
 void s21_intPartToa(parserParameters parametrs, char *buffer, int intPart) {
   parametrs.precision = 1;
   s21_itoa(parametrs, buffer, intPart);
+}
+
+void s21_stoa(parserParameters parametrs, char *buffer, char *charPtrValue) {
+  if (parametrs.precision == -1) {
+    s21_writeString(buffer, charPtrValue);
+  } else {
+    s21_writeNchar(buffer, charPtrValue, parametrs.precision);
+  }
 }
