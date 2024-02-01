@@ -1075,12 +1075,12 @@ int main(void) {
   // char str2[100];
   // unsigned int UnsInt = 105;
 
-  // correct combination flags
-  // -
-  // +
-  // ' '
-  // -+ / +-
-  // -' ' / ' '-
+  // // correct combination flags
+  // // -
+  // // +
+  // // ' '
+  // // -+ / +-
+  // // -' ' / ' '-
 
   // s21_sprintf(str1, "\nTe %5.d %s %f %c %11.0u\n", 11, "test", 0.0002346,
   // 'k',

@@ -5,99 +5,58 @@
 
 int s21_isdigit(int c) { return (c >= '0' && c <= '9'); }
 
-int s21_writeParameters(parserParameters *parametrs, char *formatSpec) {
-  s21_size_t lenParam = 0;
+void s21_writeParameters(parserParameters *parametrs, char *formatSpec) {
+  formatSpec += s21_writeFlags(parametrs, formatSpec);
 
-  if (s21_writeFlags(parametrs, formatSpec, &lenParam)) {
-    return ERROR;
-  }
+  formatSpec += s21_writeWidth(parametrs, formatSpec);
 
-  formatSpec += lenParam;
-
-  if (s21_writeWidth(parametrs, formatSpec, &lenParam)) {
-    return ERROR;
-  }
-
-  formatSpec += lenParam;
-
-  if (s21_writePrecision(parametrs, formatSpec, &lenParam)) {
-    return ERROR;
-  }
-
-  formatSpec += lenParam;
+  formatSpec += s21_writePrecision(parametrs, formatSpec);
 
   s21_writeLength(parametrs, formatSpec);
-
-  return SUCCESS;
 }
 
-int s21_writeFlags(parserParameters *parametrs, char *formatSpec,
-                   s21_size_t *lenParam) {
+s21_size_t s21_writeFlags(parserParameters *parametrs, char *formatSpec) {
   s21_size_t lenFlags = s21_strcspn(formatSpec, "1234567890.lh");
-  *lenParam = lenFlags;
 
-  if (lenFlags > 2 || (lenFlags == 2 && (formatSpec[0] == formatSpec[1]))) {
-    return ERROR;
-  }
-
-  if (lenFlags == 1 || lenFlags == 2) {
-    for (s21_size_t i = 0; i < lenFlags; i++) {
-      switch (formatSpec[i]) {
-        case '-':
-          parametrs->leftOrientation = true;
-          break;
-        case '+':
-          parametrs->forcedSignOutput = true;
-          break;
-        case ' ':
-          parametrs->signPlace = true;
-          break;
-        default:
-          return ERROR;
-          break;
-      }
+  for (s21_size_t i = 0; i < lenFlags; i++) {
+    switch (formatSpec[i]) {
+      case '-':
+        parametrs->leftOrientation = true;
+        break;
+      case '+':
+        parametrs->forcedSignOutput = true;
+        break;
+      case ' ':
+        parametrs->signPlace = true;
+        break;
     }
   }
 
-  if (parametrs->forcedSignOutput && parametrs->signPlace) {
-    return ERROR;
-  }
-
-  return SUCCESS;
+  return lenFlags;
 }
 
-int s21_writeWidth(parserParameters *parametrs, char *formatSpec,
-                   s21_size_t *lenParam) {
+s21_size_t s21_writeWidth(parserParameters *parametrs, char *formatSpec) {
   char strWidth[20];
-
   s21_size_t lenWidth = s21_strcspn(formatSpec, ".lh");
-  *lenParam = lenWidth;
 
   if (lenWidth > 0) {
     for (s21_size_t i = 0; i < lenWidth; i++, formatSpec++) {
-      if (s21_isdigit(*formatSpec)) {
-        strWidth[i] = *formatSpec;
-      } else {
-        return ERROR;
-      }
+      strWidth[i] = *formatSpec;
     }
     strWidth[lenWidth] = '\0';
-
     parametrs->width = s21_stoi(strWidth);
   }
 
-  return SUCCESS;
+  return lenWidth;
 }
 
-int s21_writePrecision(parserParameters *parametrs, char *formatSpec,
-                       s21_size_t *lenParam) {
+s21_size_t s21_writePrecision(parserParameters *parametrs, char *formatSpec) {
+  s21_size_t lenPrecision = 0;
   char strPrecision[20];
 
   if (*formatSpec == '.') {
     formatSpec++;
-
-    s21_size_t lenPrecision = s21_strcspn(formatSpec, "lh");
-    *lenParam = lenPrecision + 1;  // + '.'
+    lenPrecision = s21_strcspn(formatSpec, "lh");
 
     if (lenPrecision == 0) {  // no_explicit_meaning
       parametrs->precision = 0;
@@ -105,19 +64,17 @@ int s21_writePrecision(parserParameters *parametrs, char *formatSpec,
 
     if (lenPrecision > 0) {
       for (s21_size_t i = 0; i < lenPrecision; i++, formatSpec++) {
-        if (s21_isdigit(*formatSpec)) {
-          strPrecision[i] = *formatSpec;
-        } else {
-          return ERROR;
-        }
+        strPrecision[i] = *formatSpec;
       }
       strPrecision[lenPrecision] = '\0';
 
       parametrs->precision = s21_stoi(strPrecision);
     }
+
+    lenPrecision++;  // + '.'
   }
 
-  return SUCCESS;
+  return lenPrecision;
 }
 
 void s21_writeLength(parserParameters *parametrs, char *formatSpec) {

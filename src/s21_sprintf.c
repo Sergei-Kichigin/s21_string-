@@ -28,10 +28,7 @@ int s21_sprintf(char *str, const char *format, ...) {
           char formatSpec[20];
 
           s21_writeNchar(formatSpec, format, lenFormatSpec);
-          if (s21_writeParameters(&parametrs, formatSpec)) {
-            printf("%s", "Uncorrect format\n");
-            return ERROR;
-          }
+          s21_writeParameters(&parametrs, formatSpec);
 
           format += lenFormatSpec;
         }
@@ -56,8 +53,13 @@ int s21_sprintf(char *str, const char *format, ...) {
         switch (*format) {
           // char type
           case 'c':
-            charValue = (char)va_arg(arg, int);
-            s21_ctoa(charValue, buffer);
+            if (parametrs.length == '\0') {
+              charValue = (char)va_arg(arg, int);
+              s21_ctoa(charValue, buffer);
+            }
+            if (parametrs.length == 'l') {
+              /// надо сделать!
+            }
             break;
           // int type
           case 'd':

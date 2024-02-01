@@ -61,13 +61,11 @@ int s21_isdigit(int c);
 s21_size_t s21_stoi(const char *str);
 
 // specifier parametrs
-int s21_writeParameters(parserParameters *parametrs, char *format);
-int s21_writeFlags(parserParameters *parametrs, char *formatSpec,
-                   s21_size_t *lenParam);
-int s21_writeWidth(parserParameters *parametrs, char *format,
-                   s21_size_t *lenParam);
-int s21_writePrecision(parserParameters *parametrs, char *formatSpec,
-                       s21_size_t *lenParam);
+void s21_writeParameters(parserParameters *parametrs, char *format);
+
+s21_size_t s21_writeFlags(parserParameters *parametrs, char *formatSpec);
+s21_size_t s21_writeWidth(parserParameters *parametrs, char *formatSpec);
+s21_size_t s21_writePrecision(parserParameters *parametrs, char *formatSpec);
 void s21_writeLength(parserParameters *parametrs, char *formatSpec);
 
 #endif
