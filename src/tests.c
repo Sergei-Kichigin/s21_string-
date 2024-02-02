@@ -941,6 +941,92 @@ START_TEST(test_sprintf_unsigned_int_length_l) {
 }
 END_TEST
 
+START_TEST(test_sprintf_int_flags_with_width) {
+  char buffer1[100];
+  char buffer2[100];
+
+  // Тест с флагом '+'
+  s21_sprintf(buffer1, "Test: %+10d", 42);
+  sprintf(buffer2, "Test: %+10d", 42);
+  ck_assert_str_eq(buffer1, buffer2);
+
+  // Тест с флагом '-'
+  s21_sprintf(buffer1, "Test: %-10d", 42);
+  sprintf(buffer2, "Test: %-10d", 42);
+  ck_assert_str_eq(buffer1, buffer2);
+
+  // Тест с флагом ' '
+  s21_sprintf(buffer1, "Test: % 10d", 42);
+  sprintf(buffer2, "Test: % 10d", 42);
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_float_flags_with_width) {
+  char buffer1[100];
+  char buffer2[100];
+
+  // Тест с флагом '+'
+
+  float value = 3.141592;
+
+  s21_sprintf(buffer1, "Test: %+10.2f", value);
+  sprintf(buffer2, "Test: %+10.2f", value);
+  ck_assert_str_eq(buffer1, buffer2);
+
+  // Тест с флагом '-'
+  s21_sprintf(buffer1, "Test: %-10.2f", value);
+  sprintf(buffer2, "Test: %-10.2f", value);
+  ck_assert_str_eq(buffer1, buffer2);
+
+  // Тест с флагом ' '
+  s21_sprintf(buffer1, "Test: % 10.2f", value);
+  sprintf(buffer2, "Test: % 10.2f", value);
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_unsigned_int_flags_with_width) {
+  char buffer1[100];
+  char buffer2[100];
+
+  unsigned int value = 42;
+
+  // Тест с флагом '-'
+  s21_sprintf(buffer1, "Test: %-10u", value);
+  sprintf(buffer2, "Test: %-10u", value);
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_char_width) {
+  char buffer1[100];
+  char buffer2[100];
+  char symbol = 'c';
+
+  s21_sprintf(buffer1, "Test: %10c", symbol);
+  sprintf(buffer2, "Test: %10c", symbol);
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
+START_TEST(test_sprintf_string_flags_with_width) {
+  char buffer1[100];
+  char buffer2[100];
+
+  char string[20] = "Hello";
+
+  // Тест с флагом '-'
+  s21_sprintf(buffer1, "Test: %-10s test", string);
+  sprintf(buffer2, "Test: %-10s test", string);
+  ck_assert_str_eq(buffer1, buffer2);
+
+  s21_sprintf(buffer1, "Test: %10s", string);
+  sprintf(buffer2, "Test: %10s", string);
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
 Suite *my_string_suite(void) {
   Suite *s;
   TCase *tc_core;
@@ -1059,6 +1145,13 @@ Suite *my_string_suite(void) {
   tcase_add_test(tc_core, test_sprintf_int_length_l);
   tcase_add_test(tc_core, test_sprintf_unsigned_int_length_l);
 
+  // SPRINTF FLAGS
+  tcase_add_test(tc_core, test_sprintf_int_flags_with_width);
+  tcase_add_test(tc_core, test_sprintf_float_flags_with_width);
+  tcase_add_test(tc_core, test_sprintf_unsigned_int_flags_with_width);
+  tcase_add_test(tc_core, test_sprintf_char_width);
+  tcase_add_test(tc_core, test_sprintf_string_flags_with_width);
+
   suite_add_tcase(s, tc_core);
 
   return s;
@@ -1068,30 +1161,6 @@ int main(void) {
   int number_failed;
   Suite *s;
   SRunner *sr;
-
-  // SPRINTF TEST ----------------------------
-
-  // char str1[100];
-  // char str2[100];
-  // unsigned int UnsInt = 105;
-
-  // // correct combination flags
-  // // -
-  // // +
-  // // ' '
-  // // -+ / +-
-  // // -' ' / ' '-
-
-  // s21_sprintf(str1, "\nTe %5.d %s %f %c %11.0u\n", 11, "test", 0.0002346,
-  // 'k',
-  //             UnsInt);
-  // sprintf(str2, "\nTe %5.0d %s %f %c %11.0u\n", 11, "test", 0.0002346, 'k',
-  //         UnsInt);
-
-  // printf("result: %s\n", str1);
-  // printf("expect: %s\n", str2);
-
-  // SPRINTF TEST ----------------------------
 
   s = my_string_suite();
   sr = srunner_create(s);

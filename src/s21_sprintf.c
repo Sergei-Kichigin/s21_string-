@@ -19,6 +19,23 @@ int s21_sprintf(char *str, const char *format, ...) {
         s21_size_t lenFormatSpec = s21_strcspn(format, "cdfsu");
         parserParameters parametrs = {false, false, false, 0, -1, '\0'};
 
+        char buffer[20];
+        s21_memset(buffer, 0, sizeof(buffer));
+
+        char charValue = 0;
+
+        int intValue = 0;
+        short int shortIntValue = 0;
+        long int longIntValue = 0;
+
+        double doubleValue = 0.0;
+
+        unsigned int unsignedIntValue = 0;
+        short unsigned int shortUnsignedIntValue = 0;
+        long unsigned int longUnsignedIntValue = 0;
+
+        char *stringValue = NULL;
+
         if (lenFormatSpec == s21_strlen(format)) {  // not found "cdfsu"
           printf("%s", "Uncorrect format\n");
           return ERROR;
@@ -32,23 +49,6 @@ int s21_sprintf(char *str, const char *format, ...) {
 
           format += lenFormatSpec;
         }
-
-        char buffer[20];  // достаточно 20 символов? с добавлением ширины
-                          // какая может быть максимальная ширина
-
-        char charValue;
-
-        int intValue;
-        short int shortIntValue;
-        long int longIntValue;
-
-        double doubleValue;
-
-        unsigned int unsignedIntValue;
-        short unsigned int shortUnsignedIntValue;
-        long unsigned int longUnsignedIntValue;
-
-        char *stringValue;
 
         switch (*format) {
           // char type
@@ -90,15 +90,15 @@ int s21_sprintf(char *str, const char *format, ...) {
           case 'u':
             if (parametrs.length == '\0') {
               unsignedIntValue = va_arg(arg, int);
-              s21_itoa(parametrs, buffer, unsignedIntValue);
+              s21_utoa(parametrs, buffer, unsignedIntValue);
             }
             if (parametrs.length == 'h') {
               shortUnsignedIntValue = va_arg(arg, int);
-              s21_itoa(parametrs, buffer, shortUnsignedIntValue);
+              s21_utoa(parametrs, buffer, shortUnsignedIntValue);
             }
             if (parametrs.length == 'l') {
               longUnsignedIntValue = va_arg(arg, long int);
-              s21_itoa(parametrs, buffer, longUnsignedIntValue);
+              s21_utoa(parametrs, buffer, longUnsignedIntValue);
             }
             break;
           // unknown type
