@@ -160,6 +160,7 @@ char *s21_strtok(char *str, const char *delim) {
 char *s21_strerror(int errnum) {
 #if defined(__APPLE__)
 #define MAX_ERROR_CODE 107
+  const char error_out_of_list[20] = "Unknown error:";
   const char *list_errors[] = {
       "Undefined error: 0",
       "Operation not permitted",
@@ -270,6 +271,7 @@ char *s21_strerror(int errnum) {
       "Interface output queue is full"};
 #elif defined(__linux__)
 #define MAX_ERROR_CODE 134
+  const char error_out_of_list[20] = "Unknown error";
   const char *list_errors[] = {
       "Success",
       "Operation not permitted",
@@ -411,7 +413,7 @@ char *s21_strerror(int errnum) {
     sprintf(result, "%s",
             list_errors[errnum]); /*!!!Пока что s21_sprintf не работает*/
   } else {
-    sprintf(result, "Unknown error %d",
+    sprintf(result, "%s %d", error_out_of_list,
             errnum); /*!!!Пока что s21_sprintf не работает*/
   }
   return result;
