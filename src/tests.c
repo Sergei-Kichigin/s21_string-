@@ -1027,6 +1027,20 @@ START_TEST(test_sprintf_string_flags_with_width) {
 }
 END_TEST
 
+// START_TEST(test_sprintf_long_char) {
+//   char buffer1[100];
+//   wchar_t buffer2[100];
+
+//   wchar_t exampleSymbol = L'👋';
+
+//   s21_sprintf(buffer1, "Char: %lc", exampleSymbol);
+//   sprintf(buffer2, "Char: %lc", exampleSymbol);
+
+//   ck_assert_str_eq(buffer1, buffer2);
+// }
+// END_TEST
+
+
 Suite *my_string_suite(void) {
   Suite *s;
   TCase *tc_core;
@@ -1152,6 +1166,8 @@ Suite *my_string_suite(void) {
   tcase_add_test(tc_core, test_sprintf_char_width);
   tcase_add_test(tc_core, test_sprintf_string_flags_with_width);
 
+  //tcase_add_test(tc_core, test_sprintf_long_char);
+
   suite_add_tcase(s, tc_core);
 
   return s;
@@ -1161,6 +1177,30 @@ int main(void) {
   int number_failed;
   Suite *s;
   SRunner *sr;
+
+  // SPRINTF TEST ----------------------------
+
+  //char str1[100];
+  char str2[1000000];
+  unsigned int UnsInt = 105;
+  wchar_t exampleSymbol = L'#';
+  //'👋';
+
+  // correct combination flags
+  // -
+  // +
+  // ' '
+  // -+ / +-
+  // -' ' / ' '-
+
+  //s21_sprintf(str1, "\nTe %5.d %s %f %c %11.0u\n", 11, "test", 0.0002346, 'k', UnsInt);
+  sprintf(str2, "\nTe %5.0d %s %f %lc %11.0u\n", 11, "test", 0.0002346, exampleSymbol, UnsInt);
+
+  //printf("result: %s\n", str1);
+  printf("expect: %s\n", str2);
+
+  // SPRINTF TEST ----------------------------
+
 
   s = my_string_suite();
   sr = srunner_create(s);

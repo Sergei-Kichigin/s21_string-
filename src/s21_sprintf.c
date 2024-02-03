@@ -1,5 +1,6 @@
 #include <stdarg.h>
 #include <stdbool.h>
+#include <stddef.h>
 #include <stdio.h>
 
 #include "s21_string.h"
@@ -19,10 +20,11 @@ int s21_sprintf(char *str, const char *format, ...) {
         s21_size_t lenFormatSpec = s21_strcspn(format, "cdfsu");
         parserParameters parametrs = {false, false, false, 0, -1, '\0'};
 
-        char buffer[20];
-        s21_memset(buffer, 0, sizeof(buffer));
+        char buffer[100]; // хватит ли 20?
 
         char charValue = 0;
+        wchar_t longCharValue = 0;
+        //wchar_t exampleSymbol = L'👋';
 
         int intValue = 0;
         short int shortIntValue = 0;
@@ -58,7 +60,8 @@ int s21_sprintf(char *str, const char *format, ...) {
               s21_ctoa(charValue, buffer);
             }
             if (parametrs.length == 'l') {
-              /// надо сделать!
+              longCharValue = (wchar_t)va_arg(arg, int);
+              s21_ctoa(longCharValue, buffer);
             }
             break;
           // int type
@@ -89,15 +92,15 @@ int s21_sprintf(char *str, const char *format, ...) {
           // unsigned int type
           case 'u':
             if (parametrs.length == '\0') {
-              unsignedIntValue = va_arg(arg, int);
+              unsignedIntValue = va_arg(arg, unsigned int);
               s21_utoa(parametrs, buffer, unsignedIntValue);
             }
             if (parametrs.length == 'h') {
-              shortUnsignedIntValue = va_arg(arg, int);
+              shortUnsignedIntValue = va_arg(arg, unsigned int);
               s21_utoa(parametrs, buffer, shortUnsignedIntValue);
             }
             if (parametrs.length == 'l') {
-              longUnsignedIntValue = va_arg(arg, long int);
+              longUnsignedIntValue = va_arg(arg, unsigned long int);
               s21_utoa(parametrs, buffer, longUnsignedIntValue);
             }
             break;

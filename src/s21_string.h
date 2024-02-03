@@ -2,6 +2,7 @@
 #define S21_STRING_H
 
 #include <stdbool.h>
+#include <stddef.h>
 
 #define SUCCESS 0
 #define ERROR 1
@@ -46,7 +47,7 @@ void s21_writeNchar(char *str, const char *buffer, s21_size_t n);
 void s21_addFormat(parserParameters parametrs, char *buffer);
 
 // transform type
-void s21_ctoa(char value, char *buffer);
+void s21_ctoa(wchar_t value, char *buffer);
 void s21_itoa(parserParameters parametrs, char *buffer, long int value);
 void s21_ftoa(parserParameters parametrs, char *buffer, double value);
 void s21_utoa(parserParameters parametrs, char *buffer,

@@ -1,5 +1,6 @@
 #include <math.h>
 #include <stdio.h>
+#include <stddef.h>
 
 #include "s21_string.h"
 
@@ -123,7 +124,7 @@ void s21_writeNchar(char *str, const char *buffer, s21_size_t n) {
   str[n] = '\0';
 }
 
-void s21_ctoa(char value, char *buffer) {
+void s21_ctoa(wchar_t value, char *buffer) {
   buffer[0] = value;
   buffer[1] = '\0';
 }
