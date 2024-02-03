@@ -19,7 +19,7 @@ int s21_sprintf(char *str, const char *format, ...) {
         s21_size_t lenFormatSpec = s21_strcspn(format, "cdfsu");
         parserParameters parametrs = {false, false, false, 0, -1, '\0'};
 
-        char buffer[20];
+        char buffer[100];
         s21_memset(buffer, 0, sizeof(buffer));
 
         char charValue = 0;

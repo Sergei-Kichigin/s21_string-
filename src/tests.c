@@ -669,7 +669,10 @@ END_TEST
 // STRERROR
 
 START_TEST(strerror_1) {
-  for (int i = -5; i < 150; i++) ck_assert_str_eq(s21_strerror(i), strerror(i));
+  for (int i = -5; i < 150; i++) 
+  {
+  ck_assert_str_eq(s21_strerror(i), strerror(i));
+  }
 }
 END_TEST
 

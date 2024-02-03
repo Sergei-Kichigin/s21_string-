@@ -1,5 +1,3 @@
-#include <stdio.h> /*!!!Пока что s21_sprintf не работает (strerror)*/
-
 #include "s21_string.h"
 
 char *s21_strncat(char *dest, const char *src, s21_size_t n) {
@@ -410,11 +408,11 @@ char *s21_strerror(int errnum) {
 #endif
   static char result[1024] = "\0";
   if (errnum >= 0 && errnum < MAX_ERROR_CODE) {
-    sprintf(result, "%s",
-            list_errors[errnum]); /*!!!Пока что s21_sprintf не работает*/
+    //char* error = (char*)list_errors[errnum];
+    //s21_sprintf(result, "%s", error);
+    s21_sprintf(result, "%s", list_errors[errnum]);
   } else {
-    sprintf(result, "%s %d", error_out_of_list,
-            errnum); /*!!!Пока что s21_sprintf не работает*/
+    s21_sprintf(result, "%s %d", error_out_of_list, errnum);
   }
   return result;
 }
