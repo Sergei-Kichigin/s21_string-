@@ -1,5 +1,3 @@
-#include <stdio.h> /*!!!Пока что s21_sprintf не работает (strerror)*/
-
 #include "s21_string.h"
 
 char *s21_strncat(char *dest, const char *src, s21_size_t n) {
@@ -160,6 +158,7 @@ char *s21_strtok(char *str, const char *delim) {
 char *s21_strerror(int errnum) {
 #if defined(__APPLE__)
 #define MAX_ERROR_CODE 107
+  const char error_out_of_list[20] = "Unknown error:";
   const char *list_errors[] = {
       "Undefined error: 0",
       "Operation not permitted",
@@ -270,6 +269,7 @@ char *s21_strerror(int errnum) {
       "Interface output queue is full"};
 #elif defined(__linux__)
 #define MAX_ERROR_CODE 134
+  const char error_out_of_list[20] = "Unknown error";
   const char *list_errors[] = {
       "Success",
       "Operation not permitted",
@@ -408,11 +408,11 @@ char *s21_strerror(int errnum) {
 #endif
   static char result[1024] = "\0";
   if (errnum >= 0 && errnum < MAX_ERROR_CODE) {
-    sprintf(result, "%s",
-            list_errors[errnum]); /*!!!Пока что s21_sprintf не работает*/
+    //char* error = (char*)list_errors[errnum];
+    //s21_sprintf(result, "%s", error);
+    s21_sprintf(result, "%s", list_errors[errnum]);
   } else {
-    sprintf(result, "Unknown error %d",
-            errnum); /*!!!Пока что s21_sprintf не работает*/
+    s21_sprintf(result, "%s %d", error_out_of_list, errnum);
   }
   return result;
 }
