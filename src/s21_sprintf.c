@@ -20,11 +20,11 @@ int s21_sprintf(char *str, const char *format, ...) {
         s21_size_t lenFormatSpec = s21_strcspn(format, "cdfsu");
         parserParameters parametrs = {false, false, false, 0, -1, '\0'};
 
-        char buffer[100]; // хватит ли 20?
+        char buffer[100];  // хватит ли 20?
 
         char charValue = 0;
         wchar_t longCharValue = 0;
-        //wchar_t exampleSymbol = L'👋';
+        // wchar_t exampleSymbol = L'👋';
 
         int intValue = 0;
         short int shortIntValue = 0;
@@ -36,7 +36,7 @@ int s21_sprintf(char *str, const char *format, ...) {
         short unsigned int shortUnsignedIntValue = 0;
         long unsigned int longUnsignedIntValue = 0;
 
-        char *stringValue = NULL;
+        char *stringValue = S21_NULL;
 
         if (lenFormatSpec == s21_strlen(format)) {  // not found "cdfsu"
           printf("%s", "Uncorrect format\n");

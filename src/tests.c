@@ -14,7 +14,7 @@ START_TEST(memchr_1) {
   result = s21_memchr(input, 's', length);
   expected = memchr(input, 's', length);
 
-  ck_assert_mem_eq(result, expected, sizeof(*expected));  //
+  ck_assert_mem_eq(result, expected, sizeof(*expected));  
 }
 END_TEST
 
@@ -669,9 +669,8 @@ END_TEST
 // STRERROR
 
 START_TEST(strerror_1) {
-  for (int i = -5; i < 150; i++) 
-  {
-  ck_assert_str_eq(s21_strerror(i), strerror(i));
+  for (int i = -5; i < 150; i++) {
+    ck_assert_str_eq(s21_strerror(i), strerror(i));
   }
 }
 END_TEST
@@ -1030,19 +1029,19 @@ START_TEST(test_sprintf_string_flags_with_width) {
 }
 END_TEST
 
-// START_TEST(test_sprintf_long_char) {
-//   char buffer1[100];
-//   wchar_t buffer2[100];
+// START_TEST(to_upper_1) {
+//   char input[20] = "a";
+//   void *result;
+//   //void *expected;
 
-//   wchar_t exampleSymbol = L'👋';
+//   result = s21_to_upper(input);
+//   //expected = "THIS IS TEST1";
 
-//   s21_sprintf(buffer1, "Char: %lc", exampleSymbol);
-//   sprintf(buffer2, "Char: %lc", exampleSymbol);
+//   printf("%s\n", (char *)result);
 
-//   ck_assert_str_eq(buffer1, buffer2);
+//   //ck_assert_mem_eq(result, expected, sizeof(*expected));
 // }
 // END_TEST
-
 
 Suite *my_string_suite(void) {
   Suite *s;
@@ -1169,7 +1168,8 @@ Suite *my_string_suite(void) {
   tcase_add_test(tc_core, test_sprintf_char_width);
   tcase_add_test(tc_core, test_sprintf_string_flags_with_width);
 
-  //tcase_add_test(tc_core, test_sprintf_long_char);
+  // TO_UPPER
+  // tcase_add_test(tc_core, to_upper_1);
 
   suite_add_tcase(s, tc_core);
 
@@ -1180,30 +1180,6 @@ int main(void) {
   int number_failed;
   Suite *s;
   SRunner *sr;
-
-  // SPRINTF TEST ----------------------------
-
-  //char str1[100];
-  char str2[1000000];
-  unsigned int UnsInt = 105;
-  wchar_t exampleSymbol = L'#';
-  //'👋';
-
-  // correct combination flags
-  // -
-  // +
-  // ' '
-  // -+ / +-
-  // -' ' / ' '-
-
-  //s21_sprintf(str1, "\nTe %5.d %s %f %c %11.0u\n", 11, "test", 0.0002346, 'k', UnsInt);
-  sprintf(str2, "\nTe %5.0d %s %f %lc %11.0u\n", 11, "test", 0.0002346, exampleSymbol, UnsInt);
-
-  //printf("result: %s\n", str1);
-  printf("expect: %s\n", str2);
-
-  // SPRINTF TEST ----------------------------
-
 
   s = my_string_suite();
   sr = srunner_create(s);

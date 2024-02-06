@@ -39,7 +39,11 @@ char *s21_strncpy(char *dest, const char *src, s21_size_t n);
 char *s21_strtok(char *str, const char *delim);
 char *s21_strerror(int errnum);
 
-// additional functions
+// Special string processing functions (from the String class in C#)
+void *s21_to_upper(const char *str);
+void *s21_to_lower(const char *str);
+
+// additional functions for sprintf
 
 // for str
 void s21_writeString(char *str, char *buffer);
@@ -63,10 +67,10 @@ s21_size_t s21_stoi(const char *str);
 
 // specifier parametrs
 void s21_writeParameters(parserParameters *parametrs, char *format);
+void s21_writeLength(parserParameters *parametrs, char *formatSpec);
 
 s21_size_t s21_writeFlags(parserParameters *parametrs, char *formatSpec);
 s21_size_t s21_writeWidth(parserParameters *parametrs, char *formatSpec);
 s21_size_t s21_writePrecision(parserParameters *parametrs, char *formatSpec);
-void s21_writeLength(parserParameters *parametrs, char *formatSpec);
 
 #endif
