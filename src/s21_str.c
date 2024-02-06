@@ -408,8 +408,8 @@ char *s21_strerror(int errnum) {
 #endif
   static char result[1024] = "\0";
   if (errnum >= 0 && errnum < MAX_ERROR_CODE) {
-    //char* error = (char*)list_errors[errnum];
-    //s21_sprintf(result, "%s", error);
+    // char* error = (char*)list_errors[errnum];
+    // s21_sprintf(result, "%s", error);
     s21_sprintf(result, "%s", list_errors[errnum]);
   } else {
     s21_sprintf(result, "%s %d", error_out_of_list, errnum);

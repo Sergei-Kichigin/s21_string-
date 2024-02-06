@@ -49,7 +49,7 @@ $(GCOV_EXECUTABLE): $(SRC_FILES) $(TEST_SRC)
 gcov_report: $(GCOV_EXECUTABLE)
 	./$(GCOV_EXECUTABLE)
 	gcov *.gcda
-	gcovr -r . --html --html-details -o coverage_report.html
+	gcovr -r . --exclude tests.c --html --html-details -o coverage_report.html
 	rm -f *.gc* $(GCOV_EXECUTABLE)
 
 valgrind: $(EXECUTABLE)

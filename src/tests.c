@@ -669,9 +669,8 @@ END_TEST
 // STRERROR
 
 START_TEST(strerror_1) {
-  for (int i = -5; i < 150; i++) 
-  {
-  ck_assert_str_eq(s21_strerror(i), strerror(i));
+  for (int i = -5; i < 150; i++) {
+    ck_assert_str_eq(s21_strerror(i), strerror(i));
   }
 }
 END_TEST
@@ -1043,7 +1042,6 @@ END_TEST
 // }
 // END_TEST
 
-
 Suite *my_string_suite(void) {
   Suite *s;
   TCase *tc_core;
@@ -1169,7 +1167,7 @@ Suite *my_string_suite(void) {
   tcase_add_test(tc_core, test_sprintf_char_width);
   tcase_add_test(tc_core, test_sprintf_string_flags_with_width);
 
-  //tcase_add_test(tc_core, test_sprintf_long_char);
+  // tcase_add_test(tc_core, test_sprintf_long_char);
 
   suite_add_tcase(s, tc_core);
 
@@ -1183,7 +1181,7 @@ int main(void) {
 
   // SPRINTF TEST ----------------------------
 
-  //char str1[100];
+  // char str1[100];
   char str2[1000000];
   unsigned int UnsInt = 105;
   wchar_t exampleSymbol = L'#';
@@ -1196,14 +1194,15 @@ int main(void) {
   // -+ / +-
   // -' ' / ' '-
 
-  //s21_sprintf(str1, "\nTe %5.d %s %f %c %11.0u\n", 11, "test", 0.0002346, 'k', UnsInt);
-  sprintf(str2, "\nTe %5.0d %s %f %lc %11.0u\n", 11, "test", 0.0002346, exampleSymbol, UnsInt);
+  // s21_sprintf(str1, "\nTe %5.d %s %f %c %11.0u\n", 11, "test", 0.0002346,
+  // 'k', UnsInt);
+  sprintf(str2, "\nTe %5.0d %s %f %lc %11.0u\n", 11, "test", 0.0002346,
+          exampleSymbol, UnsInt);
 
-  //printf("result: %s\n", str1);
+  // printf("result: %s\n", str1);
   printf("expect: %s\n", str2);
 
   // SPRINTF TEST ----------------------------
-
 
   s = my_string_suite();
   sr = srunner_create(s);
