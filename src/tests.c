@@ -14,7 +14,7 @@ START_TEST(memchr_1) {
   result = s21_memchr(input, 's', length);
   expected = memchr(input, 's', length);
 
-  ck_assert_mem_eq(result, expected, sizeof(*expected));  
+  ck_assert_mem_eq(result, expected, sizeof(*expected));
 }
 END_TEST
 
@@ -1029,19 +1029,49 @@ START_TEST(test_sprintf_string_flags_with_width) {
 }
 END_TEST
 
-// START_TEST(to_upper_1) {
-//   char input[20] = "a";
-//   void *result;
-//   //void *expected;
+START_TEST(to_upper) {
+  char input[20] = "This is Test1!";
 
-//   result = s21_to_upper(input);
-//   //expected = "THIS IS TEST1";
+  void *result;
+  char *expected = "THIS IS TEST1!";
 
-//   printf("%s\n", (char *)result);
+  result = s21_to_upper(input);
 
-//   //ck_assert_mem_eq(result, expected, sizeof(*expected));
-// }
-// END_TEST
+  ck_assert_str_eq((char *)result, expected);
+}
+END_TEST
+
+START_TEST(to_lower) {
+  char input[20] = "This is Test2!";
+
+  void *result;
+  char *expected = "this is test2!";
+
+  result = s21_to_lower(input);
+
+  ck_assert_str_eq((char *)result, expected);
+}
+END_TEST
+
+START_TEST(insert) {
+  char input[20] = "make";
+
+  void *result;
+  char *expected = "maALLke";
+
+  result = s21_insert(input, "ALL", 2);
+  ck_assert_str_eq((char *)result, expected);
+
+  result = s21_insert(S21_NULL, "ALL", 2);
+  ck_assert_ptr_null(result);
+
+  result = s21_insert(input, S21_NULL, 2);
+  ck_assert_ptr_null(result);
+
+  result = s21_insert(input, "ALL", 10);
+  ck_assert_ptr_null(result);
+}
+END_TEST
 
 Suite *my_string_suite(void) {
   Suite *s;
@@ -1168,8 +1198,10 @@ Suite *my_string_suite(void) {
   tcase_add_test(tc_core, test_sprintf_char_width);
   tcase_add_test(tc_core, test_sprintf_string_flags_with_width);
 
-  // TO_UPPER
-  // tcase_add_test(tc_core, to_upper_1);
+  // Special string processing functions (from the String class in C#)
+  tcase_add_test(tc_core, to_upper);
+  tcase_add_test(tc_core, to_lower);
+  tcase_add_test(tc_core, insert);
 
   suite_add_tcase(s, tc_core);
 

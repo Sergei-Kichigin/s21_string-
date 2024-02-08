@@ -42,6 +42,7 @@ char *s21_strerror(int errnum);
 // Special string processing functions (from the String class in C#)
 void *s21_to_upper(const char *str);
 void *s21_to_lower(const char *str);
+void *s21_insert(const char *src, const char *str, size_t start_index);
 
 // additional functions for sprintf
 
