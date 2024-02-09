@@ -1,5 +1,6 @@
 #include <check.h>
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 
 #include "s21_string.h"
@@ -1070,6 +1071,32 @@ START_TEST(insert) {
 
   result = s21_insert(input, "ALL", 10);
   ck_assert_ptr_null(result);
+
+  free(result);  // malloc in insert
+}
+END_TEST
+
+START_TEST(trim) {
+  char input1[20] = "1112make32221";
+  //char input2[20] = "\t make   \n";
+
+  void *result;
+  char *expected = "make";
+
+  result = s21_trim(input1, "123");
+  ck_assert_str_eq((char *)result, expected);
+
+  free(result);  // malloc in trim
+
+  // char *trim_chars = S21_NULL;
+  // result = s21_trim(input2, trim_chars);
+  // ck_assert_str_eq((char *)result, expected);
+
+  // free(result);  // malloc in trim
+  // //free(trim_chars);
+
+  // result = s21_insert(input, "ALL", 10);
+  // ck_assert_ptr_null(result);
 }
 END_TEST
 
@@ -1202,6 +1229,7 @@ Suite *my_string_suite(void) {
   tcase_add_test(tc_core, to_upper);
   tcase_add_test(tc_core, to_lower);
   tcase_add_test(tc_core, insert);
+  tcase_add_test(tc_core, trim);
 
   suite_add_tcase(s, tc_core);
 

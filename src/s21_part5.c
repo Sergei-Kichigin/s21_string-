@@ -53,3 +53,50 @@ void *s21_insert(const char *src, const char *str, s21_size_t start_index) {
 
   return (void *)result;
 }
+
+void *s21_trim(const char *src, const char *trim_chars) {
+  if (trim_chars == S21_NULL || s21_strlen(trim_chars) == 0){
+    char *trim_chars = (char *)malloc(3 * sizeof(char));
+    s21_strncpy(trim_chars, " \n\t", 3); 
+  }
+
+  s21_size_t src_len = s21_strlen(src);
+  s21_size_t trim_len = s21_strlen(trim_chars);
+
+  char *result = (char *)malloc(src_len * sizeof(char));
+
+  s21_size_t result_len = 0;
+  s21_size_t j = 0;
+
+  // delete initial trim_chars
+  for (s21_size_t i = 0; i < src_len; i++) {
+    for (j = 0; j < trim_len; j++) {
+      if (src[i] == trim_chars[j]) {
+        break;
+      }
+    }
+
+    if (j == trim_len) { // src[i] not equal trim_chars
+      result_len = s21_strlen(src + i);
+      s21_strncpy(result, src + i, result_len);
+      result[result_len] = '\0';
+      break;
+    }
+  }
+
+  // delete end trim_chars
+  for (int k = result_len - 1; k >= 0; k--) {
+    for (j = 0; j < trim_len; j++) {
+      if (result[k] == trim_chars[j]) {
+        result[k] = '\0';
+        break;
+      }
+    }
+
+    if (j == trim_len) { // result[k] not equal trim_chars
+      break;
+    }
+  }
+
+  return (void *)result;
+}
