@@ -36,7 +36,7 @@ int s21_sprintf(char *str, const char *format, ...) {
         short unsigned int shortUnsignedIntValue = 0;
         long unsigned int longUnsignedIntValue = 0;
 
-        char *stringValue = NULL;
+        char *stringValue = S21_NULL;
 
         if (lenFormatSpec == s21_strlen(format)) {  // not found "cdfsu"
           printf("%s", "Uncorrect format\n");

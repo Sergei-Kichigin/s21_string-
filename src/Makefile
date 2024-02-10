@@ -11,7 +11,7 @@ endif
 VALG = valgrind --tool=memcheck --leak-check=yes ./s21_tests
 CPPCH = cppcheck --enable=all --suppress=missingIncludeSystem --suppress=invalidFunctionArg --force
 
-SRC_FILES = s21_str.c s21_mem.c s21_sprintf.c s21_sprintf_utils.c
+SRC_FILES = s21_str.c s21_mem.c s21_sprintf.c s21_sprintf_utils.c s21_part5.c
 OBJ_FILES = $(SRC_FILES:.c=.o)
 
 HEAD_FILE = s21_string.h
