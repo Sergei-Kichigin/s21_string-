@@ -46,20 +46,6 @@ START_TEST(memset_1) {
 }
 END_TEST
 
-// START_TEST(memset_1) {
-//   s21_size_t length = 5;
-//   char input[20] = "Text to copy";
-//   void *result;
-//   void *expected;
-
-//  result = s21_memset(input, 'a', length);
-//  char expected_buffer[20] = "Text to copy";
-//  expected = memset(expected_buffer, 'a', length);
-
-//  ck_assert_mem_eq(result, expected, strlen(input)*sizeof(*expected));
-//}
-// END_TEST
-
 START_TEST(memset_2) {
   s21_size_t length = 7;
   char result[10];
@@ -138,10 +124,8 @@ START_TEST(memcpy_1) {
   void *expected;
 
   result = s21_memcpy(input, src, length);
-  // printf("%s, %s\n", input, (char*)result);
   char expected_buffer[20] = "Text to copy";
   expected = memcpy(expected_buffer, src, length);
-  // printf("%s, %s\n", expected_buffer, (char*)expected);
   // printf("\n%ld, %ld, %ld\n", sizeof(expected), sizeof(*expected),
   // strlen(expected)*sizeof(*expected));
   ck_assert_mem_eq(result, expected, strlen(expected) * sizeof(*expected));
@@ -428,49 +412,7 @@ END_TEST
 
 // STRNCMP
 
-/*START_TEST(strncmp_1) {
-  s21_size_t length = -1;
-  char input1[20] = "This is Test1";
-  char input2[20] = "This is Test1221";
-  int result;
-  int expected;
-
-  result = s21_strncmp(input1, input2, length);
-  expected = strncmp(input1, input2, length);
-
-  ck_assert_int_eq(result, expected);
-}
-END_TEST
-
-START_TEST(strncmp_2) {
-  s21_size_t length = -1;
-  char input1[20] = "This is Test2221";
-  char input2[20] = "This is Test2";
-  int result;
-  int expected;
-
-  result = s21_strncmp(input1, input2, length);
-  expected = strncmp(input1, input2, length);
-
-  ck_assert_int_eq(result, expected);
-}
-END_TEST
-
-START_TEST(strncmp_3) {
-  s21_size_t length = -1;
-  char input1[20] = "This is Test3";
-  char input2[20] = "This is Test3";
-  int result;
-  int expected;
-
-  result = s21_strncmp(input1, input2, length);
-  expected = strncmp(input1, input2, length);
-
-  ck_assert_int_eq(result, expected);
-}
-END_TEST*/
-
-START_TEST(strncmp_4) {
+START_TEST(strncmp_1) {
   s21_size_t length = 10;
   char input1[20] = "This is Test4";
   char input2[20] = "This is Test4";
@@ -484,7 +426,7 @@ START_TEST(strncmp_4) {
 }
 END_TEST
 
-START_TEST(strncmp_5) {
+START_TEST(strncmp_2) {
   s21_size_t length = 10;
   char input1[20] = "This Test5";
   char input2[20] = "This is Test5";
@@ -498,7 +440,7 @@ START_TEST(strncmp_5) {
 }
 END_TEST
 
-START_TEST(strncmp_6) {
+START_TEST(strncmp_3) {
   s21_size_t length = 10;
   char input1[20] = "This is Test5";
   char input2[20] = "This Test5";
@@ -512,7 +454,7 @@ START_TEST(strncmp_6) {
 }
 END_TEST
 
-START_TEST(strncmp_7) {
+START_TEST(strncmp_4) {
   s21_size_t length = 5;
   char input1[20] = "This is Test7";
   char input2[20] = "This is Tett7";
@@ -1159,13 +1101,10 @@ Suite *my_string_suite(void) {
   tcase_add_test(tc_core, strstr_empty_needle);
 
   // STRNCMP
-  /*tcase_add_test(tc_core, strncmp_1);
+  tcase_add_test(tc_core, strncmp_1);
   tcase_add_test(tc_core, strncmp_2);
-  tcase_add_test(tc_core, strncmp_3);*/
+  tcase_add_test(tc_core, strncmp_3);
   tcase_add_test(tc_core, strncmp_4);
-  tcase_add_test(tc_core, strncmp_5);
-  tcase_add_test(tc_core, strncmp_6);
-  tcase_add_test(tc_core, strncmp_7);
 
   // STRNCPY
   tcase_add_test(tc_core, strncpy_1);
