@@ -131,15 +131,17 @@ char *s21_strncpy(char *dest, const char *src, s21_size_t n) {
 char *s21_strtok(char *str, const char *delim) {
   static char *point = S21_NULL;
   static int count = 0;
+  static int flag = 0;
 
-  point = str != S21_NULL ? str : point + count;
+  if (!flag) {point = str != S21_NULL ? str : point + count;
 
   while (*point != '\0' && s21_strchr(delim, *point) != S21_NULL) {
     *point = '\0';
     point++;
-  }
+  } 
   if (*point == '\0') {
     point = S21_NULL;
+    flag = 1;
   } else {
     for (count = 0; *(point + count) != '\0'; count++) {
       if (s21_strchr(delim, *(point + count)) != S21_NULL) {
@@ -148,7 +150,7 @@ char *s21_strtok(char *str, const char *delim) {
         break;
       }
     }
-  }
+  }}
   return point;
 }
 

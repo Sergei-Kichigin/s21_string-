@@ -500,8 +500,6 @@ START_TEST(strncpy_2) {
 
   result = s21_strncpy(src1, input, length);
   expected = strncpy(src2, input, length);
-  printf("%s\n", result);
-  printf("%s\n", expected);
   ck_assert_str_eq(result, expected);
 }
 END_TEST
@@ -517,8 +515,6 @@ START_TEST(strncpy_3) {
 
   result = s21_strncpy(src1, input, length);
   expected = strncpy(src2, input, length);
-  printf("%s\n", result);
-  printf("%s", expected);
   ck_assert_str_eq(result, expected);
 }
 END_TEST
@@ -541,8 +537,8 @@ END_TEST
 // STRTOK
 
 START_TEST(strtok_1) {
-  char str1[] = "Hello, world, how are you";
-  char str2[] = "Hello, world, how are you";
+  char str1[] = ",,,,,,Hello, world, how are you";
+  char str2[] = ",,,,,,Hello, world, how are you";
 
   char delim[] = ",?";
 
@@ -603,6 +599,33 @@ START_TEST(strtok_6) {
   char delim[] = "\0";
 
   ck_assert_pstr_eq(s21_strtok(str1, delim), strtok(str2, delim));
+}
+END_TEST
+
+START_TEST(strtok_7) {
+  char s1[] = "AAAAAAGOONIAAAAA";
+  char s2[] = "AAAAAAGOONIAAAAA";
+  char s3[] = "A";
+  ck_assert_pstr_eq(s21_strtok(s2, s3), strtok(s1, s3));
+  ck_assert_pstr_eq(s21_strtok(S21_NULL, s3), strtok(S21_NULL, s3));
+  ck_assert_pstr_eq(s21_strtok(S21_NULL, s3), strtok(S21_NULL, s3));
+}
+END_TEST
+
+START_TEST(strtok_8) {
+  char s1[] = "Hello, world! And other people";
+  char s2[] = "Hello, world! And other people";
+  char s3[] = "\0Come here";
+  char s4[] = "\0Come here";
+  char s5[] = "";
+
+  ck_assert_pstr_eq(strtok(s1, s5), s21_strtok(s2, s5));
+  for (int i = 0; i < 5; i++) {
+    ck_assert_pstr_eq(strtok(S21_NULL, s5), s21_strtok(S21_NULL, s5));
+  }
+  ck_assert_pstr_eq(strtok(s3, s5), s21_strtok(s4, s5));
+  ck_assert_pstr_eq(strtok(S21_NULL, s5), s21_strtok(S21_NULL, s5));
+  ck_assert_pstr_eq(strtok(S21_NULL, s5), s21_strtok(S21_NULL, s5));
 }
 END_TEST
 
@@ -1116,6 +1139,8 @@ Suite *my_string_suite(void) {
   tcase_add_test(tc_core, strtok_4);
   tcase_add_test(tc_core, strtok_5);
   tcase_add_test(tc_core, strtok_6);
+  tcase_add_test(tc_core, strtok_7);
+  tcase_add_test(tc_core, strtok_8);
 
   // STRERROR
   tcase_add_test(tc_core, strerror_1);
