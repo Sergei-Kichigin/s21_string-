@@ -36,8 +36,8 @@ END_TEST
 // MEMSET
 START_TEST(memset_1) {
   s21_size_t length = 5;
-  char result[10];
-  char expected[10];
+  char result[10] = {0};
+  char expected[10] = {0};
 
   s21_memset(result, 'A', length);
   memset(expected, 'A', length);
@@ -48,8 +48,8 @@ END_TEST
 
 START_TEST(memset_2) {
   s21_size_t length = 7;
-  char result[10];
-  char expected[10];
+  char result[10] = {0};
+  char expected[10] = {0};
 
   s21_memset(result, 'B', length);
   memset(expected, 'B', length);
@@ -115,16 +115,17 @@ START_TEST(memcmp_4) {
 }
 END_TEST
 
-// MEMCPY (n < 0 --> Segmentation fault | Original : Illegal instruction)
+// MEMCPY
 START_TEST(memcpy_1) {
   s21_size_t length = 5;
+
   char src[20] = "Thiss is Test";
-  char input[20] = "Text to copy";
+  char buffer[20] = "Text to copy";
+  char expected_buffer[20] = "Text to copy";
   void *result;
   void *expected;
 
-  result = s21_memcpy(input, src, length);
-  char expected_buffer[20] = "Text to copy";
+  result = s21_memcpy(buffer, src, length);
   expected = memcpy(expected_buffer, src, length);
   // printf("\n%ld, %ld, %ld\n", sizeof(expected), sizeof(*expected),
   // strlen(expected)*sizeof(*expected));
@@ -134,13 +135,14 @@ END_TEST
 
 START_TEST(memcpy_2) {
   s21_size_t length = 5;
+
   char src[20] = "This";
-  char input[20] = "Text to copy";
+  char buffer[20] = "Text to copy";
+  char expected_buffer[20] = "Text to copy";
   void *result;
   void *expected;
 
-  result = s21_memcpy(input, src, length);
-  char expected_buffer[20] = "Text to copy";
+  result = s21_memcpy(buffer, src, length);
   expected = memcpy(expected_buffer, src, length);
   ck_assert_mem_eq(result, expected, strlen(expected) * sizeof(*expected));
 }
@@ -148,13 +150,14 @@ END_TEST
 
 START_TEST(memcpy_3) {
   s21_size_t length = 5;
+
   char src[20] = "Thiss is Test";
-  char input[20] = "Text";
+  char buffer[20] = "Text";
+  char expected_buffer[20] = "Text";
   void *result;
   void *expected;
 
-  result = s21_memcpy(input, src, length);
-  char expected_buffer[20] = "Text";
+  result = s21_memcpy(buffer, src, length);
   expected = memcpy(expected_buffer, src, length);
   ck_assert_mem_eq(result, expected, strlen(expected) * sizeof(*expected));
 }
@@ -474,10 +477,8 @@ START_TEST(strncpy_1) {
   s21_size_t length = 5;
 
   char input[20] = "Textt to copy";
-
   char src1[20] = "This is Test";
   char src2[20] = "This is Test";
-
   char *result;
   char *expected;
 
@@ -492,16 +493,15 @@ START_TEST(strncpy_2) {
   s21_size_t length = 5;
 
   char input[20] = "Text";
-
   char src1[20] = "This is Test";
   char src2[20] = "This is Test";
-
   char *result;
   char *expected;
 
   result = s21_strncpy(src1, input, length);
   expected = strncpy(src2, input, length);
-
+  printf("%s\n", result);
+  printf("%s\n", expected);
   ck_assert_str_eq(result, expected);
 }
 END_TEST
@@ -510,28 +510,24 @@ START_TEST(strncpy_3) {
   s21_size_t length = 5;
 
   char input[20] = "Textt to copy";
-
   char src1[20] = "This";
   char src2[20] = "This";
-
   char *result;
   char *expected;
 
   result = s21_strncpy(src1, input, length);
   expected = strncpy(src2, input, length);
-
+  printf("%s\n", result);
+  printf("%s", expected);
   ck_assert_str_eq(result, expected);
 }
 END_TEST
 
 START_TEST(strncpy_4) {
   s21_size_t length = 0;
-
   char input[20] = "Textt to copy";
-
   char src1[20] = "This is Test";
   char src2[20] = "This is Test";
-
   char *result;
   char *expected;
 
@@ -603,6 +599,7 @@ END_TEST
 START_TEST(strtok_6) {
   char str1[] = "";
   char str2[] = "";
+
   char delim[] = "\0";
 
   ck_assert_pstr_eq(s21_strtok(str1, delim), strtok(str2, delim));
@@ -621,8 +618,8 @@ END_TEST
 // SPRINTF
 
 START_TEST(test_sprintf_int_left_orientation) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
 
   s21_sprintf(buffer1, "Test: %-10d", 42);
   sprintf(buffer2, "Test: %-10d", 42);
@@ -632,8 +629,8 @@ START_TEST(test_sprintf_int_left_orientation) {
 END_TEST
 
 START_TEST(test_sprintf_int_right_orientation) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
 
   s21_sprintf(buffer1, "Test: %10d", 42);
   sprintf(buffer2, "Test: %10d", 42);
@@ -643,8 +640,8 @@ START_TEST(test_sprintf_int_right_orientation) {
 END_TEST
 
 START_TEST(test_sprintf_int_negative) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
 
   s21_sprintf(buffer1, "Test: %d", -142);
   sprintf(buffer2, "Test: %d", -142);
@@ -654,8 +651,8 @@ START_TEST(test_sprintf_int_negative) {
 END_TEST
 
 START_TEST(test_sprintf_float) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
 
   s21_sprintf(buffer1, "Float: %f", 3.14159);
   sprintf(buffer2, "Float: %f", 3.14159);
@@ -665,8 +662,8 @@ START_TEST(test_sprintf_float) {
 END_TEST
 
 START_TEST(test_sprintf_float_negative) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
 
   s21_sprintf(buffer1, "Float: %f", -3.14159);
   sprintf(buffer2, "Float: %f", -3.14159);
@@ -676,8 +673,8 @@ START_TEST(test_sprintf_float_negative) {
 END_TEST
 
 START_TEST(test_sprintf_string) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
 
   s21_sprintf(buffer1, "String: %s", "Hello, World!");
   sprintf(buffer2, "String: %s", "Hello, World!");
@@ -687,8 +684,8 @@ START_TEST(test_sprintf_string) {
 END_TEST
 
 START_TEST(test_sprintf_char) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
 
   s21_sprintf(buffer1, "Char: %c", 'A');
   sprintf(buffer2, "Char: %c", 'A');
@@ -698,8 +695,8 @@ START_TEST(test_sprintf_char) {
 END_TEST
 
 START_TEST(test_sprintf_unsigned) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
 
   s21_sprintf(buffer1, "Unsigned: %u", 12345);
   sprintf(buffer2, "Unsigned: %u", 12345);
@@ -711,8 +708,8 @@ END_TEST
 // PRECISION
 
 START_TEST(test_sprintf_int_precision_positive) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
 
   s21_sprintf(buffer1, "Test: %.4d", 42);
   sprintf(buffer2, "Test: %.4d", 42);
@@ -722,8 +719,8 @@ START_TEST(test_sprintf_int_precision_positive) {
 END_TEST
 
 START_TEST(test_sprintf_int_precision_null) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
 
   s21_sprintf(buffer1, "Test: %.0d", 0);
   sprintf(buffer2, "Test: %.0d", 0);
@@ -733,8 +730,8 @@ START_TEST(test_sprintf_int_precision_null) {
 END_TEST
 
 START_TEST(test_sprintf_int_precision_no_explicit_meaning) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
 
   s21_sprintf(buffer1, "Test: %.d", 0);  // precision = 0
   sprintf(buffer2, "Test: %.d", 0);
@@ -744,8 +741,8 @@ START_TEST(test_sprintf_int_precision_no_explicit_meaning) {
 END_TEST
 
 START_TEST(test_sprintf_unsigned_int_precision_positive) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
 
   s21_sprintf(buffer1, "Test: %.4u", 65);
   sprintf(buffer2, "Test: %.4u", 65);
@@ -755,8 +752,8 @@ START_TEST(test_sprintf_unsigned_int_precision_positive) {
 END_TEST
 
 START_TEST(test_sprintf_unsigned_int_precision_null) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
 
   s21_sprintf(buffer1, "Test: %.0u", 0);
   sprintf(buffer2, "Test: %.0u", 0);
@@ -766,8 +763,8 @@ START_TEST(test_sprintf_unsigned_int_precision_null) {
 END_TEST
 
 START_TEST(test_sprintf_unsigned_int_precision_no_explicit_meaning) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
 
   s21_sprintf(buffer1, "Test: %.u", 0);  // precision = 0
   sprintf(buffer2, "Test: %.u", 0);
@@ -777,8 +774,8 @@ START_TEST(test_sprintf_unsigned_int_precision_no_explicit_meaning) {
 END_TEST
 
 START_TEST(test_sprintf_double_precision_positive) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
 
   s21_sprintf(buffer1, "Test: %.4f", 12.456789);
   sprintf(buffer2, "Test: %.4f", 12.456789);
@@ -788,8 +785,8 @@ START_TEST(test_sprintf_double_precision_positive) {
 END_TEST
 
 START_TEST(test_sprintf_double_precision_null) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
 
   s21_sprintf(buffer1, "Test: %.0f", -134.784);
   sprintf(buffer2, "Test: %.0f", -134.784);
@@ -799,8 +796,8 @@ START_TEST(test_sprintf_double_precision_null) {
 END_TEST
 
 START_TEST(test_sprintf_double_precision_no_explicit_meaning) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
 
   s21_sprintf(buffer1, "Test: %.f", 0.6);  // precision = 0
   sprintf(buffer2, "Test: %.f", 0.6);
@@ -810,8 +807,8 @@ START_TEST(test_sprintf_double_precision_no_explicit_meaning) {
 END_TEST
 
 START_TEST(test_sprintf_string_precision_positive) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
 
   s21_sprintf(buffer1, "Test: %.4s", "SUCCESS");
   sprintf(buffer2, "Test: %.4s", "SUCCESS");
@@ -821,8 +818,8 @@ START_TEST(test_sprintf_string_precision_positive) {
 END_TEST
 
 START_TEST(test_sprintf_string_precision_null) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
 
   s21_sprintf(buffer1, "Test: %.0s", "SUCCESS");
   sprintf(buffer2, "Test: %.0s", "SUCCESS");
@@ -832,8 +829,8 @@ START_TEST(test_sprintf_string_precision_null) {
 END_TEST
 
 START_TEST(test_sprintf_string_precision_no_explicit_meaning) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
 
   s21_sprintf(buffer1, "Test: %.s", "SUCCESS");  // precision = 0
   sprintf(buffer2, "Test: %.s", "SUCCESS");
@@ -843,8 +840,8 @@ START_TEST(test_sprintf_string_precision_no_explicit_meaning) {
 END_TEST
 
 START_TEST(test_sprintf_int_length_h) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
 
   s21_sprintf(buffer1, "Test: %hd", -112000);
   sprintf(buffer2, "Test: %hd", -112000);
@@ -854,8 +851,8 @@ START_TEST(test_sprintf_int_length_h) {
 END_TEST
 
 START_TEST(test_sprintf_unsigned_int_length_h) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
 
   s21_sprintf(buffer1, "Test: %hu", 12999999);
   sprintf(buffer2, "Test: %hu", 12999999);
@@ -865,8 +862,8 @@ START_TEST(test_sprintf_unsigned_int_length_h) {
 END_TEST
 
 START_TEST(test_sprintf_int_length_l) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
 
   s21_sprintf(buffer1, "Test: %ld", -6120000000);
   sprintf(buffer2, "Test: %ld", -6120000000);
@@ -876,8 +873,8 @@ START_TEST(test_sprintf_int_length_l) {
 END_TEST
 
 START_TEST(test_sprintf_unsigned_int_length_l) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
 
   s21_sprintf(buffer1, "Test: %lu", 9120000000);
   sprintf(buffer2, "Test: %lu", 9120000000);
@@ -887,8 +884,8 @@ START_TEST(test_sprintf_unsigned_int_length_l) {
 END_TEST
 
 START_TEST(test_sprintf_int_flags_with_width) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
 
   // Тест с флагом '+'
   s21_sprintf(buffer1, "Test: %+10d", 42);
@@ -908,8 +905,8 @@ START_TEST(test_sprintf_int_flags_with_width) {
 END_TEST
 
 START_TEST(test_sprintf_float_flags_with_width) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
 
   // Тест с флагом '+'
 
@@ -932,8 +929,8 @@ START_TEST(test_sprintf_float_flags_with_width) {
 END_TEST
 
 START_TEST(test_sprintf_unsigned_int_flags_with_width) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
 
   unsigned int value = 42;
 
@@ -945,8 +942,8 @@ START_TEST(test_sprintf_unsigned_int_flags_with_width) {
 END_TEST
 
 START_TEST(test_sprintf_char_width) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
   char symbol = 'c';
 
   s21_sprintf(buffer1, "Test: %10c", symbol);
@@ -956,8 +953,8 @@ START_TEST(test_sprintf_char_width) {
 END_TEST
 
 START_TEST(test_sprintf_string_flags_with_width) {
-  char buffer1[100];
-  char buffer2[100];
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
 
   char string[20] = "Hello";
 
