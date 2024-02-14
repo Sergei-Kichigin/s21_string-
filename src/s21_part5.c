@@ -55,9 +55,9 @@ void *s21_insert(const char *src, const char *str, s21_size_t start_index) {
 }
 
 void *s21_trim(const char *src, const char *trim_chars) {
-  if (trim_chars == S21_NULL || s21_strlen(trim_chars) == 0){
+  if (trim_chars == S21_NULL || s21_strlen(trim_chars) == 0) {
     char *trim_chars = (char *)malloc(3 * sizeof(char));
-    s21_strncpy(trim_chars, " \n\t", 3); 
+    s21_strncpy(trim_chars, " \n\t", 3);
   }
 
   s21_size_t src_len = s21_strlen(src);
@@ -76,7 +76,7 @@ void *s21_trim(const char *src, const char *trim_chars) {
       }
     }
 
-    if (j == trim_len) { // src[i] not equal trim_chars
+    if (j == trim_len) {  // src[i] not equal trim_chars
       result_len = s21_strlen(src + i);
       s21_strncpy(result, src + i, result_len);
       result[result_len] = '\0';
@@ -93,7 +93,7 @@ void *s21_trim(const char *src, const char *trim_chars) {
       }
     }
 
-    if (j == trim_len) { // result[k] not equal trim_chars
+    if (j == trim_len) {  // result[k] not equal trim_chars
       break;
     }
   }

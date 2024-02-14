@@ -1078,7 +1078,7 @@ END_TEST
 
 START_TEST(trim) {
   char input1[20] = "1112make32221";
-  //char input2[20] = "\t make   \n";
+  // char input2[20] = "\t make   \n";
 
   void *result;
   char *expected = "make";
