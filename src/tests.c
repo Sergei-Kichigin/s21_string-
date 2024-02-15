@@ -1024,12 +1024,15 @@ START_TEST(insert) {
 
   result = s21_insert(input, "ALL", 2);
   ck_assert_str_eq((char *)result, expected);
+  free(result);
 
   result = s21_insert(S21_NULL, "ALL", 2);
   ck_assert_ptr_null(result);
+  free(result);
 
   result = s21_insert(input, S21_NULL, 2);
   ck_assert_ptr_null(result);
+  free(result);
 
   result = s21_insert(input, "ALL", 10);
   ck_assert_ptr_null(result);
