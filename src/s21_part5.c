@@ -1,3 +1,4 @@
+#include <stdbool.h>
 #include <stdio.h>
 #include <stdlib.h>
 
@@ -35,68 +36,75 @@ void *s21_insert(const char *src, const char *str, s21_size_t start_index) {
   s21_size_t src_len = s21_strlen(src);
   s21_size_t str_len = s21_strlen(str);
 
-  if (start_index >= src_len) {
+  if (start_index > src_len) {  // Исправлено с >= на >
     return S21_NULL;
   }
 
-  char *result = (char *)malloc((src_len + str_len) * sizeof(char));
+  char *result = (char *)malloc((src_len + str_len + 1) *
+                                sizeof(char));  // Учтен символ '\0'
   if (result == S21_NULL) {
     return S21_NULL;
   }
 
-  char *endSrc = (char *)(src + start_index);
-
   s21_strncpy(result, src, start_index);
   result[start_index] = '\0';
   s21_strncat(result, str, str_len);
-  s21_strncat(result, endSrc, src_len - start_index);
+  s21_strncat(result, src + start_index, src_len - start_index);
 
   return (void *)result;
 }
 
-void *s21_trim(const char *src, const char *trim_chars) {
+int is_space(char c) { return c == ' ' || c == '\t' || c == '\n' || c == '\r'; }
+
+int is_empty_trim_chars(const char *trim_chars) {
   if (trim_chars == S21_NULL || s21_strlen(trim_chars) == 0) {
-    char *trim_chars = (char *)malloc(3 * sizeof(char));
-    s21_strncpy(trim_chars, " \n\t", 3);
+    return ERROR;
+  }
+  return SUCCESS;
+}
+
+int check_trim_chars(char c, bool isEmptyTrimChars, const char *trim_chars) {
+  int result = 0;
+
+  if (isEmptyTrimChars) {
+    result = is_space(c);
+  } else {
+    result = (s21_strchr(trim_chars, c) != S21_NULL ? ERROR : SUCCESS);
+  }
+  return result;
+}
+
+void *s21_trim(const char *src, const char *trim_chars) {
+  if (src == S21_NULL) {
+    return S21_NULL;
   }
 
+  bool isEmptyTrimChars = is_empty_trim_chars(trim_chars);
   s21_size_t src_len = s21_strlen(src);
-  s21_size_t trim_len = s21_strlen(trim_chars);
 
-  char *result = (char *)malloc(src_len * sizeof(char));
-
-  s21_size_t result_len = 0;
-  s21_size_t j = 0;
-
-  // delete initial trim_chars
-  for (s21_size_t i = 0; i < src_len; i++) {
-    for (j = 0; j < trim_len; j++) {
-      if (src[i] == trim_chars[j]) {
-        break;
-      }
-    }
-
-    if (j == trim_len) {  // src[i] not equal trim_chars
-      result_len = s21_strlen(src + i);
-      s21_strncpy(result, src + i, result_len);
-      result[result_len] = '\0';
-      break;
-    }
+  s21_size_t start_idx = 0;
+  while (start_idx < src_len &&
+         check_trim_chars(src[start_idx], isEmptyTrimChars, trim_chars)) {
+    start_idx++;
   }
 
-  // delete end trim_chars
-  for (int k = result_len - 1; k >= 0; k--) {
-    for (j = 0; j < trim_len; j++) {
-      if (result[k] == trim_chars[j]) {
-        result[k] = '\0';
-        break;
-      }
-    }
-
-    if (j == trim_len) {  // result[k] not equal trim_chars
-      break;
-    }
+  s21_size_t end_idx = src_len - 1;
+  while (end_idx > start_idx &&
+         check_trim_chars(src[end_idx], isEmptyTrimChars, trim_chars)) {
+    end_idx--;
   }
+
+  // Вычисляем новую длину строки
+  s21_size_t result_len =
+      (end_idx >= start_idx) ? (end_idx - start_idx + 1) : 0;
+
+  char *result = (char *)malloc((result_len + 1) * sizeof(char));
+  if (result == S21_NULL) {
+    return S21_NULL;
+  }
+
+  s21_strncpy(result, src + start_idx, result_len);
+  result[result_len] = '\0';
 
   return (void *)result;
 }

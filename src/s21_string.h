@@ -42,7 +42,7 @@ char *s21_strerror(int errnum);
 // Special string processing functions (from the String class in C#)
 void *s21_to_upper(const char *str);
 void *s21_to_lower(const char *str);
-void *s21_insert(const char *src, const char *str, size_t start_index);
+void *s21_insert(const char *src, const char *str, s21_size_t start_index);
 void *s21_trim(const char *src, const char *trim_chars);
 
 // additional functions for sprintf
@@ -74,5 +74,9 @@ void s21_writeLength(parserParameters *parametrs, char *formatSpec);
 s21_size_t s21_writeFlags(parserParameters *parametrs, char *formatSpec);
 s21_size_t s21_writeWidth(parserParameters *parametrs, char *formatSpec);
 s21_size_t s21_writePrecision(parserParameters *parametrs, char *formatSpec);
+
+int is_space(char c);
+int is_empty_trim_chars(const char *trim_chars);
+int check_trim_chars(char c, bool isEmptyTrimChars, const char *trim_chars);
 
 #endif

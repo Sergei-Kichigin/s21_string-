@@ -1038,27 +1038,97 @@ START_TEST(insert) {
 }
 END_TEST
 
+START_TEST(insert_basic) {
+  char input1[20] = "make";
+  void *result1;
+  char *expected1 = "maALLke";
+  result1 = s21_insert(input1, "ALL", 2);
+  ck_assert_str_eq((char *)result1, expected1);
+  free(result1);
+
+  char input2[20] = "12345";
+  void *result2;
+  char *expected2 = "1ABC2345";
+  result2 = s21_insert(input2, "ABC", 1);
+  ck_assert_str_eq((char *)result2, expected2);
+  free(result2);
+
+  char input3[20] = "";
+  void *result3;
+  char *expected3 = "XYZ";
+  result3 = s21_insert(input3, "XYZ", 0);
+  ck_assert_str_eq((char *)result3, expected3);
+  free(result3);
+}
+END_TEST
+
+START_TEST(insert_edge_cases) {
+  char input1[20] = "hello";
+  void *result1;
+  char *expected1 = "helloALL";
+  result1 = s21_insert(input1, "ALL", 5);
+  ck_assert_str_eq((char *)result1, expected1);
+  free(result1);
+
+  char input2[20] = "world";
+  void *result2;
+  char *expected2 = "ALLworld";
+  result2 = s21_insert(input2, "ALL", 0);
+  ck_assert_str_eq((char *)result2, expected2);
+  free(result2);
+
+  // проверка на выход за пределы длины строки
+  char input3[20] = "abc";
+  void *result3;
+  result3 = s21_insert(input3, "XYZ", 10);
+  ck_assert_ptr_null(result3);
+  free(result3);
+}
+END_TEST
+
 START_TEST(trim) {
   char input1[20] = "1112make32221";
-  // char input2[20] = "\t make   \n";
+  char input2[20] = "\t 123make123   \n";
+  char input3[20] = "\t 123make123   \n";
+  char input4[20] = "\t\r 123make123   \n";
+  char input5[20] = "1231231232131231";
 
   void *result;
-  char *expected = "make";
+  char *expected1 = "make";
+  char *expected2 = "\t 123make123   \n";
+  char *expected3 = "123make123";
+  char *expected4 = "123make123";
+  char *expected5 = "";
 
   result = s21_trim(input1, "123");
-  ck_assert_str_eq((char *)result, expected);
+  ck_assert_str_eq((char *)result, expected1);
 
   free(result);  // malloc in trim
 
-  // char *trim_chars = S21_NULL;
-  // result = s21_trim(input2, trim_chars);
-  // ck_assert_str_eq((char *)result, expected);
+  result = s21_trim(input2, "123");
+  ck_assert_str_eq((char *)result, expected2);
 
-  // free(result);  // malloc in trim
-  // //free(trim_chars);
+  free(result);  // malloc in trim
 
-  // result = s21_insert(input, "ALL", 10);
-  // ck_assert_ptr_null(result);
+  result = s21_trim(input3, "");
+  ck_assert_str_eq((char *)result, expected3);
+
+  free(result);  // malloc in trim
+
+  result = s21_trim(input4, S21_NULL);
+  ck_assert_str_eq((char *)result, expected4);
+
+  free(result);  // malloc in trim
+
+  result = s21_trim(input5, "123");
+  ck_assert_str_eq((char *)result, expected5);
+
+  free(result);  // malloc in trim
+
+  result = s21_trim(S21_NULL, "");
+  ck_assert_ptr_null(result);
+
+  free(result);  // malloc in trim
 }
 END_TEST
 
@@ -1190,6 +1260,8 @@ Suite *my_string_suite(void) {
   tcase_add_test(tc_core, to_upper);
   tcase_add_test(tc_core, to_lower);
   tcase_add_test(tc_core, insert);
+  tcase_add_test(tc_core, insert_basic);
+  tcase_add_test(tc_core, insert_edge_cases);
   tcase_add_test(tc_core, trim);
 
   suite_add_tcase(s, tc_core);

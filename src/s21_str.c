@@ -117,13 +117,13 @@ int s21_strncmp(const char *str1, const char *str2, s21_size_t n) {
 }
 
 char *s21_strncpy(char *dest, const char *src, s21_size_t n) {
-  char *p1 = dest;
-  s21_size_t len_dest = s21_strlen(p1);
   for (s21_size_t i = 0; i < n; i++) {
-    p1[i] = src[i];
-  }
-  if (len_dest < n) {
-    p1[n] = '\0';
+    if (src[i] == '\0') {
+      dest[i] = '\0';
+      break;
+    }
+
+    dest[i] = src[i];
   }
   return dest;
 }
@@ -133,24 +133,26 @@ char *s21_strtok(char *str, const char *delim) {
   static int count = 0;
   static int flag = 0;
 
-  if (!flag) {point = str != S21_NULL ? str : point + count;
+  if (!flag) {
+    point = str != S21_NULL ? str : point + count;
 
-  while (*point != '\0' && s21_strchr(delim, *point) != S21_NULL) {
-    *point = '\0';
-    point++;
-  } 
-  if (*point == '\0') {
-    point = S21_NULL;
-    flag = 1;
-  } else {
-    for (count = 0; *(point + count) != '\0'; count++) {
-      if (s21_strchr(delim, *(point + count)) != S21_NULL) {
-        *(point + count) = '\0';
-        count++;
-        break;
+    while (*point != '\0' && s21_strchr(delim, *point) != S21_NULL) {
+      *point = '\0';
+      point++;
+    }
+    if (*point == '\0') {
+      point = S21_NULL;
+      flag = 1;
+    } else {
+      for (count = 0; *(point + count) != '\0'; count++) {
+        if (s21_strchr(delim, *(point + count)) != S21_NULL) {
+          *(point + count) = '\0';
+          count++;
+          break;
+        }
       }
     }
-  }}
+  }
   return point;
 }
 
