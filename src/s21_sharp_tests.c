@@ -163,7 +163,7 @@ START_TEST(s21_trim_empty_src) {
 END_TEST
 
 START_TEST(s21_trim_empty_char) {
-  char src[64] = "\ts21_NULL\t";
+  char src[64] = "\tS21_NULL\t";
   char trim_chars[64] = "";
   char expected_res[64] = "S21_NULL";
   ck_assert_str_eq(s21_trim(src, trim_chars), expected_res);
