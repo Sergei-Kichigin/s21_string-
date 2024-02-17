@@ -5,6 +5,7 @@
 
 int s21_sprintf(char *str, const char *format, ...) {
   va_list arg;
+  char *temp = str;
   va_start(arg, format);
 
   while (*format) {
@@ -58,5 +59,6 @@ int s21_sprintf(char *str, const char *format, ...) {
   }
 
   va_end(arg);
-  return (int)s21_strlen(str);
+  // printf("\n RETURN - %ld\n", s21_strlen(temp));
+  return (int)s21_strlen(temp);
 }
