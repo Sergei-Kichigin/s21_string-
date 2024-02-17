@@ -1,8 +1,8 @@
 #ifndef S21_STRING_H
 #define S21_STRING_H
 
+#include <stdarg.h>
 #include <stdbool.h>
-#include <stddef.h>
 
 #define SUCCESS 0
 #define ERROR 1
@@ -50,10 +50,10 @@ void *s21_trim(const char *src, const char *trim_chars);
 // for str
 void s21_writeString(char *str, char *buffer);
 void s21_writeNchar(char *str, const char *buffer, s21_size_t n);
-void s21_addFormat(parserParameters parametrs, char *buffer);
+s21_size_t s21_addFormat(parserParameters parametrs, char *buffer, char *str);
 
 // transform type
-void s21_ctoa(wchar_t value, char *buffer);
+void s21_ctoa(char value, char *buffer);
 void s21_itoa(parserParameters parametrs, char *buffer, long int value);
 void s21_ftoa(parserParameters parametrs, char *buffer, double value);
 void s21_utoa(parserParameters parametrs, char *buffer,
@@ -62,6 +62,13 @@ void s21_stoa(parserParameters parametrs, char *buffer, char *charPtrValue);
 
 void s21_intPartToa(parserParameters parametrs, char *buffer, int intPart);
 void s21_strrev(char *str);
+
+void s21_processChar(char *buffer, va_list arg);
+void s21_processInteger(char *buffer, va_list arg, parserParameters parametrs);
+void s21_processFloat(char *buffer, va_list arg, parserParameters parametrs);
+void s21_processString(char *buffer, va_list arg, parserParameters parametrs);
+void s21_processUnsignedInteger(char *buffer, va_list arg,
+                            parserParameters parametrs);
 
 int s21_isdigit(int c);
 
@@ -78,5 +85,6 @@ s21_size_t s21_writePrecision(parserParameters *parametrs, char *formatSpec);
 int is_space(char c);
 int is_empty_trim_chars(const char *trim_chars);
 int check_trim_chars(char c, bool isEmptyTrimChars, const char *trim_chars);
+
 
 #endif

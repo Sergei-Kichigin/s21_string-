@@ -5,11 +5,17 @@
 #include "s21_string.h"
 
 void *s21_to_upper(const char *str) {
-  char *result = (char *)str;
+  s21_size_t str_len = s21_strlen(str);
+  char *result = (char *)malloc((str_len + 1) * sizeof(char));
+  if (result == S21_NULL) {
+    return S21_NULL;
+  }
 
-  for (s21_size_t i = 0; i < s21_strlen(str); i++) {
+  for (s21_size_t i = 0; i < str_len; i++) {
     if (str[i] >= 'a' && str[i] <= 'z') {
       result[i] = str[i] - 32;  // a -> A
+    } else {
+      result[i] = str[i];
     }
   }
 
@@ -17,11 +23,17 @@ void *s21_to_upper(const char *str) {
 }
 
 void *s21_to_lower(const char *str) {
-  char *result = (char *)str;
+  s21_size_t str_len = s21_strlen(str);
+  char *result = (char *)malloc((str_len + 1) * sizeof(char));
+  if (result == S21_NULL) {
+    return S21_NULL;
+  }
 
-  for (s21_size_t i = 0; i < s21_strlen(str); i++) {
+  for (s21_size_t i = 0; i < str_len; i++) {
     if (str[i] >= 'A' && str[i] <= 'Z') {
-      result[i] = str[i] + 32;  // // A -> a
+      result[i] = str[i] + 32;  // A -> a
+    } else {
+      result[i] = str[i];
     }
   }
 

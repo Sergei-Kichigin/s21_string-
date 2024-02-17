@@ -1,6 +1,4 @@
 #include <stdarg.h>
-#include <stdbool.h>
-#include <stddef.h>
 #include <stdio.h>
 
 #include "s21_string.h"
@@ -20,99 +18,37 @@ int s21_sprintf(char *str, const char *format, ...) {
         s21_size_t lenFormatSpec = s21_strcspn(format, "cdfsu");
         parserParameters parametrs = {false, false, false, 0, -1, '\0'};
 
-        char buffer[100];  // хватит ли 20?
-
-        char charValue = 0;
-        wchar_t longCharValue = 0;
-        // wchar_t exampleSymbol = L'👋';
-
-        int intValue = 0;
-        short int shortIntValue = 0;
-        long int longIntValue = 0;
-
-        double doubleValue = 0.0;
-
-        unsigned int unsignedIntValue = 0;
-        short unsigned int shortUnsignedIntValue = 0;
-        long unsigned int longUnsignedIntValue = 0;
-
-        char *stringValue = S21_NULL;
+        char buffer[1024] = {0};
 
         if (lenFormatSpec == s21_strlen(format)) {  // not found "cdfsu"
-          printf("%s", "Uncorrect format\n");
           return ERROR;
         }
 
         if (lenFormatSpec > 0) {  // specifier have parametrs
-          char formatSpec[20];
-
+          char formatSpec[20] = {0};
           s21_writeNchar(formatSpec, format, lenFormatSpec);
           s21_writeParameters(&parametrs, formatSpec);
-
           format += lenFormatSpec;
         }
 
         switch (*format) {
-          // char type
           case 'c':
-            if (parametrs.length == '\0') {
-              charValue = (char)va_arg(arg, int);
-              s21_ctoa(charValue, buffer);
-            }
-            if (parametrs.length == 'l') {
-              longCharValue = (wchar_t)va_arg(arg, int);
-              s21_ctoa(longCharValue, buffer);
-            }
+            s21_processChar(buffer, arg);
             break;
-          // int type
           case 'd':
-            if (parametrs.length == '\0') {
-              intValue = va_arg(arg, int);
-              s21_itoa(parametrs, buffer, intValue);
-            }
-            if (parametrs.length == 'h') {
-              shortIntValue = va_arg(arg, int);
-              s21_itoa(parametrs, buffer, shortIntValue);
-            }
-            if (parametrs.length == 'l') {
-              longIntValue = va_arg(arg, long int);
-              s21_itoa(parametrs, buffer, longIntValue);
-            }
+            s21_processInteger(buffer, arg, parametrs);
             break;
-          // float type
           case 'f':
-            doubleValue = va_arg(arg, double);
-            s21_ftoa(parametrs, buffer, doubleValue);
+            s21_processFloat(buffer, arg, parametrs);
             break;
-          // string type
           case 's':
-            stringValue = va_arg(arg, char *);
-            s21_stoa(parametrs, buffer, stringValue);
+            s21_processString(buffer, arg, parametrs);
             break;
-          // unsigned int type
           case 'u':
-            if (parametrs.length == '\0') {
-              unsignedIntValue = va_arg(arg, unsigned int);
-              s21_utoa(parametrs, buffer, unsignedIntValue);
-            }
-            if (parametrs.length == 'h') {
-              shortUnsignedIntValue = va_arg(arg, unsigned int);
-              s21_utoa(parametrs, buffer, shortUnsignedIntValue);
-            }
-            if (parametrs.length == 'l') {
-              longUnsignedIntValue = va_arg(arg, unsigned long int);
-              s21_utoa(parametrs, buffer, longUnsignedIntValue);
-            }
-            break;
-          // unknown type
-          default:
-            return ERROR;  // need to change !!!
+            s21_processUnsignedInteger(buffer, arg, parametrs);
             break;
         }
-
-        s21_addFormat(parametrs, buffer);
-        s21_writeString(str, buffer);
-        str += s21_strlen(buffer);
+        str += s21_addFormat(parametrs, buffer, str);
       }
     } else {
       *str = *format;

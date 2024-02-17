@@ -82,8 +82,10 @@ void s21_writeLength(parserParameters *parametrs, char *formatSpec) {
   parametrs->length = *formatSpec;
 }
 
-void s21_addFormat(parserParameters parametrs, char *buffer) {
+s21_size_t s21_addFormat(parserParameters parametrs, char *buffer, char *str) {
+  s21_size_t shift = 0;
   if (parametrs.width > s21_strlen(buffer)) {
+    shift = parametrs.width;
     s21_size_t addWidth = parametrs.width - s21_strlen(buffer);
 
     char bufferWidth[parametrs.width];
@@ -91,12 +93,17 @@ void s21_addFormat(parserParameters parametrs, char *buffer) {
     bufferWidth[addWidth] = '\0';
 
     if (parametrs.leftOrientation) {  // left orientation
-      s21_strncat(buffer, bufferWidth, addWidth);
+      s21_writeString(str, buffer);
+      s21_strncat(str, bufferWidth, addWidth);
     } else {  // right orientation
-      s21_strncat(bufferWidth, buffer, s21_strlen(buffer));
-      s21_writeString(buffer, bufferWidth);
+      s21_writeString(str, bufferWidth);
+      s21_strncat(str, buffer, s21_strlen(buffer));
     }
+  } else {
+    shift = s21_strlen(buffer);
+    s21_writeString(str, buffer);
   }
+  return shift;
 }
 
 s21_size_t s21_stoi(const char *str) {
@@ -124,7 +131,7 @@ void s21_writeNchar(char *str, const char *buffer, s21_size_t n) {
   str[n] = '\0';
 }
 
-void s21_ctoa(wchar_t value, char *buffer) {
+void s21_ctoa(char value, char *buffer) {
   buffer[0] = value;
   buffer[1] = '\0';
 }
@@ -256,5 +263,51 @@ void s21_stoa(parserParameters parametrs, char *buffer, char *charPtrValue) {
     s21_writeString(buffer, charPtrValue);
   } else {
     s21_writeNchar(buffer, charPtrValue, parametrs.precision);
+  }
+}
+
+void s21_processChar(char *buffer, va_list arg) {
+  char charValue = (char)va_arg(arg, int);
+  s21_ctoa(charValue, buffer);
+}
+
+void s21_processInteger(char *buffer, va_list arg, parserParameters parametrs) {
+  if (parametrs.length == '\0') {
+    int intValue = va_arg(arg, int);
+    s21_itoa(parametrs, buffer, intValue);
+  }
+  if (parametrs.length == 'h') {
+    short int shortIntValue = va_arg(arg, int);
+    s21_itoa(parametrs, buffer, shortIntValue);
+  }
+  if (parametrs.length == 'l') {
+    long int longIntValue = va_arg(arg, long int);
+    s21_itoa(parametrs, buffer, longIntValue);
+  }
+}
+
+void s21_processFloat(char *buffer, va_list arg, parserParameters parametrs) {
+  double doubleValue = va_arg(arg, double);
+  s21_ftoa(parametrs, buffer, doubleValue);
+}
+
+void s21_processString(char *buffer, va_list arg, parserParameters parametrs) {
+  char *stringValue = va_arg(arg, char *);
+  s21_stoa(parametrs, buffer, stringValue);
+}
+
+void s21_processUnsignedInteger(char *buffer, va_list arg,
+                            parserParameters parametrs) {
+  if (parametrs.length == '\0') {
+    unsigned int unsignedIntValue = va_arg(arg, unsigned int);
+    s21_utoa(parametrs, buffer, unsignedIntValue);
+  }
+  if (parametrs.length == 'h') {
+    short unsigned int shortUnsignedIntValue = va_arg(arg, unsigned int);
+    s21_utoa(parametrs, buffer, shortUnsignedIntValue);
+  }
+  if (parametrs.length == 'l') {
+    long unsigned int longUnsignedIntValue = va_arg(arg, unsigned long int);
+    s21_utoa(parametrs, buffer, longUnsignedIntValue);
   }
 }

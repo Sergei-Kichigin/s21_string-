@@ -644,8 +644,8 @@ START_TEST(test_sprintf_int_left_orientation) {
   char buffer1[100] = {0};
   char buffer2[100] = {0};
 
-  s21_sprintf(buffer1, "Test: %-10d", 42);
-  sprintf(buffer2, "Test: %-10d", 42);
+  s21_sprintf(buffer1, "Test: %-10d %%", 42);
+  sprintf(buffer2, "Test: %-10d %%", 42);
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -907,8 +907,8 @@ START_TEST(test_sprintf_unsigned_int_length_l) {
 END_TEST
 
 START_TEST(test_sprintf_int_flags_with_width) {
-  char buffer1[100] = {0};
-  char buffer2[100] = {0};
+  char buffer1[20] = {0};
+  char buffer2[20] = {0};
 
   // Тест с флагом '+'
   s21_sprintf(buffer1, "Test: %+10d", 42);
@@ -976,14 +976,14 @@ START_TEST(test_sprintf_char_width) {
 END_TEST
 
 START_TEST(test_sprintf_string_flags_with_width) {
-  char buffer1[100] = {0};
-  char buffer2[100] = {0};
+  char buffer1[10000] = {0};
+  char buffer2[10000] = {0};
 
   char string[20] = "Hello";
 
   // Тест с флагом '-'
-  s21_sprintf(buffer1, "Test: %-10s test", string);
-  sprintf(buffer2, "Test: %-10s test", string);
+  s21_sprintf(buffer1, "Test: %-2000s test", string);
+  sprintf(buffer2, "Test: %-2000s test", string);
   ck_assert_str_eq(buffer1, buffer2);
 
   s21_sprintf(buffer1, "Test: %10s", string);
@@ -1001,6 +1001,8 @@ START_TEST(to_upper) {
   result = s21_to_upper(input);
 
   ck_assert_str_eq((char *)result, expected);
+
+  free(result);
 }
 END_TEST
 
@@ -1013,6 +1015,7 @@ START_TEST(to_lower) {
   result = s21_to_lower(input);
 
   ck_assert_str_eq((char *)result, expected);
+  free(result);
 }
 END_TEST
 
