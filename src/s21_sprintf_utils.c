@@ -1,10 +1,10 @@
 #include <math.h>
-#include <stddef.h>
-#include <stdio.h>
 
 #include "s21_string.h"
 
 int s21_isdigit(int c) { return (c >= '0' && c <= '9'); }
+
+int s21_sign(double x) { return (x > 0) - (x < 0); }
 
 void s21_writeParameters(parserParameters *parametrs, char *formatSpec) {
   formatSpec += s21_writeFlags(parametrs, formatSpec);
@@ -20,24 +20,24 @@ s21_size_t s21_writeFlags(parserParameters *parametrs, char *formatSpec) {
   s21_size_t lenFlags = s21_strcspn(formatSpec, "1234567890.lh");
 
   for (s21_size_t i = 0; i < lenFlags; i++) {
-    switch (formatSpec[i]) {
-      case '-':
-        parametrs->leftOrientation = true;
-        break;
-      case '+':
-        parametrs->forcedSignOutput = true;
-        break;
-      case ' ':
-        parametrs->signPlace = true;
-        break;
+    if (formatSpec[i] == '-') {
+      parametrs->leftOrientation = true;
+    } else if (formatSpec[i] == '+') {
+      parametrs->forcedSignOutput = true;
+    } else if (formatSpec[i] == ' ') {
+      parametrs->signPlace = true;
     }
+  }
+
+  if (parametrs->forcedSignOutput && parametrs->signPlace) {
+    parametrs->signPlace = false;
   }
 
   return lenFlags;
 }
 
 s21_size_t s21_writeWidth(parserParameters *parametrs, char *formatSpec) {
-  char strWidth[20];
+  char strWidth[20] = {0};
   s21_size_t lenWidth = s21_strcspn(formatSpec, ".lh");
 
   if (lenWidth > 0) {
@@ -53,7 +53,7 @@ s21_size_t s21_writeWidth(parserParameters *parametrs, char *formatSpec) {
 
 s21_size_t s21_writePrecision(parserParameters *parametrs, char *formatSpec) {
   s21_size_t lenPrecision = 0;
-  char strPrecision[20];
+  char strPrecision[20] = {0};
 
   if (*formatSpec == '.') {
     formatSpec++;
@@ -68,10 +68,8 @@ s21_size_t s21_writePrecision(parserParameters *parametrs, char *formatSpec) {
         strPrecision[i] = *formatSpec;
       }
       strPrecision[lenPrecision] = '\0';
-
       parametrs->precision = s21_stoi(strPrecision);
     }
-
     lenPrecision++;  // + '.'
   }
 
@@ -226,8 +224,8 @@ void s21_utoa(parserParameters parametrs, char *buffer,
 }
 
 void s21_ftoa(parserParameters parametrs, char *buffer, double value) {
-  int intPart;
-  char fracBuffer[41];
+  int intPart = 0;
+  char fracBuffer[41] = {0};
 
   if (parametrs.precision == -1) {  // not specified
     parametrs.precision = 6;
@@ -297,7 +295,7 @@ void s21_processString(char *buffer, va_list arg, parserParameters parametrs) {
 }
 
 void s21_processUnsignedInteger(char *buffer, va_list arg,
-                            parserParameters parametrs) {
+                                parserParameters parametrs) {
   if (parametrs.length == '\0') {
     unsigned int unsignedIntValue = va_arg(arg, unsigned int);
     s21_utoa(parametrs, buffer, unsignedIntValue);

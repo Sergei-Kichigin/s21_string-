@@ -13,7 +13,7 @@ char *s21_strncat(char *dest, const char *src, s21_size_t n) {
 }
 
 char *s21_strchr(const char *str, int c) {
-  char *result = S21_NULL;
+  char *result = s21_NULL;
   char value = (char)c;
 
   for (s21_size_t i = 0; i <= s21_strlen(str); i++) {  // with '\0'
@@ -30,7 +30,7 @@ s21_size_t s21_strcspn(const char *str1, const char *str2) {
   s21_size_t length = 0;
 
   for (s21_size_t i = 0; i < s21_strlen(str1); i++) {
-    if (s21_strchr(str2, (int)str1[i]) != S21_NULL) {
+    if (s21_strchr(str2, (int)str1[i]) != s21_NULL) {
       break;
     }
     length++;
@@ -50,10 +50,10 @@ s21_size_t s21_strlen(const char *str) {
 }
 
 char *s21_strpbrk(const char *str1, const char *str2) {
-  char *result = S21_NULL;
+  char *result = s21_NULL;
 
   for (s21_size_t i = 0; i < s21_strlen(str1); i++) {
-    if (s21_strchr(str2, (int)str1[i]) != S21_NULL) {
+    if (s21_strchr(str2, (int)str1[i]) != s21_NULL) {
       result = (char *)(str1 + i);
       break;
     }
@@ -63,7 +63,7 @@ char *s21_strpbrk(const char *str1, const char *str2) {
 }
 
 char *s21_strrchr(const char *str, int c) {
-  char *result = S21_NULL;
+  char *result = s21_NULL;
   char value = (char)c;
 
   for (int i = s21_strlen(str); i >= 0; i--) {  // with '\0'
@@ -77,7 +77,7 @@ char *s21_strrchr(const char *str, int c) {
 }
 
 char *s21_strstr(const char *haystack, const char *needle) {
-  const char *result = S21_NULL;
+  const char *result = s21_NULL;
 
   if (*needle == '\0') {
     result = haystack;  // Пустая строка всегда найдена в любой строке
@@ -109,6 +109,7 @@ int s21_strncmp(const char *str1, const char *str2, s21_size_t n) {
   for (s21_size_t i = 0; i < n; i++) {
     if (str1[i] != str2[i]) {
       result = (int)(str1[i] - str2[i]);
+      // result = (int)(str1[i] - str2[i]) > 0 ? 1 : -1;
       break;
     }
   }
@@ -129,23 +130,23 @@ char *s21_strncpy(char *dest, const char *src, s21_size_t n) {
 }
 
 char *s21_strtok(char *str, const char *delim) {
-  static char *point = S21_NULL;
+  static char *point = s21_NULL;
   static int count = 0;
   static int flag = 0;
 
   if (!flag) {
-    point = str != S21_NULL ? str : point + count;
+    point = str != s21_NULL ? str : point + count;
 
-    while (*point != '\0' && s21_strchr(delim, *point) != S21_NULL) {
+    while (*point != '\0' && s21_strchr(delim, *point) != s21_NULL) {
       *point = '\0';
       point++;
     }
     if (*point == '\0') {
-      point = S21_NULL;
+      point = s21_NULL;
       flag = 1;
     } else {
       for (count = 0; *(point + count) != '\0'; count++) {
-        if (s21_strchr(delim, *(point + count)) != S21_NULL) {
+        if (s21_strchr(delim, *(point + count)) != s21_NULL) {
           *(point + count) = '\0';
           count++;
           break;

@@ -425,7 +425,7 @@ START_TEST(strncmp_1) {
   result = s21_strncmp(input1, input2, length);
   expected = strncmp(input1, input2, length);
 
-  ck_assert_int_eq(result, expected);
+  ck_assert_int_eq(s21_sign(result), s21_sign(expected));
 }
 END_TEST
 
@@ -439,7 +439,7 @@ START_TEST(strncmp_2) {
   result = s21_strncmp(input1, input2, length);
   expected = strncmp(input1, input2, length);
 
-  ck_assert_int_eq(result, expected);
+  ck_assert_int_eq(s21_sign(result), s21_sign(expected));
 }
 END_TEST
 
@@ -453,7 +453,7 @@ START_TEST(strncmp_3) {
   result = s21_strncmp(input1, input2, length);
   expected = strncmp(input1, input2, length);
 
-  ck_assert_int_eq(result, expected);
+  ck_assert_int_eq(s21_sign(result), s21_sign(expected));
 }
 END_TEST
 
@@ -467,7 +467,7 @@ START_TEST(strncmp_4) {
   result = s21_strncmp(input1, input2, length);
   expected = strncmp(input1, input2, length);
 
-  ck_assert_int_eq(result, expected);
+  ck_assert_int_eq(s21_sign(result), s21_sign(expected));
 }
 END_TEST
 
@@ -543,8 +543,8 @@ START_TEST(strtok_1) {
   char delim[] = ",?";
 
   ck_assert_str_eq(s21_strtok(str1, delim), strtok(str2, delim));
-  ck_assert_str_eq(s21_strtok(S21_NULL, delim), strtok(S21_NULL, delim));
-  ck_assert_str_eq(s21_strtok(S21_NULL, delim), strtok(S21_NULL, delim));
+  ck_assert_str_eq(s21_strtok(s21_NULL, delim), strtok(s21_NULL, delim));
+  ck_assert_str_eq(s21_strtok(s21_NULL, delim), strtok(s21_NULL, delim));
 }
 END_TEST
 
@@ -555,7 +555,7 @@ START_TEST(strtok_2) {
   char delim[] = "!?";
 
   ck_assert_str_eq(s21_strtok(str1, delim), strtok(str2, delim));
-  ck_assert_pstr_eq(s21_strtok(S21_NULL, delim), strtok(S21_NULL, delim));
+  ck_assert_pstr_eq(s21_strtok(s21_NULL, delim), strtok(s21_NULL, delim));
 }
 END_TEST
 
@@ -566,9 +566,9 @@ START_TEST(strtok_3) {
   char delim[] = ",!?";
 
   ck_assert_str_eq(s21_strtok(str1, delim), strtok(str2, delim));
-  ck_assert_str_eq(s21_strtok(S21_NULL, delim), strtok(S21_NULL, delim));
-  ck_assert_str_eq(s21_strtok(S21_NULL, delim), strtok(S21_NULL, delim));
-  ck_assert_pstr_eq(s21_strtok(S21_NULL, delim), strtok(S21_NULL, delim));
+  ck_assert_str_eq(s21_strtok(s21_NULL, delim), strtok(s21_NULL, delim));
+  ck_assert_str_eq(s21_strtok(s21_NULL, delim), strtok(s21_NULL, delim));
+  ck_assert_pstr_eq(s21_strtok(s21_NULL, delim), strtok(s21_NULL, delim));
 }
 END_TEST
 
@@ -607,8 +607,8 @@ START_TEST(strtok_7) {
   char s2[] = "AAAAAAGOONIAAAAA";
   char s3[] = "A";
   ck_assert_pstr_eq(s21_strtok(s2, s3), strtok(s1, s3));
-  ck_assert_pstr_eq(s21_strtok(S21_NULL, s3), strtok(S21_NULL, s3));
-  ck_assert_pstr_eq(s21_strtok(S21_NULL, s3), strtok(S21_NULL, s3));
+  ck_assert_pstr_eq(s21_strtok(s21_NULL, s3), strtok(s21_NULL, s3));
+  ck_assert_pstr_eq(s21_strtok(s21_NULL, s3), strtok(s21_NULL, s3));
 }
 END_TEST
 
@@ -621,11 +621,11 @@ START_TEST(strtok_8) {
 
   ck_assert_pstr_eq(strtok(s1, s5), s21_strtok(s2, s5));
   for (int i = 0; i < 5; i++) {
-    ck_assert_pstr_eq(strtok(S21_NULL, s5), s21_strtok(S21_NULL, s5));
+    ck_assert_pstr_eq(strtok(s21_NULL, s5), s21_strtok(s21_NULL, s5));
   }
   ck_assert_pstr_eq(strtok(s3, s5), s21_strtok(s4, s5));
-  ck_assert_pstr_eq(strtok(S21_NULL, s5), s21_strtok(S21_NULL, s5));
-  ck_assert_pstr_eq(strtok(S21_NULL, s5), s21_strtok(S21_NULL, s5));
+  ck_assert_pstr_eq(strtok(s21_NULL, s5), s21_strtok(s21_NULL, s5));
+  ck_assert_pstr_eq(strtok(s21_NULL, s5), s21_strtok(s21_NULL, s5));
 }
 END_TEST
 
@@ -916,8 +916,8 @@ START_TEST(test_sprintf_int_flags_with_width) {
   ck_assert_str_eq(buffer1, buffer2);
 
   // Тест с флагом '-'
-  s21_sprintf(buffer1, "Test: %-10d", 42);
-  sprintf(buffer2, "Test: %-10d", 42);
+  s21_sprintf(buffer1, "Test: % -10d", 42);
+  sprintf(buffer2, "Test: % -10d", 42);
   ck_assert_str_eq(buffer1, buffer2);
 
   // Тест с флагом ' '
@@ -993,28 +993,33 @@ START_TEST(test_sprintf_string_flags_with_width) {
 END_TEST
 
 START_TEST(to_upper) {
-  char input[20] = "This is Test1!";
+  char input[20] = "This is Test1! a z";
 
   void *result;
-  char *expected = "THIS IS TEST1!";
+  char *expected = "THIS IS TEST1! A Z";
 
   result = s21_to_upper(input);
-
   ck_assert_str_eq((char *)result, expected);
+  free(result);
 
+  result = s21_to_upper(s21_NULL);
+  ck_assert_ptr_null(result);
   free(result);
 }
 END_TEST
 
 START_TEST(to_lower) {
-  char input[20] = "This is Test2!";
+  char input[20] = "This is Test2! A Z";
 
   void *result;
-  char *expected = "this is test2!";
+  char *expected = "this is test2! a z";
 
   result = s21_to_lower(input);
-
   ck_assert_str_eq((char *)result, expected);
+  free(result);
+
+  result = s21_to_lower(s21_NULL);
+  ck_assert_ptr_null(result);
   free(result);
 }
 END_TEST
@@ -1029,11 +1034,11 @@ START_TEST(insert) {
   ck_assert_str_eq((char *)result, expected);
   free(result);
 
-  result = s21_insert(S21_NULL, "ALL", 2);
+  result = s21_insert(s21_NULL, "ALL", 2);
   ck_assert_ptr_null(result);
   free(result);
 
-  result = s21_insert(input, S21_NULL, 2);
+  result = s21_insert(input, s21_NULL, 2);
   ck_assert_ptr_null(result);
   free(result);
 
@@ -1121,7 +1126,7 @@ START_TEST(trim) {
 
   free(result);  // malloc in trim
 
-  result = s21_trim(input4, S21_NULL);
+  result = s21_trim(input4, s21_NULL);
   ck_assert_str_eq((char *)result, expected4);
 
   free(result);  // malloc in trim
@@ -1131,7 +1136,7 @@ START_TEST(trim) {
 
   free(result);  // malloc in trim
 
-  result = s21_trim(S21_NULL, "");
+  result = s21_trim(s21_NULL, "");
   ck_assert_ptr_null(result);
 
   free(result);  // malloc in trim

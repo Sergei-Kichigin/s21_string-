@@ -1,34 +1,72 @@
+OS = $(shell uname)
+CC = gcc
+CFLAGS = -Wall -Wextra -Werror -std=c11 -D_POSIX_C_SOURCE=200809L
+GCOV_FLAGS = -fprofile-arcs -ftest-coverage
+
+LIBS = -lcheck -lm
+ifeq ($(OS), Linux)
+	LIBS += -lsubunit
+endif
+
+VALG = valgrind --tool=memcheck --leak-check=yes --log-file=valgrind_output.txt ./s21_tests
+CPPCH = cppcheck --enable=all --suppress=missingIncludeSystem --suppress=invalidFunctionArg --force
+
 SRC_FILES = s21_str.c s21_mem.c s21_sprintf.c s21_sprintf_utils.c s21_part5.c
-all: gcov_report
+OBJ_FILES = $(SRC_FILES:.c=.o)
+
+HEAD_FILE = s21_string.h
+LIBRARY = $(HEAD_FILE:.h=.a)
+
+EXECUTABLE = s21_tests
+GCOV_EXECUTABLE = s21_gcov_tests
+
+TEST_SRC = tests.c
+TEST_OBJ = $(TEST_SRC:.c=.o)
+
+SRC_CL = ../materials/linters/.clang-format
+
+all: $(LIBRARY)
+
+# building static lib
+$(LIBRARY): $(OBJ_FILES)
+	ar rcs $@ $^
+	
+# building objects for static lib
+%.o: %.c $(HEAD_FILE)
+	$(CC) $(CFLAGS) -c $< -o $@
+
+$(EXECUTABLE): $(TEST_SRC) $(LIBRARY)
+	$(CC) $(CFLAGS) $(TEST_SRC) -o $(EXECUTABLE) $(LIBRARY) $(LIBS)
+
+test: $(EXECUTABLE)
+	./$(EXECUTABLE)
+
+# building file for gcov report
+$(GCOV_EXECUTABLE): $(SRC_FILES) $(TEST_SRC)
+	$(CC) $(CFLAGS) $(GCOV_FLAGS) $^ -o $@ $(LIBS)
+
+# building gcov report
+gcov_report: $(GCOV_EXECUTABLE)
+	./$(GCOV_EXECUTABLE)
+	gcov *.gcda
+	gcovr -r . --exclude tests.c --html --html-details -o coverage_report.html
+	rm -f *.gc* $(GCOV_EXECUTABLE)
+
+valgrind: $(EXECUTABLE)
+	$(VALG) $(EXECUTABLE)
+
+cpp_check:
+	$(CPPCH) $(SRC_FILES) $(HEAD_FILE)
+
+clang_all:
+	cp $(SRC_CL) .clang-format
+	clang-format -i *.c
+	clang-format -i *.h
+	rm -f .clang-format
+
 clean:
-	rm -rf test test_sharp test_sscanf test_sprintf *.o *.a *.gcno *.html *.gcda
-	rm -rf lcov_report lcov_report.info
-clang_test:
-	clang-format -n -style=Google *.c *.h */*.c
+	rm -f $(EXECUTABLE) $(GCOV_EXECUTABLE) $(LIBRARY) *.gc* *.html *.css *.o valgrind_output.txt
 
-s21_string.o:
-	gcc -c -Wall -Wextra -Werror -std=c11 *.c s21_sprintf.c
+rebuild: clean all
 
-s21_string.a: s21_string.o
-	ar rc s21_string.a *.o
-	ranlib s21_string.a
-
-test:
-	gcc -Wall -Wextra -Werror -o test s21_string_test.c $(SRC_FILES) --coverage -lcheck -lm -lsubunit 
-	./test
-
-test_sharp: 
-	gcc -Wall -Wextra -Werror -o test_sharp s21_sharp_tests.c $(SRC_FILES) --coverage -lcheck -lm -lsubunit 
-	./test_sharp
-
-test_sprintf:
-	gcc -Wall -Wextra -Werror -o test_sprintf s21_sprintf_test.c $(SRC_FILES) --coverage -lcheck -lm -lsubunit 
-	./test_sprintf
-
-
-gcov_report: test test_sharp test_sprintf
-	gcovr --html >> report.html
-
-lcov_report:test test_sharp test_sprintf
-	lcov -t "lcov_report" -o lcov_report.info -c -d . 
-	genhtml -o lcov_report lcov_report.info
+.PHONY: all test clean gcov_report valgrind cpp_check clang_all

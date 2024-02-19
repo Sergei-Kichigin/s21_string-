@@ -1,6 +1,6 @@
 #include <check.h>
 
-#include "s21_string.h"
+#include "../s21_string.h"
 
 // to_upper tests
 
@@ -26,8 +26,8 @@ START_TEST(s21_to_upper_no_letters) {
 END_TEST
 
 START_TEST(s21_to_upper_str_null) {
-  char *str = S21_NULL;
-  char *expected_res = S21_NULL;
+  char *str = s21_NULL;
+  char *expected_res = s21_NULL;
   ck_assert_pstr_eq(s21_to_upper(str), expected_res);
 }
 END_TEST
@@ -56,8 +56,8 @@ START_TEST(s21_to_lower_no_letters) {
 END_TEST
 
 START_TEST(s21_to_lower_str_null) {
-  char *str = S21_NULL;
-  char *expected_res = S21_NULL;
+  char *str = s21_NULL;
+  char *expected_res = s21_NULL;
   ck_assert_pstr_eq(s21_to_lower(str), expected_res);
 }
 END_TEST
@@ -89,7 +89,7 @@ START_TEST(s21_insert_len_less_index) {
   char src[16] = "kjgh";
   char str[16] = "75tr";
   s21_size_t start_index = 13;
-  ck_assert_ptr_eq(s21_insert(src, str, start_index), S21_NULL);
+  ck_assert_ptr_eq(s21_insert(src, str, start_index), s21_NULL);
 }
 END_TEST
 
@@ -97,23 +97,23 @@ START_TEST(s21_insert_index_less_zero) {
   char src[16] = "kjgh";
   char str[16] = "75tr";
   s21_size_t start_index = -13;
-  ck_assert_ptr_eq(s21_insert(src, str, start_index), S21_NULL);
+  ck_assert_ptr_eq(s21_insert(src, str, start_index), s21_NULL);
 }
 END_TEST
 
 START_TEST(s21_insert_src_null) {
-  char *src = S21_NULL;
+  char *src = s21_NULL;
   char str[16] = "75tr";
   s21_size_t start_index = 13;
-  ck_assert_ptr_eq(s21_insert(src, str, start_index), S21_NULL);
+  ck_assert_ptr_eq(s21_insert(src, str, start_index), s21_NULL);
 }
 END_TEST
 
 START_TEST(s21_insert_str_null) {
   char src[16] = "akjshf";
-  char *str = S21_NULL;
+  char *str = s21_NULL;
   s21_size_t start_index = 13;
-  ck_assert_ptr_eq(s21_insert(src, str, start_index), S21_NULL);
+  ck_assert_ptr_eq(s21_insert(src, str, start_index), s21_NULL);
 }
 END_TEST
 
@@ -140,16 +140,16 @@ END_TEST
 
 START_TEST(s21_trim_chars_null) {
   char src[64] = "\t\n zsjdff\r\t";
-  char *trim_chars = S21_NULL;
+  char *trim_chars = s21_NULL;
   char expected_res[64] = "zsjdff";
   ck_assert_str_eq(s21_trim(src, trim_chars), expected_res);
 }
 END_TEST
 
 START_TEST(s21_trim_src_null) {
-  char *src = S21_NULL;
+  char *src = s21_NULL;
   char trim_chars[64] = "aff";
-  char *expected_res = S21_NULL;
+  char *expected_res = s21_NULL;
   ck_assert_ptr_eq(s21_trim(src, trim_chars), expected_res);
 }
 END_TEST
@@ -165,7 +165,7 @@ END_TEST
 START_TEST(s21_trim_empty_char) {
   char src[64] = "\ts21_NULL\t";
   char trim_chars[64] = "";
-  char expected_res[64] = "S21_NULL";
+  char expected_res[64] = "s21_NULL";
   ck_assert_str_eq(s21_trim(src, trim_chars), expected_res);
 }
 END_TEST

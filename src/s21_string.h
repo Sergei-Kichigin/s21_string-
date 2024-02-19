@@ -6,7 +6,8 @@
 
 #define SUCCESS 0
 #define ERROR 1
-#define S21_NULL (void *)0
+#define s21_NULL (void *)0
+#define BUFFER_SIZE 1024
 
 typedef long unsigned s21_size_t;
 
@@ -68,9 +69,10 @@ void s21_processInteger(char *buffer, va_list arg, parserParameters parametrs);
 void s21_processFloat(char *buffer, va_list arg, parserParameters parametrs);
 void s21_processString(char *buffer, va_list arg, parserParameters parametrs);
 void s21_processUnsignedInteger(char *buffer, va_list arg,
-                            parserParameters parametrs);
+                                parserParameters parametrs);
 
 int s21_isdigit(int c);
+int s21_sign(double x);
 
 s21_size_t s21_stoi(const char *str);
 
@@ -85,6 +87,5 @@ s21_size_t s21_writePrecision(parserParameters *parametrs, char *formatSpec);
 int is_space(char c);
 int is_empty_trim_chars(const char *trim_chars);
 int check_trim_chars(char c, bool isEmptyTrimChars, const char *trim_chars);
-
 
 #endif

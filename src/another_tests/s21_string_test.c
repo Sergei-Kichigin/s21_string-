@@ -1,4 +1,4 @@
-#include "s21_string.h"
+#include "../s21_string.h"
 
 #include <check.h>
 #include <string.h>
@@ -62,7 +62,7 @@ START_TEST(s21_memchr_n_eq_Zero) {
 END_TEST
 
 START_TEST(s21_memchr_str_null) {
-  char *str = S21_NULL;
+  char *str = s21_NULL;
   int c = 't';
   s21_size_t n = 0;
   ck_assert_ptr_null(s21_memchr(str, c, n));
@@ -206,8 +206,8 @@ START_TEST(s21_memset_default) {
 END_TEST
 
 START_TEST(s21_memset_NULL) {
-  char *str_1 = S21_NULL;
-  char *str_2 = S21_NULL;
+  char *str_1 = s21_NULL;
+  char *str_2 = s21_NULL;
   int c = 56;
   s21_size_t n = 0;
   s21_memset(str_1, c, n);
@@ -217,8 +217,8 @@ START_TEST(s21_memset_NULL) {
 END_TEST
 
 START_TEST(s21_memset_n_zero) {
-  char str_1[16] = "S21_NULL";
-  char str_2[16] = "S21_NULL";
+  char str_1[16] = "s21_NULL";
+  char str_2[16] = "s21_NULL";
   int c = 56;
   s21_size_t n = 0;
   s21_memset(str_1, c, n);
@@ -704,9 +704,9 @@ START_TEST(s21_strtok_match) {
   char str_2[32] = "test1/test2/test3/test4";
   char delim[4] = "/,";
   ck_assert_str_eq(s21_strtok(str_1, delim), strtok(str_2, delim));
-  ck_assert_str_eq(s21_strtok(S21_NULL, delim), strtok(S21_NULL, delim));
-  ck_assert_str_eq(s21_strtok(S21_NULL, delim), strtok(S21_NULL, delim));
-  ck_assert_str_eq(s21_strtok(S21_NULL, delim), strtok(S21_NULL, delim));
+  ck_assert_str_eq(s21_strtok(s21_NULL, delim), strtok(s21_NULL, delim));
+  ck_assert_str_eq(s21_strtok(s21_NULL, delim), strtok(s21_NULL, delim));
+  ck_assert_str_eq(s21_strtok(s21_NULL, delim), strtok(s21_NULL, delim));
 }
 END_TEST
 
@@ -714,7 +714,7 @@ START_TEST(s21_strtok_one_token) {
   char str[32] = "test1/test2/test3/test4";
   char delim[4] = " ,";
   ck_assert_str_eq(s21_strtok(str, delim), strtok(str, delim));
-  ck_assert_pstr_eq(s21_strtok(S21_NULL, delim), strtok(S21_NULL, delim));
+  ck_assert_pstr_eq(s21_strtok(s21_NULL, delim), strtok(s21_NULL, delim));
 }
 END_TEST
 
