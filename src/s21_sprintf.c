@@ -15,35 +15,22 @@ int s21_sprintf(char *str, const char *format, ...) {
         *str = *format;
         str++;
       } else {
-        s21_size_t lenFormatSpec = s21_strcspn(format, "cdfsu");
-        parserParameters parametrs = {false, false, false, 0, -1, '\0'};
-
         char buffer[BUFFER_SIZE] = {0};
+        s21_size_t lenFormatSpec = 0;
+        parserParameters parameters = {false, false, false, 0, -1, '\0'};
+
+        s21_getLenFormatSpec(format, &lenFormatSpec);
 
         if (lenFormatSpec == s21_strlen(format)) {  // specifier not found
           va_end(arg);
           return ERROR;
         }
 
-        if (lenFormatSpec > 0) {  // specifier has parameters
-          char formatSpec[20] = {0};
-          s21_writeNchar(formatSpec, format, lenFormatSpec);
-          s21_writeParameters(&parametrs, formatSpec);
-          format += lenFormatSpec;
-        }
+        s21_specifierParametersParsing(format, lenFormatSpec, &parameters);
+        format += lenFormatSpec;
 
-        if (*format == 'c') {
-          s21_processChar(buffer, arg);
-        } else if (*format == 'd') {
-          s21_processInteger(buffer, arg, parametrs);
-        } else if (*format == 'f') {
-          s21_processFloat(buffer, arg, parametrs);
-        } else if (*format == 's') {
-          s21_processString(buffer, arg, parametrs);
-        } else if (*format == 'u') {
-          s21_processUnsignedInteger(buffer, arg, parametrs);
-        }
-        str += s21_addFormat(parametrs, buffer, str);
+        s21_checkSpecifier(format, buffer, arg, parameters);
+        str += s21_addFormat(parameters, buffer, str);
       }
     } else {
       *str = *format;
@@ -51,7 +38,6 @@ int s21_sprintf(char *str, const char *format, ...) {
     }
     format++;
   }
-
   va_end(arg);
   *str = '\0';
 

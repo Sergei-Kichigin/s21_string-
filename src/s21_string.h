@@ -51,38 +51,44 @@ void *s21_trim(const char *src, const char *trim_chars);
 // for str
 void s21_writeString(char *str, char *buffer);
 void s21_writeNchar(char *str, const char *buffer, s21_size_t n);
-s21_size_t s21_addFormat(parserParameters parametrs, char *buffer, char *str);
+s21_size_t s21_addFormat(parserParameters parameters, char *buffer, char *str);
 
 // transform type
 void s21_ctoa(char value, char *buffer);
-void s21_itoa(parserParameters parametrs, char *buffer, long int value);
-void s21_ftoa(parserParameters parametrs, char *buffer, double value);
-void s21_utoa(parserParameters parametrs, char *buffer,
+void s21_itoa(parserParameters parameters, char *buffer, long int value);
+void s21_ftoa(parserParameters parameters, char *buffer, double value);
+void s21_utoa(parserParameters parameters, char *buffer,
               long unsigned int value);
-void s21_stoa(parserParameters parametrs, char *buffer, char *charPtrValue);
+void s21_stoa(parserParameters parameters, char *buffer, char *charPtrValue);
 
-void s21_intPartToa(parserParameters parametrs, char *buffer, int intPart);
+void s21_intPartToa(parserParameters parameters, char *buffer, int intPart);
 void s21_strrev(char *str);
 
 void s21_processChar(char *buffer, va_list arg);
-void s21_processInteger(char *buffer, va_list arg, parserParameters parametrs);
-void s21_processFloat(char *buffer, va_list arg, parserParameters parametrs);
-void s21_processString(char *buffer, va_list arg, parserParameters parametrs);
+void s21_processInteger(char *buffer, va_list arg, parserParameters parameters);
+void s21_processFloat(char *buffer, va_list arg, parserParameters parameters);
+void s21_processString(char *buffer, va_list arg, parserParameters parameters);
 void s21_processUnsignedInteger(char *buffer, va_list arg,
-                                parserParameters parametrs);
+                                parserParameters parameters);
 
 int s21_isdigit(int c);
 int s21_sign(double x);
 
 s21_size_t s21_stoi(const char *str);
 
-// specifier parametrs
-void s21_writeParameters(parserParameters *parametrs, char *format);
-void s21_writeLength(parserParameters *parametrs, char *formatSpec);
+// specifier parameters
+void s21_getLenFormatSpec(const char *format, s21_size_t *lenFormatSpec);
+void s21_specifierParametersParsing(const char *format,
+                                    s21_size_t lenFormatSpec,
+                                    parserParameters *parameters);
+void s21_checkSpecifier(const char *format, char *buffer, va_list arg,
+                        parserParameters parameters);
+void s21_writeParameters(parserParameters *parameters, char *format);
+void s21_writeLength(parserParameters *parameters, char *formatSpec);
 
-s21_size_t s21_writeFlags(parserParameters *parametrs, char *formatSpec);
-s21_size_t s21_writeWidth(parserParameters *parametrs, char *formatSpec);
-s21_size_t s21_writePrecision(parserParameters *parametrs, char *formatSpec);
+s21_size_t s21_writeFlags(parserParameters *parameters, char *formatSpec);
+s21_size_t s21_writeWidth(parserParameters *parameters, char *formatSpec);
+s21_size_t s21_writePrecision(parserParameters *parameters, char *formatSpec);
 
 int is_space(char c);
 int is_empty_trim_chars(const char *trim_chars);
