@@ -23,7 +23,7 @@ int s21_sprintf(char *str, const char *format, ...) {
 
         if (lenFormatSpec == s21_strlen(format)) {  // specifier not found
           va_end(arg);
-          return ERROR;
+          return -ERROR;
         }
 
         s21_specifierParametersParsing(format, lenFormatSpec, &parameters);

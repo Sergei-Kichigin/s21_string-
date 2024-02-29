@@ -640,12 +640,25 @@ END_TEST
 
 // SPRINTF
 
+START_TEST(test_sprintf_with_wrong_format) {
+  char buffer1[100] = {0};
+  char buffer2[100] = {0};
+
+  const char *format = " %+";
+
+  ck_assert_int_eq(s21_sprintf(buffer1, format, 21),
+                   sprintf(buffer2, format, 21));
+
+  ck_assert_str_eq(buffer1, buffer2);
+}
+END_TEST
+
 START_TEST(test_sprintf_int_left_orientation) {
   char buffer1[100] = {0};
   char buffer2[100] = {0};
 
-  s21_sprintf(buffer1, "Test: %-10d %%", 42);
-  sprintf(buffer2, "Test: %-10d %%", 42);
+  ck_assert_int_eq(s21_sprintf(buffer1, "Test: %-10d %%", 42),
+                   sprintf(buffer2, "Test: %-10d %%", 42));
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -655,8 +668,10 @@ START_TEST(test_sprintf_int_right_orientation) {
   char buffer1[100] = {0};
   char buffer2[100] = {0};
 
-  s21_sprintf(buffer1, "Test: %10d", 42);
-  sprintf(buffer2, "Test: %10d", 42);
+  const char *format = " % +d %+d %+d";
+
+  ck_assert_int_eq(s21_sprintf(buffer1, format, 42, 24, 33),
+                   sprintf(buffer2, format, 42, 24, 33));
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -666,8 +681,8 @@ START_TEST(test_sprintf_int_negative) {
   char buffer1[100] = {0};
   char buffer2[100] = {0};
 
-  s21_sprintf(buffer1, "Test: %d", -142);
-  sprintf(buffer2, "Test: %d", -142);
+  ck_assert_int_eq(s21_sprintf(buffer1, "Test: %d", -142),
+                   sprintf(buffer2, "Test: %d", -142));
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -677,8 +692,8 @@ START_TEST(test_sprintf_float) {
   char buffer1[100] = {0};
   char buffer2[100] = {0};
 
-  s21_sprintf(buffer1, "Float: %f", 3.14159);
-  sprintf(buffer2, "Float: %f", 3.14159);
+  ck_assert_int_eq(s21_sprintf(buffer1, "Float: %f", 3.14159),
+                   sprintf(buffer2, "Float: %f", 3.14159));
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -688,8 +703,8 @@ START_TEST(test_sprintf_float_negative) {
   char buffer1[100] = {0};
   char buffer2[100] = {0};
 
-  s21_sprintf(buffer1, "Float: %f", -3.14159);
-  sprintf(buffer2, "Float: %f", -3.14159);
+  ck_assert_int_eq(s21_sprintf(buffer1, "Float: %f", -3.14159),
+                   sprintf(buffer2, "Float: %f", -3.14159));
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -699,8 +714,8 @@ START_TEST(test_sprintf_string) {
   char buffer1[100] = {0};
   char buffer2[100] = {0};
 
-  s21_sprintf(buffer1, "String: %s", "Hello, World!");
-  sprintf(buffer2, "String: %s", "Hello, World!");
+  ck_assert_int_eq(s21_sprintf(buffer1, "String: %s", "Hello, World!"),
+                   sprintf(buffer2, "String: %s", "Hello, World!"));
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -710,8 +725,8 @@ START_TEST(test_sprintf_char) {
   char buffer1[100] = {0};
   char buffer2[100] = {0};
 
-  s21_sprintf(buffer1, "Char: %c", 'A');
-  sprintf(buffer2, "Char: %c", 'A');
+  ck_assert_int_eq(s21_sprintf(buffer1, "Char: %c", 'A'),
+                   sprintf(buffer2, "Char: %c", 'A'));
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -721,8 +736,8 @@ START_TEST(test_sprintf_unsigned) {
   char buffer1[100] = {0};
   char buffer2[100] = {0};
 
-  s21_sprintf(buffer1, "Unsigned: %u", 12345);
-  sprintf(buffer2, "Unsigned: %u", 12345);
+  ck_assert_int_eq(s21_sprintf(buffer1, "Unsigned: %u", 12345),
+                   sprintf(buffer2, "Unsigned: %u", 12345));
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -734,8 +749,8 @@ START_TEST(test_sprintf_int_precision_positive) {
   char buffer1[100] = {0};
   char buffer2[100] = {0};
 
-  s21_sprintf(buffer1, "Test: %.4d", 42);
-  sprintf(buffer2, "Test: %.4d", 42);
+  ck_assert_int_eq(s21_sprintf(buffer1, "Test: %.4d", 42),
+                   sprintf(buffer2, "Test: %.4d", 42));
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -745,8 +760,8 @@ START_TEST(test_sprintf_int_precision_null) {
   char buffer1[100] = {0};
   char buffer2[100] = {0};
 
-  s21_sprintf(buffer1, "Test: %.0d", 0);
-  sprintf(buffer2, "Test: %.0d", 0);
+  ck_assert_int_eq(s21_sprintf(buffer1, "Test: %.0d", 0),
+                   sprintf(buffer2, "Test: %.0d", 0));
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -756,8 +771,9 @@ START_TEST(test_sprintf_int_precision_no_explicit_meaning) {
   char buffer1[100] = {0};
   char buffer2[100] = {0};
 
-  s21_sprintf(buffer1, "Test: %.d", 0);  // precision = 0
-  sprintf(buffer2, "Test: %.d", 0);
+  // precision = 0
+  ck_assert_int_eq(s21_sprintf(buffer1, "Test: %.d", 0),
+                   sprintf(buffer2, "Test: %.d", 0));
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -767,8 +783,8 @@ START_TEST(test_sprintf_unsigned_int_precision_positive) {
   char buffer1[100] = {0};
   char buffer2[100] = {0};
 
-  s21_sprintf(buffer1, "Test: %.4u", 65);
-  sprintf(buffer2, "Test: %.4u", 65);
+  ck_assert_int_eq(s21_sprintf(buffer1, "Test: %.4u", 65),
+                   sprintf(buffer2, "Test: %.4u", 65));
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -778,8 +794,8 @@ START_TEST(test_sprintf_unsigned_int_precision_null) {
   char buffer1[100] = {0};
   char buffer2[100] = {0};
 
-  s21_sprintf(buffer1, "Test: %.0u", 0);
-  sprintf(buffer2, "Test: %.0u", 0);
+  ck_assert_int_eq(s21_sprintf(buffer1, "Test: %.0u", 0),
+                   sprintf(buffer2, "Test: %.0u", 0));
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -788,9 +804,9 @@ END_TEST
 START_TEST(test_sprintf_unsigned_int_precision_no_explicit_meaning) {
   char buffer1[100] = {0};
   char buffer2[100] = {0};
-
-  s21_sprintf(buffer1, "Test: %.u", 0);  // precision = 0
-  sprintf(buffer2, "Test: %.u", 0);
+  // precision = 0
+  ck_assert_int_eq(s21_sprintf(buffer1, "Test: %.u", 0),
+                   sprintf(buffer2, "Test: %.u", 0));
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -800,8 +816,8 @@ START_TEST(test_sprintf_double_precision_positive) {
   char buffer1[100] = {0};
   char buffer2[100] = {0};
 
-  s21_sprintf(buffer1, "Test: %.4f", 12.456789);
-  sprintf(buffer2, "Test: %.4f", 12.456789);
+  ck_assert_int_eq(s21_sprintf(buffer1, "Test: %.4f", 12.456789),
+                   sprintf(buffer2, "Test: %.4f", 12.456789));
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -811,8 +827,8 @@ START_TEST(test_sprintf_double_precision_null) {
   char buffer1[100] = {0};
   char buffer2[100] = {0};
 
-  s21_sprintf(buffer1, "Test: %.0f", -134.784);
-  sprintf(buffer2, "Test: %.0f", -134.784);
+  ck_assert_int_eq(s21_sprintf(buffer1, "Test: %.0f", -134.784),
+                   sprintf(buffer2, "Test: %.0f", -134.784));
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -821,9 +837,9 @@ END_TEST
 START_TEST(test_sprintf_double_precision_no_explicit_meaning) {
   char buffer1[100] = {0};
   char buffer2[100] = {0};
-
-  s21_sprintf(buffer1, "Test: %.f", 0.6);  // precision = 0
-  sprintf(buffer2, "Test: %.f", 0.6);
+  // precision = 0
+  ck_assert_int_eq(s21_sprintf(buffer1, "Test: %.f", 0.6),
+                   sprintf(buffer2, "Test: %.f", 0.6));
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -833,8 +849,8 @@ START_TEST(test_sprintf_string_precision_positive) {
   char buffer1[100] = {0};
   char buffer2[100] = {0};
 
-  s21_sprintf(buffer1, "Test: %.4s", "SUCCESS");
-  sprintf(buffer2, "Test: %.4s", "SUCCESS");
+  ck_assert_int_eq(s21_sprintf(buffer1, "Test: %.4s", "SUCCESS"),
+                   sprintf(buffer2, "Test: %.4s", "SUCCESS"));
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -844,8 +860,8 @@ START_TEST(test_sprintf_string_precision_null) {
   char buffer1[100] = {0};
   char buffer2[100] = {0};
 
-  s21_sprintf(buffer1, "Test: %.0s", "SUCCESS");
-  sprintf(buffer2, "Test: %.0s", "SUCCESS");
+  ck_assert_int_eq(s21_sprintf(buffer1, "Test: %.0s", "SUCCESS"),
+                   sprintf(buffer2, "Test: %.0s", "SUCCESS"));
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -855,8 +871,9 @@ START_TEST(test_sprintf_string_precision_no_explicit_meaning) {
   char buffer1[100] = {0};
   char buffer2[100] = {0};
 
-  s21_sprintf(buffer1, "Test: %.s", "SUCCESS");  // precision = 0
-  sprintf(buffer2, "Test: %.s", "SUCCESS");
+  // precision = 0
+  ck_assert_int_eq(s21_sprintf(buffer1, "Test: %.s", "SUCCESS"),
+                   sprintf(buffer2, "Test: %.s", "SUCCESS"));
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -866,8 +883,8 @@ START_TEST(test_sprintf_int_length_h) {
   char buffer1[100] = {0};
   char buffer2[100] = {0};
 
-  s21_sprintf(buffer1, "Test: %hd", -112000);
-  sprintf(buffer2, "Test: %hd", -112000);
+  ck_assert_int_eq(s21_sprintf(buffer1, "Test: %hd", -112000),
+                   sprintf(buffer2, "Test: %hd", -112000));
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -877,8 +894,8 @@ START_TEST(test_sprintf_unsigned_int_length_h) {
   char buffer1[100] = {0};
   char buffer2[100] = {0};
 
-  s21_sprintf(buffer1, "Test: %hu", 12999999);
-  sprintf(buffer2, "Test: %hu", 12999999);
+  ck_assert_int_eq(s21_sprintf(buffer1, "Test: %hu", 12999999),
+                   sprintf(buffer2, "Test: %hu", 12999999));
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -888,8 +905,8 @@ START_TEST(test_sprintf_int_length_l) {
   char buffer1[100] = {0};
   char buffer2[100] = {0};
 
-  s21_sprintf(buffer1, "Test: %ld", -6120000000);
-  sprintf(buffer2, "Test: %ld", -6120000000);
+  ck_assert_int_eq(s21_sprintf(buffer1, "Test: %ld", -6120000000),
+                   sprintf(buffer2, "Test: %ld", -6120000000));
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -899,8 +916,8 @@ START_TEST(test_sprintf_unsigned_int_length_l) {
   char buffer1[100] = {0};
   char buffer2[100] = {0};
 
-  s21_sprintf(buffer1, "Test: %lu", 9120000000);
-  sprintf(buffer2, "Test: %lu", 9120000000);
+  ck_assert_int_eq(s21_sprintf(buffer1, "Test: %lu", 9120000000),
+                   sprintf(buffer2, "Test: %lu", 9120000000));
 
   ck_assert_str_eq(buffer1, buffer2);
 }
@@ -911,18 +928,18 @@ START_TEST(test_sprintf_int_flags_with_width) {
   char buffer2[20] = {0};
 
   // Тест с флагом '+'
-  s21_sprintf(buffer1, "Test: %+10d", 42);
-  sprintf(buffer2, "Test: %+10d", 42);
+  ck_assert_int_eq(s21_sprintf(buffer1, "Test: %+10d", 42),
+                   sprintf(buffer2, "Test: %+10d", 42));
   ck_assert_str_eq(buffer1, buffer2);
 
   // Тест с флагом '-'
-  s21_sprintf(buffer1, "Test: % -10d", 42);
-  sprintf(buffer2, "Test: % -10d", 42);
+  ck_assert_int_eq(s21_sprintf(buffer1, "Test: % -10d", 42),
+                   sprintf(buffer2, "Test: % -10d", 42));
   ck_assert_str_eq(buffer1, buffer2);
 
   // Тест с флагом ' '
-  s21_sprintf(buffer1, "Test: % 10d", 42);
-  sprintf(buffer2, "Test: % 10d", 42);
+  ck_assert_int_eq(s21_sprintf(buffer1, "Test: % 10d", 42),
+                   sprintf(buffer2, "Test: % 10d", 42));
   ck_assert_str_eq(buffer1, buffer2);
 }
 END_TEST
@@ -934,19 +951,18 @@ START_TEST(test_sprintf_float_flags_with_width) {
   // Тест с флагом '+'
 
   float value = 3.141592;
-
-  s21_sprintf(buffer1, "Test: %+10.2f", value);
-  sprintf(buffer2, "Test: %+10.2f", value);
+  ck_assert_int_eq(s21_sprintf(buffer1, "Test: %+10.2f", value),
+                   sprintf(buffer2, "Test: %+10.2f", value));
   ck_assert_str_eq(buffer1, buffer2);
 
   // Тест с флагом '-'
-  s21_sprintf(buffer1, "Test: %-10.2f", value);
-  sprintf(buffer2, "Test: %-10.2f", value);
+  ck_assert_int_eq(s21_sprintf(buffer1, "Test: %-10.2f", value),
+                   sprintf(buffer2, "Test: %-10.2f", value));
   ck_assert_str_eq(buffer1, buffer2);
 
   // Тест с флагом ' '
-  s21_sprintf(buffer1, "Test: % 10.2f", value);
-  sprintf(buffer2, "Test: % 10.2f", value);
+  ck_assert_int_eq(s21_sprintf(buffer1, "Test: % 10.2f", value),
+                   sprintf(buffer2, "Test: % 10.2f", value));
   ck_assert_str_eq(buffer1, buffer2);
 }
 END_TEST
@@ -958,8 +974,8 @@ START_TEST(test_sprintf_unsigned_int_flags_with_width) {
   unsigned int value = 42;
 
   // Тест с флагом '-'
-  s21_sprintf(buffer1, "Test: %-10u", value);
-  sprintf(buffer2, "Test: %-10u", value);
+  ck_assert_int_eq(s21_sprintf(buffer1, "Test: %-10u", value),
+                   sprintf(buffer2, "Test: %-10u", value));
   ck_assert_str_eq(buffer1, buffer2);
 }
 END_TEST
@@ -967,10 +983,11 @@ END_TEST
 START_TEST(test_sprintf_char_width) {
   char buffer1[100] = {0};
   char buffer2[100] = {0};
+
   char symbol = 'c';
 
-  s21_sprintf(buffer1, "Test: %10c", symbol);
-  sprintf(buffer2, "Test: %10c", symbol);
+  ck_assert_int_eq(s21_sprintf(buffer1, "Test: %10c", symbol),
+                   sprintf(buffer2, "Test: %10c", symbol));
   ck_assert_str_eq(buffer1, buffer2);
 }
 END_TEST
@@ -982,12 +999,12 @@ START_TEST(test_sprintf_string_flags_with_width) {
   char string[20] = "Hello";
 
   // Тест с флагом '-'
-  s21_sprintf(buffer1, "Test: %-2000s test", string);
-  sprintf(buffer2, "Test: %-2000s test", string);
+  ck_assert_int_eq(s21_sprintf(buffer1, "Test: %-2000s test", string),
+                   sprintf(buffer2, "Test: %-2000s test", string));
   ck_assert_str_eq(buffer1, buffer2);
 
-  s21_sprintf(buffer1, "Test: %10s", string);
-  sprintf(buffer2, "Test: %10s", string);
+  ck_assert_int_eq(s21_sprintf(buffer1, "Test: %10s", string),
+                   sprintf(buffer2, "Test: %10s", string));
   ck_assert_str_eq(buffer1, buffer2);
 }
 END_TEST
@@ -1227,6 +1244,7 @@ Suite *my_string_suite(void) {
   tcase_add_test(tc_core, strerror_1);
 
   // SPRINTF
+  tcase_add_test(tc_core, test_sprintf_with_wrong_format);
   tcase_add_test(tc_core, test_sprintf_int_left_orientation);
   tcase_add_test(tc_core, test_sprintf_int_right_orientation);
   tcase_add_test(tc_core, test_sprintf_int_negative);
