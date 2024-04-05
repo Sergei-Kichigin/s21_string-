@@ -42,6 +42,15 @@ Implementation of the string.h library with additions.
 | ------ | ------ | ------ |
 | 1 | int sprintf(char *str, const char *format, ...) | sends formatted output to a string pointed to, by str. |
 
+### Special string processing functions (from the String class in C#)
+
+| No. | Function | Description |
+| ------ | ------ | ------ |
+| 1 | void *to_upper(const char *str) | Returns a copy of string (str) converted to uppercase. In case of any error, return NULL |
+| 2 | void *to_lower(const char *str) | Returns a copy of string (str) converted to lowercase. In case of any error, return NULL |
+| 3 | void *insert(const char *src, const char *str, size_t start_index) | Returns a new string in which a specified string (str) is inserted at a specified index position (start_index) in the given string (src). In case of any error, return NULL |
+| 4 | void *trim(const char *src, const char *trim_chars) | Returns a new string in which all leading and trailing occurrences of a set of specified characters (trim_chars) from the given string (src) are removed. In case of any error, return NULL |
+
 ## Building
 
 | Command | Description |
